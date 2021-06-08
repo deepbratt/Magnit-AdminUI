@@ -1,20 +1,26 @@
+import { Suspense } from "react";
 import { Typography } from "@material-ui/core";
-import { useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
-import Layout from "./components/Layout";
+import RequireAuth from "./RequireAuth";
+import { pagesRoutes } from "./Utils/paths";
 
 const Routes = () => {
-  const isLoggedIn = useSelector((state) => state.rootReducer.auth.isLoggedIn);
+  const routeArray = Object.values(pagesRoutes);
+
   return (
-    <Router>
-      <Switch>
-        {isLoggedIn ? (
-          <Typography>Welcome Admin</Typography>
-        ) : (
-          <Typography>Login Please</Typography>
-        )}
-      </Switch>
-    </Router>
+    <Suspense fallback={<Typography styles="h4">Loading....</Typography>}>
+      <Router>
+        <Switch>
+          {routeArray.map((route, index) => (
+            <RequireAuth
+              path={route.path}
+              component={route.component}
+              key={`route-${index}`}
+            />
+          ))}
+        </Switch>
+      </Router>
+    </Suspense>
   );
 };
 
