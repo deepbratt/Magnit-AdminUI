@@ -34,3 +34,4 @@ const regEmail =
 export const isEmailValid=(email)=>{
     return regEmail.test(email)
    }
+   
