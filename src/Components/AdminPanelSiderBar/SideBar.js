@@ -11,7 +11,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import DrawerContext from "./DrawerContext";
 import clsx from "clsx";
 import { AppBarText } from "../../Utils/Text";
-const SideBar = () => {
+const SideBar = ({children}) => {
   const [open, setOpen] = useState(false);
 
   const {
@@ -60,6 +60,7 @@ const SideBar = () => {
           })}
         >
           <div className={drawerHeader} />
+          {children}
         </main>
       </div>
     </div>
