@@ -16,9 +16,13 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 import MenuIcon from "@material-ui/icons/Menu";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import NoteAddIcon from "@material-ui/icons/NoteAdd";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -148,21 +152,24 @@ const Layout = ({ children }) => {
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+          {[
+            { text: "Dashboard", icon: <DashboardIcon /> },
+            { text: "New Page", icon: <NoteAddIcon /> },
+            { text: "New Section", icon: <AddBoxIcon /> },
+            { text: "Add User", icon: <PersonAddIcon /> },
+          ].map((item, index) => (
+            <ListItem button key={item.text}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
             </ListItem>
           ))}
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
+          {["Account", "Logout"].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 2 === 0 ? <AccountCircleIcon /> : <ExitToAppIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
