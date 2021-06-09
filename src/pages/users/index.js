@@ -1,11 +1,11 @@
 import { Typography } from "@material-ui/core";
 
-const Home = () => {
+const Users = () => {
   return (
     <div>
-      <Typography>Hello, Admin</Typography>
+      <Typography>Manage, users</Typography>
     </div>
   );
 };
 
-export default Home;
+export default Users;
