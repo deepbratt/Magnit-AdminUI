@@ -1,10 +1,4 @@
-import {
-  AppBar,
-  Grid,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,15 +10,14 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AddBoxIcon from "@material-ui/icons/AddBox";
 import MenuIcon from "@material-ui/icons/Menu";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import NoteAddIcon from "@material-ui/icons/NoteAdd";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { pagesRoutes } from "../../Utils/paths";
+import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/reducers/authSlice";
 
 const drawerWidth = 240;
 
@@ -94,6 +87,8 @@ const Layout = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const routeArray = Object.values(pagesRoutes);
+  const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -102,6 +97,7 @@ const Layout = ({ children }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -152,31 +148,37 @@ const Layout = ({ children }) => {
         </div>
         <Divider />
         <List>
-          {[
-            { text: "Dashboard", icon: <DashboardIcon /> },
-            { text: "New Page", icon: <NoteAddIcon /> },
-            { text: "New Section", icon: <AddBoxIcon /> },
-            { text: "Add User", icon: <PersonAddIcon /> },
-          ].map((item, index) => (
-            <ListItem button key={item.text}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
+          {routeArray.map((route, index) => (
+            <NavLink
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                color: "inherit",
+              }}
+              to={route.path}
+              key={route.name}
+            >
+              <ListItem button>
+                <ListItemIcon>{route.icon}</ListItemIcon>
+                <ListItemText primary={route.name} />
+              </ListItem>
+            </NavLink>
           ))}
         </List>
         <Divider />
         <List>
-          {["Account", "Logout"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <AccountCircleIcon /> : <ExitToAppIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button onClick={() => dispatch(logout())}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Account"} />
+          </ListItem>
         </List>
       </Drawer>
-      {children}
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {children}
+      </main>
     </div>
   );
 };
