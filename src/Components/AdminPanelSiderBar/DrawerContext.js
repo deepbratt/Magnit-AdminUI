@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import useStyles from "./useStyles";
-import Logo from "../assets/MagnitLogo.png";
+import Logo from "../../assets/MagnitLogo.png";
 const DrawerContext = ({ openDrawer, closeDrawer }) => {
   const { drawer, drawerHeader, drawerPaper } = useStyles();
   const theme = useTheme();
@@ -27,7 +27,7 @@ const DrawerContext = ({ openDrawer, closeDrawer }) => {
         }}
       >
         <div className={drawerHeader}>
-          <img width="130px" src={Logo} />
+          <img width="130px" alt="logo" src={Logo} />
           <IconButton onClick={closeDrawer}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
