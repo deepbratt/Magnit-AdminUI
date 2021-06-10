@@ -40,6 +40,7 @@ const Login = () => {
             <TextField
               id="input-name"
               fullWidth
+              variant="outlined"
               placeholder="e.g John@gmail.com"
               value={values.email}
             />
@@ -47,6 +48,7 @@ const Login = () => {
               id="input-password"
               type="password"
               fullWidth
+              variant="outlined"
               placeholder="*********"
               value={values.pass}
             />

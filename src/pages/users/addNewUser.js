@@ -1,7 +1,13 @@
 import PropTypes from "prop-types";
 import FullPageDialog from "../../components/FullPageDialog";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Grid, InputLabel, MenuItem, TextField } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  InputLabel,
+  MenuItem,
+  TextField,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -34,24 +40,26 @@ const AddNewUser = ({ open, handleClose }) => {
         <Grid className={classes.formRoot} container item xs={12}>
           <form className={classes.form}>
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-title">Title</InputLabel>
+              <InputLabel id="input-title">Email</InputLabel>
               <TextField
-                labelId="input-title"
+                type="email"
+                labelId="input-email"
                 id="input-title"
                 variant="outlined"
-                placeholder="Careers | The Magnit"
+                placeholder="e.g johnmartin@abc.com"
                 size="medium"
                 fullWidth
                 required
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-canonical">Canonical</InputLabel>
+              <InputLabel id="input-password">Password</InputLabel>
               <TextField
-                labelId="input-canonical"
-                id="input-canonical"
+                type="password"
+                labelId="input-password"
+                id="input-password"
                 variant="outlined"
-                placeholder="/careers"
+                placeholder="Enter your Password"
                 size="medium"
                 fullWidth
                 required
@@ -59,9 +67,10 @@ const AddNewUser = ({ open, handleClose }) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-query">Query</InputLabel>
+              <InputLabel id="input-user-role">Role</InputLabel>
               <TextField
-                id="filled-select-currency-native"
+                labelId="input-user-role"
+                id="input-user-role"
                 select
                 fullWidth
                 variant="outlined"
