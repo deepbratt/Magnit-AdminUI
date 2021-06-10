@@ -98,7 +98,7 @@ const history=useHistory();
   };
  const handleLogout = () => {
   removeUserSession();
-    history.push('/home');
+    history.push('/');
   }
   const handleDrawerClose = () => {
     setOpen(false);

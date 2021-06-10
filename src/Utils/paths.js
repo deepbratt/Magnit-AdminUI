@@ -14,7 +14,7 @@ export const paths = {
 };
 
 export const routes = {
-  home: "/home",
+  home: "/",
   dashboard: "/dashboard",
   login:"/login",
   forgetPassword:"/Forget-Pass"

@@ -65,7 +65,7 @@ await userLoginApi (requestBody)
     .then(response => {
         setLoading(false);
         setUserSession(response.data.token, response.data.user);
-        history.push("/home");
+        history.push("/");
     }
     ).catch(error=>{
       setLoading(false);
