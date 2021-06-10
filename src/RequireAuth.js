@@ -16,7 +16,8 @@ const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
           <Layout>
             <Component {...props} />
           </Layout>
-        ) : ( <Login/>
+        ) : ( 
+        <Login/>
         )
       }
     />

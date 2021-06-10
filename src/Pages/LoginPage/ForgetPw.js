@@ -53,7 +53,7 @@ const ForgetPs = () => {
         />
           <FormHelperText id="component-error-text" style ={{color :"red"}}>{errors === true ? "Invalid Login" : ""}</FormHelperText>
       
-              <InputLabel className={label} htmlFor="input-name">
+              {/* <InputLabel className={label} htmlFor="input-name">
                 {labelsText.newPassword}
               </InputLabel>
               <PasswordField
@@ -90,7 +90,7 @@ const ForgetPs = () => {
               aria-describedby="component-error-text"
         />
           <FormHelperText id="component-error-text" style ={{color :"red"}}>{errors === true ? "Invalid Login" : ""}</FormHelperText>
-      
+       */}
               <Button type="submit" color="primary" variant="contained" fullWidth>
                 <Typography
                   style={{ textAlign: "center", color: "#fff" }}
