@@ -14,6 +14,7 @@ const Routes = () => {
           {routeArray.map((route, index) => (
             <RequireAuth
               path={route.path}
+              exact
               component={route.component}
               key={`route-${index}`}
             />

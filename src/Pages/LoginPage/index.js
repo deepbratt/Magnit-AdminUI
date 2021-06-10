@@ -1,13 +1,25 @@
-import { Grid, InputLabel, Typography, Button, FormControlLabel, Radio } from "@material-ui/core";
+import {
+  Grid,
+  InputLabel,
+  Typography,
+  Button,
+  FormHelperText,
+} from "@material-ui/core";
 import React, { useState } from "react";
-import InputStyle from "../../Component/Input/index";
+
 import { fieldName, labelsText } from "../../Utils/form";
 import FormStyle from "./style";
 import { useForm } from "./useForm";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import PasswordField from "../../Component/Input/password";
+
+import { navigate } from "@reach/router";
+
 export const Login = () => {
-  const { root, div, logo, label, form, forget,radio } = FormStyle();
-  const [Forgetpass, setForgetpass] = useState(false);
-  const { values, errors, handleInputChange,handleRememberMeChange, handleSubmit } = useForm(true);
+
+  const { root, div, logo, label, form, forget } = FormStyle();
+  const { toggleShow,handleSubmit,values,handleInputChange,errors,loading,} = useForm(true);
 
   return (
     <Grid container justify="center" className={div}>
@@ -18,90 +30,46 @@ export const Login = () => {
             Logo
           </Typography>
         </div>
-        {Forgetpass ? (
+      
           <form className={form} onSubmit={handleSubmit}>
-            <Typography
-              variant="h4"
-              style={{ padding: "1rem", textAlign: "center" }}
-            >
-              Reset Password{" "}
-            </Typography>
             <InputLabel className={label} htmlFor="input-email">
               {labelsText.email}
             </InputLabel>
-
-            <InputStyle
+            <PasswordField
               id="input-email"
               fullWidth
               placeholder="e.g abc@gmail.com"
               name={fieldName.email}
+              type="email"
+              
               value={values.email}
               onChange={handleInputChange}
-              error={errors.email}
-            />
-            <InputLabel className={label} htmlFor="input-name">
-              {labelsText.newPassword}
-            </InputLabel>
-            <InputStyle
-              id="input-password"
-              fullWidth
-              placeholder=""
-              name={fieldName.newPassword}
-              value={values.newPassword}
-              onChange={handleInputChange}
-              error={errors.newPassword}
-            />
-            <InputLabel className={label} htmlFor="input-name">
-              {labelsText.confirmPassword}
-            </InputLabel>
-            <InputStyle
-              id="input-password"
-              fullWidth
-              placeholder=""
-              name={fieldName.confirmPassword}
-              value={values.confirmPassword}
-              error={errors.confirmPassword}
-              onChange={handleInputChange}
-            />
-            <Button type="submit" color="primary" variant="contained" fullWidth>
-              <Typography
-                style={{ textAlign: "center", color: "#fff" }}
-                variant="button"
-                onClick={() => setForgetpass(false)}
-              >
-                {labelsText.submit}
-              </Typography>
-            </Button>
-          </form>
-        ) : (
-          <form className={form} onSubmit={handleSubmit}>
-            <InputLabel className={label} htmlFor="input-email">
-              {labelsText.email}
-            </InputLabel>
-
-            <InputStyle
-              id="input-email"
-              fullWidth
-              placeholder="e.g abc@gmail.com"
-              name={fieldName.email}
-              values={values.email}
-              error={errors.email}
-              onChange={handleInputChange}
-            />
+              error={errors}
+              aria-describedby="component-error-text"
+        />
+        <FormHelperText id="component-error-text" style ={{color :"red"}}>{errors === true ? "invalid Login" : ""}</FormHelperText>
             <InputLabel className={label} htmlFor="input-name">
               {labelsText.password}
             </InputLabel>
-            <InputStyle
-              id="input-password"
-              fullWidth
-              placeholder=""
+            <PasswordField
+              id="outlined-adornment-password"
+              type={values.hiddenPassword === true ? "text" : "password"}
               name={fieldName.password}
               value={values.password}
-              error={errors.password}
               onChange={handleInputChange}
-            />
-<FormControlLabel className={radio} value="end" control={<Radio color="primary" name={fieldName.rememberMe}
-              value={values.rememberMe} onChange={handleRememberMeChange}/>} label={labelsText.rememberMe}  />
+              position="end"
+             error={errors}
+              onClick={toggleShow}
+              showPassword={
+                values.hiddenPassword ? <Visibility /> : <VisibilityOff />
+              }
+              aria-describedby="component-error-text"
+        />
+        <FormHelperText id="component-error-text" style ={{color :"red"}}>{errors === true ? "Invalid Login" : ""}</FormHelperText>
+    
+            <Typography className={forget} onClick={() => navigate("/Forget-Pass")}>
+              Forgot Password?
+            </Typography>
             <Button
               type="submit"
               color="primary"
@@ -112,15 +80,13 @@ export const Login = () => {
               <Typography
                 style={{ textAlign: "center", color: "#fff" }}
                 variant="button"
+               
               >
-                {labelsText.signin}
+                {loading ? 'Loading...' : labelsText.signin}
               </Typography>
             </Button>
-            <Typography className={forget} onClick={() => setForgetpass(true)}>
-              Forgot Password?
-            </Typography>
           </form>
-        )}
+      
       </Grid>
     </Grid>
   );

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "./redux/reducers/authSlice";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./theme/theme";
-import { Button } from "@material-ui/core";
+import { Button} from "@material-ui/core";
 import Routes from "./routes";
+import { Login } from "./Pages/LoginPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -13,10 +14,12 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        {/* <Routes /> */}
+        <Routes />
+        
         <Button onClick={() => dispatch(isLoggedIn ? logout() : login())}>
           {isLoggedIn ? "LOGOUT" : "LOGIN"}
         </Button>
+
       </div>
     </ThemeProvider>
   );

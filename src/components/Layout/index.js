@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Button,
   Grid,
   IconButton,
   Toolbar,
@@ -21,7 +22,8 @@ import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import PropTypes from "prop-types";
 import { useState } from "react";
-
+import { removeUserSession } from "../../Utils/form";
+import { useHistory } from "react-router";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -90,11 +92,14 @@ const Layout = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-
+const history=useHistory();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
+ const handleLogout = () => {
+  removeUserSession();
+    history.push('/home');
+  }
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -159,15 +164,16 @@ const Layout = ({ children }) => {
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
+          {["All mail", "Trash", "Spam","Logout"].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text}  />
             </ListItem>
           ))}
         </List>
+        <Button onClick={handleLogout}>logout</Button>
       </Drawer>
       {children}
     </div>

@@ -1,74 +1,94 @@
 import { useState } from "react";
 import {
-  
-  fieldName,
-  isEmailValid,
-  isTypePassword,
-  messages
-} from "../../Utils/form.js";
 
+  setUserSession
+} from "../../Utils/form.js";
+import { userLoginApi } from "../../Utils/api.js";
+import {  useHistory } from "react-router";
 const initialFValues = {
   
   email: "",
   password:"",
   newPassword:"",
   confirmPassword:"",
-  rememberMe: false
- 
+  hiddenPassword:true,
+
 };
-
-export function useForm(validateOnChange = false) {
+ export function useForm({validateOnChange=false}) {
+   const history =useHistory();
   const [values, setValues] = useState(initialFValues);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const validate = (fieldValues = values) => {
-    let temp = { ...errors };
-   
-    if (fieldName.email in fieldValues) {
-      temp.email =
-        fieldValues.email.trim() === ""
-          ? messages.isRequired
-          : isEmailValid(fieldValues.email)
-          ? ""
-          : messages.notValid;
+  // "errors" is used to check the form for errors
+  
+  const validate = () => {
+    const { email, password,  } = values;
+    if (email === "" || password === "") {
+      return setErrors(true);
+    } else if ( password.length < 6){
+      return  setErrors(true);
+    }
+   else {
+      setErrors(false);
     }
 
-    if (fieldName.password in fieldValues)
-    temp.password =
-      fieldValues.password.length === 0 ? messages.isRequired : isTypePassword(fieldValues.password) ? "" : messages.notValid ;
-    setErrors({
-      ...temp,
-    });
-
-    if (fieldValues === values)
-      return Object.values(temp).every((x) => x === "");
-  };
-
+  }
   const handleInputChange = (e) => {
      const { name, value } = e.target;
     setValues({
       ...values,
       [name]: value,
     });
-    if (validateOnChange) validate({ [name]: value });
+   
+   if (validateOnChange) validate({ [name]: value });
   };
-  function handleRememberMeChange(e) {
-    setValues((inputs) => ({ ...inputs, rememberMe: !inputs.rememberMe }));
-    
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    };
-
+    e.stopPropagation();
+ let requestBody = {
+        email: values.email,
+        password: values.password,
+      };
+    setErrors(null);
+    setLoading(true);
+    const { email, password,  } = values;
+    if (email === "" || password === "") {
+      return setErrors(true);
+    } else if ( password.length < 6){
+      return  setErrors(true);
+    }
+   else {
+      setErrors(false);
+    }
+await userLoginApi (requestBody)
+    .then(response => {
+        setLoading(false);
+        setUserSession(response.data.token, response.data.user);
+        history.push("/home");
+    }
+    ).catch(error=>{
+      setLoading(false);
+      if (error.status === 401) setErrors(error.data.message);
+        else setErrors("Something went wrong. Please try again later.");
+     })
+  
+    
+      };
+    const toggleShow =()=>{
+      setValues({ hiddenPassword: !values.hiddenPassword});
+    } 
   return {
     values,
     setValues,
     errors,
+    loading,
     setErrors,
     handleInputChange,
-    handleRememberMeChange,
     handleSubmit,
-    
+    toggleShow,
+  
+   
   };
 }
+

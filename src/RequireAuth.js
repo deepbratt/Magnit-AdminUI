@@ -3,6 +3,7 @@ import { Route } from "react-router";
 import { connect } from "react-redux";
 import Layout from "./components/Layout";
 import { Login } from "./Pages/LoginPage";
+import { getToken } from "./Utils/form";
 
 const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
   console.log(isLoggedIn,"log");
@@ -10,7 +11,7 @@ const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        isLoggedIn ? (
+      getToken() ? (
           <Layout>
             <Component {...props} />
           </Layout>
