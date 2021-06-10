@@ -6,7 +6,7 @@ import { pagesRoutes } from "./Utils/paths";
 
 const Routes = () => {
   const routeArray = Object.values(pagesRoutes);
-
+  console.log("paths",routeArray.map(route => route.path));
   return (
     <Suspense fallback={<Typography styles="h4">Loading....</Typography>}>
       <Router>
@@ -14,9 +14,9 @@ const Routes = () => {
           {routeArray.map((route, index) => (
             <RequireAuth
               path={route.path}
-              exact
               component={route.component}
-              key={`route-${index}`}
+              key={`route-${route.name}`}
+              exact
             />
           ))}
         </Switch>

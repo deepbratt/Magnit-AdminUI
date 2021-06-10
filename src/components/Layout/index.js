@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Button,
-  Grid,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -17,13 +10,15 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { removeUserSession } from "../../Utils/form";
 import { useHistory } from "react-router";
+import { pagesRoutes } from "../../Utils/paths";
+import { NavLink } from "react-router-dom";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -93,6 +88,8 @@ const Layout = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 const history=useHistory();
+  const routeArray = Object.values(pagesRoutes);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -103,6 +100,7 @@ const history=useHistory();
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -153,29 +151,37 @@ const history=useHistory();
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+          {routeArray.map((route, index) => (
+            <NavLink
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                color: "inherit",
+              }}
+              to={route.path}
+              key={route.name}
+            >
+              <ListItem button>
+                <ListItemIcon>{route.icon}</ListItemIcon>
+                <ListItemText primary={route.name} />
+              </ListItem>
+            </NavLink>
           ))}
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam","Logout"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text}  />
-            </ListItem>
-          ))}
+          <ListItem button onClick={handleLogout}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Account"} />
+          </ListItem>
         </List>
-        <Button onClick={handleLogout}>logout</Button>
       </Drawer>
-      {children}
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {children}
+      </main>
     </div>
   );
 };
