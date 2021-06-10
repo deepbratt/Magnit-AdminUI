@@ -12,7 +12,7 @@ import {
   import Visibility from "@material-ui/icons/Visibility";
   import VisibilityOff from "@material-ui/icons/VisibilityOff";
   import PasswordField from "../../Component/Input/password";
-const ForgetPs = () => {
+const Reset = () => {
   
   
     const { root, div, logo, label, form, } = FormStyle();
@@ -106,4 +106,4 @@ const ForgetPs = () => {
       </Grid>
     );
   };
-  export default ForgetPs;
+  export default Reset;

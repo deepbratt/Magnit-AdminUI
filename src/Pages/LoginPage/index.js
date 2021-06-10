@@ -16,7 +16,7 @@ import PasswordField from "../../Component/Input/password";
 
 import { navigate } from "@reach/router";
 
-export const Login = () => {
+ const Login = () => {
 
   const { root, div, logo, label, form, forget } = FormStyle();
   const { toggleShow,handleSubmit,values,handleInputChange,errors,loading,} = useForm(true);
@@ -91,3 +91,4 @@ export const Login = () => {
     </Grid>
   );
 };
+export default Login;

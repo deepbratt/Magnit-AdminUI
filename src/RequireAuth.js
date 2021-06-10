@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Layout from "./components/Layout";
 
 import { getToken } from "./Utils/form";
-import { Login } from "./Pages/LoginPage";
+import  Login  from "./Pages/LoginPage";
 
 const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
   console.log(isLoggedIn,"log");

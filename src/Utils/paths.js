@@ -1,16 +1,15 @@
 import { lazy } from "react";
-
-
-
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import RestorePageRoundedIcon from "@material-ui/icons/RestorePageRounded";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 
+
+
 const Home = lazy(() => import("../Pages/home/index"));
-const Login = lazy(() => import("../Pages/LoginPage/index"));
-const ForgetPs = lazy(() => import("../Pages/LoginPage/ForgetPw"));
+const Login = lazy(() => import("../Pages/LoginPage"));
+const Reset =lazy(()=> import("../Pages/LoginPage/ForgetPw"));
 const ModeratePages = lazy(() => import("../Pages/ModeratePages/index"));
 const ModerateSections = lazy(() => import("../Pages/ModerateSections"));
 const Users = lazy(() => import("../Pages/users"));
@@ -68,12 +67,15 @@ export const pagesRoutes = {
     icon: <AccountCircleIcon />,
   },
   [paths.login]: {
+    name: "login",
     path: routes.login,
     component: Login,
   },
   [paths.forgetPassword]: {
+    name: "Reset",
     path: routes.forgetPassword,
-    component: ForgetPs,
+    component: Reset,
   },
   
 };
+
