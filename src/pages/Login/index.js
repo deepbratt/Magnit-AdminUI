@@ -1,7 +1,6 @@
 import { Grid, Card, TextField, Button } from "@material-ui/core";
 import { useState } from "react";
 import Logo from "../../assets/logo.png";
-import InputField from "../../components/InputField";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -38,13 +37,13 @@ const Login = () => {
           />
 
           <form style={{ padding: "20px 20px" }} onSubmit={handleSubmit}>
-            <InputField
+            <TextField
               id="input-name"
               fullWidth
               placeholder="e.g John@gmail.com"
               value={values.email}
             />
-            <InputField
+            <TextField
               id="input-password"
               type="password"
               fullWidth
