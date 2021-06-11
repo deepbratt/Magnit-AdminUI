@@ -9,6 +9,8 @@ const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
 const Users = lazy(() => import("../pages/users"));
 const Settings = lazy(() => import("../pages/settings"));
+const AdminPanelSlider = lazy(() => import("../pages/AdminPanelSlider/Container"));
+const EditData = lazy(() => import("../Sections/AdminPanelSliderSections/EditData"));
 
 export const paths = {
   dashboard: "dashboard",
@@ -16,6 +18,8 @@ export const paths = {
   sections: "sections",
   users: "users",
   setting: "setting",
+  homeSlider: "home-slider",
+  edit: "edit"
 };
 
 export const routes = {
@@ -24,6 +28,8 @@ export const routes = {
   sections: "/moderate-sections",
   users: "/users",
   settings: "/account-settings",
+  homeSlider: "/home-slider",
+  edit: "/edit-data"
 };
 
 export const pagesRoutes = {
@@ -56,5 +62,14 @@ export const pagesRoutes = {
     path: routes.settings,
     component: Settings,
     icon: <AccountCircleIcon />,
+  },
+  [paths.homeSlider]: {
+    name: "Section/HomeSlider",
+    path: routes.homeSlider,
+    component: AdminPanelSlider,
+  },
+  [paths.edit]: {
+    path: routes.edit,
+    component: EditData,
   },
 };
