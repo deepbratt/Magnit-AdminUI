@@ -5,7 +5,7 @@ const initialState = {
     email: "jamshedahmed@gmail.com",
     password: "qwerty"
   },
-  isLoggedIn: true,
+  isLoggedIn: false,
 };
 
 const authSlice = createSlice({

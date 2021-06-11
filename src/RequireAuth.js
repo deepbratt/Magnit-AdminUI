@@ -1,10 +1,10 @@
 import React from "react";
-import { Route } from "react-router";
+import { Redirect, Route, useHistory } from "react-router";
 import { connect } from "react-redux";
-import Login from "./pages/Login";
 import Layout from "./components/Layout";
 
 const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
+  const history = useHistory();
   return (
     <Route
       {...rest}
@@ -14,7 +14,7 @@ const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
             <Component {...props} />
           </Layout>
         ) : (
-          <Login />
+          history.push("/login")
         )
       }
     />
