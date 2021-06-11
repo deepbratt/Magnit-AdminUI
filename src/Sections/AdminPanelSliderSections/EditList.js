@@ -15,6 +15,17 @@ const EditList = ({ arr, setArr }) => {
     setArr(updatedData);
     setEditing(null);
   }
+
+  function handleEditInputChange(e) {
+    setEditingText(e.target.value);
+  }
+
+  function handleEditClick(id, todo) {
+    setEditing(id);
+    setEditingText(todo);
+  }
+
+  console.log(arr);
   return (
     <>
       <Grid item xs={12}>
@@ -23,16 +34,18 @@ const EditList = ({ arr, setArr }) => {
             <div style={{ display: "flex" }} key={id}>
               {id === editing ? (
                 <TextField
+                  name="edit"
                   type="text"
                   variant="outlined"
+                  value={editingText}
                   style={{ height: "10px", paddingRight: "20px" }}
                   required
-                  value={id === editing && editingText}
-                  onChange={(e) => setEditingText(e.target.value)}
+                  onChange={(e) => handleEditInputChange(e)}
                 />
               ) : (
-                <ListItem
-                style={{margin: "20px 0px 20px 0px"}}>{data}</ListItem>
+                <ListItem style={{ margin: "20px 0px 20px 0px" }}>
+                  {data}
+                </ListItem>
               )}
               {id === editing ? (
                 <Button
@@ -49,13 +62,14 @@ const EditList = ({ arr, setArr }) => {
                 </Button>
               ) : (
                 <Button
-                style={{
-                  margin: "20px 0px 20px 0px",
-                }}
+                  style={{
+                    margin: "20px 0px 20px 0px",
+                  }}
                   size="small"
                   variant="contained"
                   color="secondary"
-                  onClick={() => setEditing(id)}>
+                  onClick={() => handleEditClick(id, data)}
+                >
                   Edit
                 </Button>
               )}
