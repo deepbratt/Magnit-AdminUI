@@ -5,6 +5,7 @@ import Layout from "./components/Layout";
 
 const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
   const history = useHistory();
+  console.log(isLoggedIn);
   return (
     <Route
       {...rest}
@@ -22,7 +23,7 @@ const AuthRoute = ({ component: Component, isLoggedIn, ...rest }) => {
 };
 
 const mapStateToProps = (state) => ({
-  isLoggedIn: state.rootReducer.auth.isLoggedIn,
+  isLoggedIn: state.persistedReducer.auth.isLoggedIn,
 });
 
 export default connect(mapStateToProps)(AuthRoute);

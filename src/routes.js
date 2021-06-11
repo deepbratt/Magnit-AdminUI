@@ -23,10 +23,10 @@ const Routes = () => {
               exact
             />
           ))}
-          <Route exact path="/login">
-            <Login />
-          </Route>
         </Switch>
+        <Route exact path="/login">
+          <Login />
+        </Route>
       </Router>
     </Suspense>
   );

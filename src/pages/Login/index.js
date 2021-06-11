@@ -1,17 +1,11 @@
 import { Grid, Card, TextField, Button } from "@material-ui/core";
-import { useState } from "react";
 import Logo from "../../assets/logo.png";
+import { fieldNames } from "../../Utils/formConstants";
+import { useForm } from "./useForm";
 
 const Login = () => {
-  const [values, setValues] = useState({
-    email: "",
-    pass: "",
-  });
+  const { values, errors, handleInputChange, handleSubmit } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(values);
-  };
   return (
     <Grid
       style={{ height: "100vh" }}
@@ -39,18 +33,24 @@ const Login = () => {
           <form style={{ padding: "20px 20px" }} onSubmit={handleSubmit}>
             <TextField
               id="input-name"
+              name={fieldNames.email}
               fullWidth
               variant="outlined"
               placeholder="e.g John@gmail.com"
               value={values.email}
+              {...(errors && { error: true, helperText: errors.email })}
+              onChange={handleInputChange}
             />
             <TextField
               id="input-password"
+              name={fieldNames.password}
               type="password"
               fullWidth
               variant="outlined"
               placeholder="*********"
-              value={values.pass}
+              value={values.password}
+              {...(errors && { error: true, helperText: errors.password })}
+              onChange={handleInputChange}
             />
 
             <Button fullWidth variant="contained" color="primary" type="submit">

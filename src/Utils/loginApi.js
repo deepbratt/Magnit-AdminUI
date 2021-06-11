@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
     "Access-Control-Allow-Origin": "*",
   },
 });
+
 const USERS = {
   LOGIN: `users/login`,
 };
