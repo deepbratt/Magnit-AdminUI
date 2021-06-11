@@ -4,8 +4,8 @@ import CreateIcon from "@material-ui/icons/Create";
 import DeleteIcon from "@material-ui/icons/Delete";
 import useContentTable from "./useContentTable";
 
-const ContentTable = ({dataArray}) => {
-    const {editItem, deleteItem} = useContentTable()
+const ContentTable = ({dataArray, updateItem, removeItem}) => {
+    const {editItem, deleteItem} = useContentTable(updateItem, removeItem)
   return (
     <Grid container style={{ border: "2px solid grey" }}>
       <Grid container item xs={12} style={{ borderBottom: "1px solid grey", padding:"5px" }}>

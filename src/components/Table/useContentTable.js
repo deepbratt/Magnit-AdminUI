@@ -1,11 +1,11 @@
-const useContentTable = () =>{
+const useContentTable = (updateItem, removeItem) =>{
 
     const editItem = (id) =>{
-        console.log('Edit this Item= '+id)
+      updateItem(id)
     }
     
     const deleteItem = (id) =>{
-      console.log('delete this Item= '+id)
+      removeItem(id)
   }
 
   return {editItem, deleteItem}
