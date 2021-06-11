@@ -4,11 +4,14 @@ export const messages = {
   projectDetailValidationMessage:
     "Project details should be greater than 30 characters",
   companyNameLength: "Company Name should be greater than 3 characters",
+  notMatch: "Password doesn't match",
+  password: "Password must be 8 charactors long",
 };
 
 export const fieldNames = {
   email: "email",
   password: "password",
+  confirmPassword: "confirmPassword",
 };
 
 export const regex = {

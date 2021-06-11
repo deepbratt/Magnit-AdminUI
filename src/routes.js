@@ -5,6 +5,7 @@ import RequireAuth from "./RequireAuth";
 import { pagesRoutes } from "./Utils/paths";
 const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
 const Login = lazy(() => import("./pages/Login"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 
 const Routes = () => {
   const routeArray = Object.values(pagesRoutes);
@@ -30,6 +31,9 @@ const Routes = () => {
         </Route>
         <Route exact path="/forget-password">
           <ForgetPassword />
+        </Route>
+        <Route exact path="/reset-password">
+          <ResetPassword />
         </Route>
       </Router>
     </Suspense>
