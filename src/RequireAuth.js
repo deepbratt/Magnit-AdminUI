@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Route, useHistory } from "react-router";
+import { Route, useHistory } from "react-router";
 import { connect } from "react-redux";
 import Layout from "./components/Layout";
 

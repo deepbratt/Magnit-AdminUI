@@ -1,4 +1,4 @@
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/core/styles";
 import { Button, Grid, InputLabel, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import FullPageDialog from "../../components/FullPageDialog";
@@ -6,36 +6,8 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 import Chip from "@material-ui/core/Chip";
-import FormControl from "@material-ui/core/FormControl";
 import { useState } from "react";
-
-const useStyles = makeStyles((theme) => ({
-  form: {
-    minWidth: "100%",
-    padding: "20px",
-    display: "flex",
-    flexWrap: "wrap",
-    "& > *": {
-      padding: "10px",
-    },
-  },
-
-  multipleInput: {
-    minWidth: "100%",
-  },
-  chips: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  chip: {
-    margin: 2,
-  },
-  buttonWrap: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-end",
-  },
-}));
+import ModeratePagesStyles from "./style";
 
 const names = [
   "Banner",
@@ -66,7 +38,8 @@ function getStyles(name, personName, theme) {
 }
 
 const AddNewPage = ({ open, handleClose }) => {
-  const classes = useStyles();
+  const { form, multipleInput, chips, chip, buttonWrap } =
+    ModeratePagesStyles();
   const theme = useTheme();
   const [personName, setPersonName] = useState([]);
 
@@ -77,8 +50,8 @@ const AddNewPage = ({ open, handleClose }) => {
   return (
     <FullPageDialog open={open} handleClose={handleClose}>
       <Grid container>
-        <Grid className={classes.formRoot} container item xs={12}>
-          <form className={classes.form}>
+        <Grid container item xs={12}>
+          <form className={form}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-title">Title</InputLabel>
               <TextField
@@ -134,7 +107,7 @@ const AddNewPage = ({ open, handleClose }) => {
             <Grid item xs={10} md={6}>
               <InputLabel id="input-sections">Sections</InputLabel>
               <Select
-                className={classes.multipleInput}
+                className={multipleInput}
                 labelId="input-sections"
                 id="input-sections"
                 variant="outlined"
@@ -143,13 +116,9 @@ const AddNewPage = ({ open, handleClose }) => {
                 onChange={handleChange}
                 input={<Input id="input-sections" />}
                 renderValue={(selected) => (
-                  <div className={classes.chips}>
+                  <div className={chips}>
                     {selected.map((value) => (
-                      <Chip
-                        key={value}
-                        label={value}
-                        className={classes.chip}
-                      />
+                      <Chip key={value} label={value} className={chip} />
                     ))}
                   </div>
                 )}
@@ -178,7 +147,7 @@ const AddNewPage = ({ open, handleClose }) => {
                 required
               />
             </Grid>
-            <Grid className={classes.buttonWrap} item xs={12} md={6}>
+            <Grid className={buttonWrap} item xs={12} md={6}>
               <Button
                 style={{ maxWidth: "100px" }}
                 variant="contained"

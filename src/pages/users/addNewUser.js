@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import FullPageDialog from "../../components/FullPageDialog";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
   Grid,
@@ -8,37 +7,18 @@ import {
   MenuItem,
   TextField,
 } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  form: {
-    minWidth: "100%",
-    padding: "20px",
-    display: "flex",
-    flexWrap: "wrap",
-    "& > *": {
-      padding: "10px",
-    },
-  },
-  multipleInput: {
-    minWidth: "100%",
-  },
-  buttonWrap: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-end",
-  },
-}));
+import UserPageStyles from "./style";
 
 const roles = ["Admin", "SE0 Professional", "Developer"];
 
 const AddNewUser = ({ open, handleClose }) => {
-  const classes = useStyles();
+  const { form, buttonWrap } = UserPageStyles();
 
   return (
     <FullPageDialog open={open} handleClose={handleClose}>
       <Grid container>
-        <Grid className={classes.formRoot} container item xs={12}>
-          <form className={classes.form}>
+        <Grid container item xs={12}>
+          <form className={form}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-title">Email</InputLabel>
               <TextField
@@ -82,7 +62,7 @@ const AddNewUser = ({ open, handleClose }) => {
                 ))}
               </TextField>
             </Grid>
-            <Grid className={classes.buttonWrap} item xs={12} md={6}>
+            <Grid className={buttonWrap} item xs={12} md={6}>
               <Button
                 style={{ maxWidth: "100px" }}
                 variant="contained"

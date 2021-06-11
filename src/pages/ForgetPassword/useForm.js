@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { forgotPasswordApi } from "../../Utils/loginApi";
 import { fieldNames, isEmailValid, messages } from "../../Utils/formConstants";
-import { useHistory } from "react-router";
 
 const initialValues = {
   email: "",
@@ -11,7 +10,6 @@ export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
