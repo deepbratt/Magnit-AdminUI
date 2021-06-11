@@ -1,12 +1,10 @@
-import { Grid, Card, TextField, Button, Typography } from "@material-ui/core";
-import { useHistory } from "react-router";
+import { Grid, Card, TextField, Button } from "@material-ui/core";
 import Logo from "../../assets/logo.png";
 import { fieldNames } from "../../Utils/formConstants";
 import { useForm } from "./useForm";
 
-const Login = () => {
+const ForgetPassword = () => {
   const { values, errors, handleInputChange, handleSubmit } = useForm();
-  const history = useHistory();
 
   return (
     <Grid
@@ -43,22 +41,9 @@ const Login = () => {
               {...(errors && { error: true, helperText: errors.email })}
               onChange={handleInputChange}
             />
-            <TextField
-              id="input-password"
-              name={fieldNames.password}
-              type="password"
-              fullWidth
-              variant="outlined"
-              placeholder="*********"
-              value={values.password}
-              {...(errors && { error: true, helperText: errors.password })}
-              onChange={handleInputChange}
-            />
-            <Button onClick={() => history.push("/forget-password")}>
-              Forgot Password?
-            </Button>
+
             <Button fullWidth variant="contained" color="primary" type="submit">
-              Login
+              Continue
             </Button>
           </form>
         </Card>
@@ -67,4 +52,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgetPassword;

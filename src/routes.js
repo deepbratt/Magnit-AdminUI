@@ -3,6 +3,7 @@ import { Typography } from "@material-ui/core";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import RequireAuth from "./RequireAuth";
 import { pagesRoutes } from "./Utils/paths";
+const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
 const Login = lazy(() => import("./pages/Login"));
 
 const Routes = () => {
@@ -26,6 +27,9 @@ const Routes = () => {
         </Switch>
         <Route exact path="/login">
           <Login />
+        </Route>
+        <Route exact path="/forget-password">
+          <ForgetPassword />
         </Route>
       </Router>
     </Suspense>
