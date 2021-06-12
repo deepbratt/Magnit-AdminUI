@@ -56,3 +56,38 @@ export const resetPasswordApi = async (token, data) => {
     return error.response.data;
   }
 };
+
+const api = {
+  getAllHowItWorks: async function(){
+      try{
+          const response = await axiosInstance.get("howitworks")
+          console.log(response)
+          return response
+      }catch(error){
+          console.log('error: ',error)
+          return error
+      }
+  },
+  getOneHowItWorks: async function(itemId){
+      try{
+          const response = await axiosInstance.get("howitworks/"+itemId)
+          console.log(response)
+          return response
+      }catch(error){
+          console.log('error: ',error)
+          return error
+      }
+  },
+  createHowItWorks: async function(dataBody){
+      try{
+          const response = await axiosInstance.post("howitworks", dataBody)
+          console.log(response)
+          return response
+      }catch(error){
+          console.log('error: ',error)
+          return error
+      }
+  }
+}
+
+export default api

@@ -45,7 +45,7 @@ const ContentTable = ({dataArray, updateItem, removeItem}) => {
           alignItems="center"
         >
           <Grid item xs={3}>
-            {item.id}
+            {item._id}
           </Grid>
           <Grid item xs={4}>
             {item.title}
@@ -54,8 +54,8 @@ const ContentTable = ({dataArray, updateItem, removeItem}) => {
             {item.query}
           </Grid>
           <Grid item container xs={2} justify="space-between" style={{ display: "flex" }}>
-            <Button variant="contained" color="primary" onClick={()=>editItem(item.id)}><CreateIcon /></Button>
-            <Button variant="contained" color="secondary" onClick={()=>deleteItem(item.id)}><DeleteIcon /></Button>
+            <Button variant="contained" color="primary" onClick={()=>editItem(item._id)}><CreateIcon /></Button>
+            <Button variant="contained" color="secondary" onClick={()=>deleteItem(item._id)}><DeleteIcon /></Button>
           </Grid>
         </Grid>
       ))}
