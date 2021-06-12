@@ -9,6 +9,9 @@ const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
 const Users = lazy(() => import("../pages/users"));
 const Settings = lazy(() => import("../pages/settings"));
+const Login = lazy(() => import("../pages/Login"));
+const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword"));
 
 export const paths = {
   dashboard: "dashboard",
@@ -16,6 +19,9 @@ export const paths = {
   sections: "sections",
   users: "users",
   setting: "setting",
+  login: "login",
+  forgotPassword: "forgot-password",
+  resetPassword: "reset-password",
 };
 
 export const routes = {
@@ -24,6 +30,9 @@ export const routes = {
   sections: "/moderate-sections",
   users: "/users",
   settings: "/account-settings",
+  login: "/login",
+  forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password/:token",
 };
 
 export const pagesRoutes = {
@@ -56,5 +65,23 @@ export const pagesRoutes = {
     path: routes.settings,
     component: Settings,
     icon: <AccountCircleIcon />,
+  },
+};
+
+export const publicRoutes = {
+  [paths.login]: {
+    name: "Login",
+    path: routes.login,
+    component: Login,
+  },
+  [paths.forgotPassword]: {
+    name: "Forgot Password",
+    path: routes.forgotPassword,
+    component: ForgetPassword,
+  },
+  [paths.resetPassword]: {
+    name: "Reset Password",
+    path: routes.resetPassword,
+    component: ResetPassword,
   },
 };
