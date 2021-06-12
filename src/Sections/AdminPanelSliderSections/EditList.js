@@ -25,7 +25,6 @@ const EditList = ({ arr, setArr }) => {
     setEditingText(todo);
   }
 
-  console.log(arr);
   return (
     <>
       <Grid item xs={12}>

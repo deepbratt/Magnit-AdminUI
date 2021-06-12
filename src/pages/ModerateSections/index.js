@@ -1,10 +1,15 @@
+import React from "react";
 import { Typography } from "@material-ui/core";
-
+import ModerateBox from "../../components/ModerateContext/ModerateBox"
+import {BoxData} from "../../Utils/Text"
 const ModerateSections = () => {
+ 
+  
   return (
-    <div>
-      <Typography>Manage, Sections/Components</Typography>
-    </div>
+    <>
+      <Typography variant="h4" style={{textAlign: "center"}}>Manage Sections</Typography>
+      <ModerateBox payload={BoxData}/>
+    </>
   );
 };
 
