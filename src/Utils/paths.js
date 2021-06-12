@@ -32,7 +32,7 @@ export const routes = {
   settings: "/account-settings",
   login: "/login",
   forgotPassword: "/forgot-password",
-  resetPassword: "/reset-password",
+  resetPassword: "/reset-password/:token",
 };
 
 export const pagesRoutes = {

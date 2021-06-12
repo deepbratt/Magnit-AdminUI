@@ -1,17 +1,20 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { fieldNames, messages } from "../../Utils/formConstants";
+import { resetPasswordApi } from "../../Utils/loginApi";
 
 const initialValues = {
   password: "",
   confirmPassword: "",
 };
 
-export const useForm = (validateOnChange = false) => {
+export const useForm = (token, validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
+  const [responseMessage, setResponseMessage] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  // const history = useHistory();
+  const history = useHistory();
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -54,12 +57,28 @@ export const useForm = (validateOnChange = false) => {
     console.log("btn clicked", values);
     if (validate()) {
       setIsLoading(true);
-      console.log(values);
+      console.log(values, token);
       let requestBody = {
         password: values.password,
-        confirmPassword: values.confirmPASSWORD,
+        passwordConfirm: values.confirmPassword,
       };
-      console.log("reset-pass", requestBody);
+      await resetPasswordApi(token, requestBody)
+        .then((response) => {
+          setIsLoading(false);
+          console.log("response", response);
+          if (response.status === "success") {
+            history.push("/login");
+          }
+          if (response.status === "fail") {
+            setResponseMessage(response.message);
+            resetForm();
+          }
+
+          console.log("resp", response);
+        })
+        .catch((error) => {
+          setResponseMessage(error.message);
+        });
     }
   };
 
@@ -73,5 +92,6 @@ export const useForm = (validateOnChange = false) => {
     validate,
     handleSubmit,
     isLoading,
+    responseMessage,
   };
 };

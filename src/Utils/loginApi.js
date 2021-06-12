@@ -13,6 +13,7 @@ const axiosInstance = axios.create({
 const USERS = {
   LOGIN: `users/login`,
   FORGOTPASS: `users/forgotPassword`,
+  RESETPASS: `users/resetPassword`,
 };
 
 export const userLoginApi = async (data) => {
@@ -33,6 +34,19 @@ export const forgotPasswordApi = async (data) => {
   try {
     let result = await axiosInstance.post(`${USERS.FORGOTPASS}`, data);
 
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    if (error.response === undefined) {
+      return { status: 403, message: "Something Went Wrong!" };
+    }
+    return error.response.data;
+  }
+};
+
+export const resetPasswordApi = async (token, data) => {
+  try {
+    let result = await axiosInstance.patch(`${USERS.RESETPASS}/${token}`, data);
     return result.data;
   } catch (error) {
     console.log(error);

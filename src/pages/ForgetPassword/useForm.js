@@ -10,6 +10,8 @@ export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+  const [resetLinkMessage, setResetLinkMessage] = useState("");
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -59,9 +61,15 @@ export const useForm = (validateOnChange = false) => {
         .then((response) => {
           setIsLoading(false);
           console.log("resp", response);
+          if (response.status === "success") {
+            setResetLinkMessage(response.message);
+          }
+          if (response.status === "fail") {
+            setResponseMessage(response.message);
+          }
         })
         .catch((error) => {
-          console.error(error);
+          setResponseMessage(error.message);
         });
     }
   };
@@ -76,5 +84,7 @@ export const useForm = (validateOnChange = false) => {
     validate,
     handleSubmit,
     isLoading,
+    resetLinkMessage,
+    responseMessage,
   };
 };

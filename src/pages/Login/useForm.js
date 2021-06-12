@@ -16,6 +16,7 @@ export const useForm = (validateOnChange = false) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
+  const [responseMessage, setResponseMessage] = useState("");
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -71,14 +72,23 @@ export const useForm = (validateOnChange = false) => {
       await userLoginApi(requestBody)
         .then((response) => {
           setIsLoading(false);
-          dispatch(login(response));
+          console.log("response", response);
           if (response.status === "success") {
+            dispatch(login(response));
             history.push("/");
+          }
+          if (response.status === "fail") {
+            setResponseMessage(response.message);
+            resetForm();
+          }
+          if (response.status === 403) {
+            setResponseMessage(response.message);
+            resetForm();
           }
           console.log("resp", response);
         })
         .catch((error) => {
-          console.error(error);
+          setResponseMessage(error.message);
         });
     }
   };
@@ -93,5 +103,6 @@ export const useForm = (validateOnChange = false) => {
     validate,
     handleSubmit,
     isLoading,
+    responseMessage,
   };
 };

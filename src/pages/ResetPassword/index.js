@@ -1,28 +1,26 @@
-import { Grid, Card, TextField, Button, InputLabel } from "@material-ui/core";
+import { Grid, Card, TextField, Button, Typography } from "@material-ui/core";
+import { useParams } from "react-router-dom";
 import Logo from "../../assets/logo.png";
+import GlobalStyles from "../../globalStyles";
 import { fieldNames } from "../../Utils/formConstants";
 import { useForm } from "./useForm";
 
 const ResetPassword = () => {
-  const { values, errors, handleInputChange, handleSubmit } = useForm();
+  const { token } = useParams();
+  const { values, errors, handleInputChange, responseMessage, handleSubmit } =
+    useForm(token);
+  console.log("token", token);
+  const { loginFormGrid, formCard } = GlobalStyles();
 
   return (
     <Grid
-      style={{ height: "100vh" }}
+      className={loginFormGrid}
       container
       justify="center"
       alignContent="center"
     >
       <Grid item xs={4}>
-        <Card
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <Card className={formCard}>
           <img
             style={{ margin: "30px 20px" }}
             width="200px"
@@ -31,25 +29,23 @@ const ResetPassword = () => {
           />
 
           <form style={{ padding: "20px 20px" }} onSubmit={handleSubmit}>
-            <InputLabel id="input-password">Password</InputLabel>
             <TextField
               id="input-password"
               name={fieldNames.password}
               type="password"
               fullWidth
               variant="outlined"
-              placeholder="*********"
+              label="Enter your password"
               value={values.password}
               {...(errors && { error: true, helperText: errors.password })}
               onChange={handleInputChange}
             />
-            <InputLabel id="input-confirm-password">
-              Confirm Password
-            </InputLabel>
+
             <TextField
               id="input-confirm-password"
               name={fieldNames.confirmPassword}
               type="password"
+              label="Re-enter your password"
               fullWidth
               variant="outlined"
               value={values.confirmPassword}
@@ -59,10 +55,20 @@ const ResetPassword = () => {
               })}
               onChange={handleInputChange}
             />
-
-            <Button fullWidth variant="contained" color="primary" type="submit">
+            <Button
+              style={{ marginBottom: "10px" }}
+              fullWidth
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
               Reset Password
             </Button>
+            {responseMessage && (
+              <Typography color="error" variant="subtitle1">
+                {responseMessage}
+              </Typography>
+            )}
           </form>
         </Card>
       </Grid>
