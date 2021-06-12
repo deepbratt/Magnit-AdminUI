@@ -1,22 +1,17 @@
-import { Typography } from "@material-ui/core";
-import { Grid, Card, TextField, Button } from "@material-ui/core";
-import { useHistory } from "react-router";
+import { Grid, Card, TextField, Button, Typography } from "@material-ui/core";
+import { useParams } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 import GlobalStyles from "../../globalStyles";
 import { fieldNames } from "../../Utils/formConstants";
 import { useForm } from "./useForm";
 
-const Login = () => {
-  const {
-    values,
-    errors,
-    handleInputChange,
-    responseMessage,
-    handleSubmit,
-  } = useForm();
-  const history = useHistory();
-
+const ResetPassword = () => {
+  const { token } = useParams();
+  const { values, errors, handleInputChange, responseMessage, handleSubmit } =
+    useForm(token);
+  console.log("token", token);
   const { loginFormGrid, formCard } = GlobalStyles();
+
   return (
     <Grid
       className={loginFormGrid}
@@ -27,28 +22,13 @@ const Login = () => {
       <Grid item xs={4}>
         <Card className={formCard}>
           <img
-            style={{ margin: "20px 0" }}
-            width="120px"
+            style={{ margin: "30px 20px" }}
+            width="200px"
             src={Logo}
             alt="Magnit Logo"
           />
-          <Typography variant="h6" gutterBottom>
-            Sign In
-          </Typography>
-          <Typography align="center" variant="subtitle1">
-            Enter your Magnit Account Email and password.
-          </Typography>
+
           <form style={{ padding: "20px 20px" }} onSubmit={handleSubmit}>
-            <TextField
-              id="input-name"
-              name={fieldNames.email}
-              fullWidth
-              variant="outlined"
-              label="Email"
-              value={values.email}
-              {...(errors && { error: true, helperText: errors.email })}
-              onChange={handleInputChange}
-            />
             <TextField
               id="input-password"
               name={fieldNames.password}
@@ -60,13 +40,21 @@ const Login = () => {
               {...(errors && { error: true, helperText: errors.password })}
               onChange={handleInputChange}
             />
-            <Button
-              style={{ marginBottom: "10px" }}
-              onClick={() => history.push("/forgot-password")}
-            >
-              Forgot Password?
-            </Button>
 
+            <TextField
+              id="input-confirm-password"
+              name={fieldNames.confirmPassword}
+              type="password"
+              label="Re-enter your password"
+              fullWidth
+              variant="outlined"
+              value={values.confirmPassword}
+              {...(errors && {
+                error: true,
+                helperText: errors.confirmPassword,
+              })}
+              onChange={handleInputChange}
+            />
             <Button
               style={{ marginBottom: "10px" }}
               fullWidth
@@ -74,7 +62,7 @@ const Login = () => {
               color="primary"
               type="submit"
             >
-              Login
+              Reset Password
             </Button>
             {responseMessage && (
               <Typography color="error" variant="subtitle1">
@@ -88,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;
