@@ -4,8 +4,8 @@ import CreateIcon from "@material-ui/icons/Create";
 import DeleteIcon from "@material-ui/icons/Delete";
 import useContentTable from "./useContentTable";
 
-const ContentTable = ({dataArray,edit}) => {
-    const {editItem, deleteItem} = useContentTable()
+const ContentTable = ({dataArray,edit,url,handleId}) => {
+    const {editItem, deleteItem} = useContentTable(url)
   return (
     <Grid container style={{ border: "2px solid grey" }}>
       <Grid container item xs={12} style={{ borderBottom: "1px solid grey", padding:"5px" }}>
@@ -38,7 +38,7 @@ const ContentTable = ({dataArray,edit}) => {
           alignItems="center"
         >
           <Grid item xs={3}>
-            {item.id}
+            {item._id}
           </Grid>
           <Grid item xs={4}>
             {item.title}
@@ -47,10 +47,11 @@ const ContentTable = ({dataArray,edit}) => {
             {item.query}
           </Grid>
           <Grid item container xs={2} justify="space-between" style={{ display: "flex" }}>
-            <Button variant="contained" color="primary" onClick={()=>{editItem(item.id)
+            <Button variant="contained" color="primary" onClick={()=>{editItem(item._id)
             edit(true)
+            handleId(item._id)
       }}><CreateIcon /></Button>
-            <Button variant="contained" color="secondary" onClick={()=>deleteItem(item.id)}><DeleteIcon /></Button>
+            <Button variant="contained" color="secondary" onClick={()=>deleteItem(item._id)}><DeleteIcon /></Button>
           </Grid>
         </Grid>
       ))}

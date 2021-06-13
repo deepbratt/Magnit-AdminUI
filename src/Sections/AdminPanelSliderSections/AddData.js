@@ -4,17 +4,20 @@ import TextFieldContext from "./TextFieldContext";
 import ListItems from "./ListItems";
 import Alert from "@material-ui/lab/Alert";
 import useStyles from "./useStyles";
+import useApi from "../../Utils/useApi";
+
 const AddData = () => {
+  const { addData, isPending } = useApi("http://3.138.190.235/v1/sliders");
   const { grid, btn } = useStyles();
   const [list, setList] = useState("");
   const [file, setFile] = useState(null);
   const [array, setArray] = useState([]);
   const [data, setData] = useState({
-    heading: "",
-    button: "",
-    link: "",
+    title: "",
+    buttonLink: "",
+    buttonLabel: "",
   });
-  const { heading, button, link } = data;
+  const { title, buttonLabel, buttonLink } = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -31,65 +34,54 @@ const AddData = () => {
     }
   };
 
-  // const items = {
-  //     heading: heading,
-  //     img: file,
-  //     list: array,
-  //     link: link,
-  //     button: button,
-  //   };
+  const formData = new FormData();
+  formData.append("backgroundImage", file);
+  formData.append("title", title);
+  formData.append("items", array);
+  formData.append("buttonLabel", buttonLabel);
+  formData.append("buttonLink", buttonLink);
+
   return (
     <>
-      <form
-        // onSubmit={(e) => updateData(e, id, items)}
-        onSubmit={(e) => {
-          e.preventDefault();
+      <Grid className={grid} lg={12} item xs={12}>
+        <TextFieldContext
+          title={title}
+          buttonLabel={buttonLabel}
+          inputChange={inputChange}
+          buttonLink={buttonLink}
+          setFile={setFile}
+        />
+        <ListItems
+          handleAddList={add}
+          value={list}
+          arr={array}
+          input={InputChange}
+        />
+      </Grid>
+      <Grid
+        item
+        lg={12}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "30px",
         }}
-        autoComplete="off"
       >
-        <Grid className={grid} lg={12} item xs={12}>
-          <TextFieldContext
-            head={heading}
-            btn={button}
-            inputChange={inputChange}
-            link={link}
-            setFile={setFile}
-          />
-          <ListItems
-            handleAddList={add}
-            value={list}
-            arr={array}
-            input={InputChange}
-          />
-        </Grid>
-        <Grid
-          item
-          lg={12}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "30px",
+        <Button
+          onClick={() => {
+            addData(formData);
           }}
+          variant="contained"
+          className={btn}
         >
-          <Button
-            type="submit"
-            onClick={() => {
-              console.log(array);
-            }}
-            variant="contained"
-            className={btn}
-          >
-            Add Data
-          </Button>
-        </Grid>
+          Add Data
+        </Button>
+      </Grid>
+      {isPending ? (
         <Alert severity="info">Status: pending!</Alert>
-
-        {/* {isPending ? (
-            <Alert severity="info">Status: pending!</Alert>
-          ) : (
-            <Alert severity="success">Status: updated successfully!</Alert>
-          )} */}
-      </form>
+      ) : (
+        <Alert severity="success">Status: Added successfully!</Alert>
+      )}
     </>
   );
 };

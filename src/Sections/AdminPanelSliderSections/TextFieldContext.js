@@ -2,7 +2,13 @@ import React from "react";
 import { TextField, InputLabel, Grid } from "@material-ui/core";
 import useStyles from "./useStyles";
 
-const TextFieldContext = ({ head, btn, inputChange, link, setFile }) => {
+const TextFieldContext = ({
+  title,
+  buttonLabel,
+  inputChange,
+  buttonLink,
+  setFile,
+}) => {
   const { labels, common } = useStyles();
   return (
     <>
@@ -11,9 +17,8 @@ const TextFieldContext = ({ head, btn, inputChange, link, setFile }) => {
         <TextField
           variant="outlined"
           type="text"
-          name="heading"
-          value={head}
-          required
+          name="title"
+          value={title}
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
@@ -23,9 +28,8 @@ const TextFieldContext = ({ head, btn, inputChange, link, setFile }) => {
         <TextField
           variant="outlined"
           type="text"
-          name="link"
-          value={link}
-          required
+          name="buttonLink"
+          value={buttonLink}
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
@@ -36,9 +40,8 @@ const TextFieldContext = ({ head, btn, inputChange, link, setFile }) => {
         <TextField
           variant="outlined"
           type="text"
-          name="button"
-          value={btn}
-          required
+          name="buttonLabel"
+          value={buttonLabel}
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
@@ -48,7 +51,6 @@ const TextFieldContext = ({ head, btn, inputChange, link, setFile }) => {
         <TextField
           variant="outlined"
           type="file"
-          required
           name="file"
           onChange={(e) => setFile(e.target.files[0])}
           style={{ width: "100%" }}
