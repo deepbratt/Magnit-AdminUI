@@ -10,16 +10,22 @@ const useApi = (url) => {
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState({ errorMessage: "" });
   const [success, setSuccess] = useState({ successMessage: "" });
+  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
-    loadData();
+    if (isMounted) {
+      loadData();
+    } else {
+      return () => {};
+    }
   }, [data]);
 
   const loadData = async () => {
     try {
-      const result = await axios.get("http://3.138.190.235/v1/sliders");
-      setSuccess({ successMessage: result.data.success });
-      setData(result.data.data.data);
+      const { data } = await axios.get("http://3.138.190.235/v1/sliders");
+      setSuccess({ successMessage: data.success });
+      setData(data.data.data);
+      setIsMounted(true);
     } catch (error) {
       setError({ errorMessage: error.message });
       console.error("There was an error!", error);
@@ -34,14 +40,17 @@ const useApi = (url) => {
 
   const addData = async (formData) => {
     try {
-      const result = await axios.post(`${url}`, formData, { headers });
-      if (result.status === 200) {
-        setSuccess({ successMessage: result.data.success });
-        setData((prev)=>{
-          return [...prev,result.data.data.data]
-        })
+      const { status, data } = await axios.post(`${url}`, formData, {
+        headers,
+      });
+      if (status === 200) {
+        setSuccess({ successMessage: data.success });
+        setData((prev) => {
+          return [...prev, data.data.data];
+        });
       }
       setIsPending(false);
+      setIsMounted(false);
     } catch (error) {
       setError({ errorMessage: error.message });
       console.error("There was an error!", error);
@@ -56,15 +65,18 @@ const useApi = (url) => {
 
   const updateData = async (Id, items) => {
     try {
-      const result = await axios.patch(`${url}/${Id}`, items, { headers });
-      if (result.status === 200) {
-        setSuccess({ successMessage: result.data.success });
+      const { status, data } = await axios.patch(`${url}/${Id}`, items, {
+        headers,
+      });
+      if (status === 200) {
+        setSuccess({ successMessage: data.success });
         setError(false);
         setIsPending(false);
-        setData((prev)=>{
-          return [...prev,result.data.data.data]
-        })
+        setData((prev) => {
+          return [...prev, data.data.data];
+        });
       }
+      setIsMounted(false);
     } catch (error) {
       setError({ errorMessage: error.message });
       console.error("There was an error!", error);
