@@ -2,16 +2,18 @@ import { Suspense } from "react";
 import { Typography } from "@material-ui/core";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import RequireAuth from "./RequireAuth";
-import { pagesRoutes } from "./Utils/paths";
+import { pagesRoutes, publicRoutes } from "./Utils/paths";
+import PublicRoute from "./PublicRoute";
 
 const Routes = () => {
-  const routeArray = Object.values(pagesRoutes);
-  console.log("paths",routeArray.map(route => route.path));
+  const privateRoutes = Object.values(pagesRoutes);
+  const _publicRoutes = Object.values(publicRoutes);
+
   return (
     <Suspense fallback={<Typography styles="h4">Loading....</Typography>}>
       <Router>
         <Switch>
-          {routeArray.map((route, index) => (
+          {privateRoutes.map((route, index) => (
             <RequireAuth
               path={route.path}
               component={route.component}
@@ -19,7 +21,24 @@ const Routes = () => {
               exact
             />
           ))}
+          {_publicRoutes.map((route, index) => (
+            <PublicRoute
+              path={route.path}
+              component={route.component}
+              key={`route-${route.name}`}
+              exact
+            />
+          ))}
         </Switch>
+        {/* <Route exact path="/login">
+          <Login />
+        </Route>
+        <Route exact path="/forget-password">
+          <ForgetPassword />
+        </Route>
+        <Route exact path="/reset-password">
+          <ResetPassword />
+        </Route> */}
       </Router>
     </Suspense>
   );
