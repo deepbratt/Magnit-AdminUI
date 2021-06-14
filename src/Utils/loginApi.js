@@ -9,6 +9,14 @@ const axiosInstance = axios.create({
     "Access-Control-Allow-Origin": "*",
   },
 });
+const axiosFormInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    Accept: "application/json",
+    'Content-Type': 'multipart/form-data',
+    "Access-Control-Allow-Origin": "*",
+  },
+});
 
 const USERS = {
   LOGIN: `users/login`,
@@ -79,8 +87,13 @@ const api = {
       }
   },
   createHowItWorks: async function(dataBody){
+    const headers = {
+      "content-type": "multipart/form-data",
+    };
       try{
-          const response = await axiosInstance.post("howitworks", dataBody)
+          const response = await axios.post(BASE_URL+"howitworks", dataBody, {
+            headers,
+          })
           console.log(response)
           return response
       }catch(error){

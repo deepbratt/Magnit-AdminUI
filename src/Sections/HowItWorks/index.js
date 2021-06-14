@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import ContentTable from "../../components/Table";
 import api from "../../Utils/loginApi";
 import HowWorkForm from './HowWorkForm'
+import SimpleForm from "../../components/SimpleForm/SimpleForm";
 
 const HowItWorks = () => {
   const [itemId, setItemId] = useState('')
@@ -37,7 +38,7 @@ const HowItWorks = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <HowWorkForm itemId={itemId} clearItemId={()=>setItemId('')}/>
+        <SimpleForm itemId={itemId} clearItemId={()=>setItemId('')} createApi={api.createHowItWorks} updateApi={console.log} getItemApi={api.getOneHowItWorks}/>
       </Grid>
       <Grid item xs={12}>
         <ContentTable dataArray={dataArray} updateItem={setItemId} removeItem={deleteItem}/>

@@ -1,9 +1,21 @@
 import React from "react";
 import { Button, Grid, TextField } from "@material-ui/core";
-import useHowWorksForm from "./useHowWorksForm";
+import useSimpleForm from "./useSimpleForm";
 
-const HowWorkForm = ({ itemId, clearItemId }) => {
-  const { handleChange, handleSubmit, formData,  clearFields  } = useHowWorksForm(itemId, clearItemId);
+const SimpleForm = ({
+  itemId,
+  clearItemId,
+  createApi,
+  updateApi,
+  getItemApi,
+}) => {
+  const { handleChange, handleSubmit, formData, clearFields } = useSimpleForm(
+    itemId,
+    clearItemId,
+    createApi,
+    updateApi,
+    getItemApi
+  );
   return (
     <form onSubmit={handleSubmit}>
       <Grid container alignItems="center" spacing={2}>
@@ -43,12 +55,12 @@ const HowWorkForm = ({ itemId, clearItemId }) => {
               <input name="image" type="file" hidden onChange={handleChange}/>
             </Button> */}
             <TextField
-          variant="outlined"
-          type="file"
-          name="image"
-          onChange={handleChange}
-          style={{ width: "100%" }}
-        />
+              variant="outlined"
+              type="file"
+              name="image"
+              onChange={handleChange}
+              style={{ width: "100%" }}
+            />
           </Grid>
           <Grid
             item
@@ -58,8 +70,8 @@ const HowWorkForm = ({ itemId, clearItemId }) => {
             justify="center"
           >
             <div>
-              {/* <img src={formData.image && URL.createObjectURL(formData.image)} height="auto" width="100px" />
-              <img src={itemId && formData.image} height="auto" width="100px" /> */}
+              {formData.image && <img src={URL.createObjectURL(formData.image)} height="auto" width="100px" />}
+              {itemId && <img src={formData.image} height="auto" width="100px" />}
             </div>
           </Grid>
         </Grid>
@@ -80,9 +92,8 @@ const HowWorkForm = ({ itemId, clearItemId }) => {
   );
 };
 
-
-HowWorkForm.defaultProps = {
+SimpleForm.defaultProps = {
   itemId: "",
 };
 
-export default HowWorkForm;
+export default SimpleForm;

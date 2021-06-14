@@ -1,5 +1,4 @@
 import { useEffect, useReducer } from "react";
-import api from "../../Utils/loginApi";
 
 const formReducer = (state, event) => {
   return {
@@ -9,11 +8,17 @@ const formReducer = (state, event) => {
 };
 
 const initialFieldValues = {
-    title: "",
-    text: "",
-    image: "",
-  };
-const useHowWorksForm = (itemId, clearItemId) => {
+  title: "",
+  text: "",
+  image: "",
+};
+const useSimpleForm = (
+  itemId,
+  clearItemId,
+  createApi,
+  updateApi,
+  getItemApi
+) => {
   const [formData, setFormData] = useReducer(formReducer, initialFieldValues);
   const handleChange = (event) => {
     setFormData({
@@ -26,51 +31,49 @@ const useHowWorksForm = (itemId, clearItemId) => {
   };
 
   const handleSubmit = () => {
-    // console.table(formData);
-    // return
     var fd = new FormData();
-fd.append('text', formData.text);
-fd.append('title', formData.title);
-fd.append('image', formData.image);
-    // for(var pair of fd.entries()) {
-    //   console.log(pair[0]+', '+pair[1]);
-    // }
-    // return
-    api.createHowItWorks(fd).then(response=>{
-      console.log(response)
-    })
+    fd.append("title", formData.title);
+    fd.append("text", formData.text);
+    fd.append("image", formData.image);
+    if (itemId) {
+      updateApi(itemId, fd).then((response) => {
+        console.log(response);
+      });
+    }
+    createApi(fd).then((response) => {
+      console.log(response);
+    });
   };
-  
-  const clearFields = () =>{
+
+  const clearFields = () => {
     setFormData({ name: "title", value: "" });
     setFormData({ name: "text", value: "" });
-    setFormData({name:"image", value:""})
-    clearItemId()
-  }
+    setFormData({ name: "image", value: "" });
+    clearItemId();
+  };
 
   useEffect(() => {
     if (itemId) {
       // fetch data and populate the fields
-      api.getOneHowItWorks(itemId).then(response=>{
-        // console.log(response)
+      getItemApi(itemId).then((response) => {
         setFormData({ name: "title", value: response.data.data.data.title });
         setFormData({ name: "text", value: response.data.data.data.text });
-        setFormData({name:'image', value:response.data.data.data.image})
-      })
+        setFormData({ name: "image", value: response.data.data.data.image });
+      });
     }
   }, [itemId]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setFormData({ name: "title", value: "" });
     setFormData({ name: "text", value: "" });
-    setFormData({name:"image", value:""})
-  },[])
+    setFormData({ name: "image", value: "" });
+  }, []);
   return {
     handleSubmit,
     handleChange,
     formData,
-    clearFields
+    clearFields,
   };
 };
 
-export default useHowWorksForm;
+export default useSimpleForm;
