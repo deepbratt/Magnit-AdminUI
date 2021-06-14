@@ -28,6 +28,10 @@ const useSimpleForm = (
           ? event.target.files[0]
           : event.target.value,
     });
+    event.target.value = event.target.name === "image" && null
+    if(event.target.name === "image"){
+      console.log(typeof event.target.files[0] !== String)
+    }
   };
 
   const handleSubmit = () => {
@@ -39,10 +43,11 @@ const useSimpleForm = (
       updateApi(itemId, fd).then((response) => {
         console.log(response);
       });
+    }else{
+      createApi(fd).then((response) => {
+        console.log(response);
+      });
     }
-    createApi(fd).then((response) => {
-      console.log(response);
-    });
   };
 
   const clearFields = () => {

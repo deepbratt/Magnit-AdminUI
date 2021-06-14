@@ -50,17 +50,17 @@ const SimpleForm = ({
           spacing={0}
         >
           <Grid item xs={6}>
-            {/* <Button variant="contained" component="label">
+            <Button variant="contained" component="label">
               Upload Icon
-              <input name="image" type="file" hidden onChange={handleChange}/>
-            </Button> */}
-            <TextField
+              <input name="image" type="file" hidden onChange={handleChange} />
+            </Button>
+            {/* <TextField
               variant="outlined"
               type="file"
               name="image"
               onChange={handleChange}
               style={{ width: "100%" }}
-            />
+            /> */}
           </Grid>
           <Grid
             item
@@ -70,8 +70,18 @@ const SimpleForm = ({
             justify="center"
           >
             <div>
-              {formData.image && <img src={URL.createObjectURL(formData.image)} height="auto" width="100px" />}
-              {itemId && <img src={formData.image} height="auto" width="100px" />}
+              {typeof formData.image === "string" ? (
+                <img src={formData.image} height="auto" width="100px" />
+              ) : formData.image && typeof formData !== "string" ? (
+                <img
+                  src={URL.createObjectURL(formData.image)}
+                  height="auto"
+                  width="100px"
+                />
+              ) : (
+                ""
+              )}
+              {/* {itemId && <img src={formData.image} height="auto" width="100px" />} */}
             </div>
           </Grid>
         </Grid>

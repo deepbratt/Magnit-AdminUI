@@ -32,13 +32,18 @@ const HowItWorks = () => {
   },[])
 
   const deleteItem = (id) =>{
-    console.log('delete this '+ id)
+    api.deleteHowItWorks(id).then(response=>{
+      console.log(response)
+      let arr = dataArray
+      let newArr = arr.filter(item=>item._id!==id)
+      setDataArray(newArr)
+    })
   }
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <SimpleForm itemId={itemId} clearItemId={()=>setItemId('')} createApi={api.createHowItWorks} updateApi={console.log} getItemApi={api.getOneHowItWorks}/>
+        <SimpleForm itemId={itemId} clearItemId={()=>setItemId('')} createApi={api.createHowItWorks} updateApi={api.updateHowItWorks} getItemApi={api.getOneHowItWorks}/>
       </Grid>
       <Grid item xs={12}>
         <ContentTable dataArray={dataArray} updateItem={setItemId} removeItem={deleteItem}/>

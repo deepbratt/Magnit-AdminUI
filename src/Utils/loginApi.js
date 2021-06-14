@@ -86,6 +86,27 @@ const api = {
           return error
       }
   },
+  deleteHowItWorks: async function(itemId){
+      try{
+          const response = await axiosInstance.delete("howitworks/"+itemId)
+          console.log(response)
+          return response
+      }catch(error){
+          console.log('error: ',error)
+          return error
+      }
+  },
+
+  updateHowItWorks: async function(itemId, dataBody){
+      try{
+          const response = await axiosFormInstance.patch("howitworks/"+itemId, dataBody)
+          console.log(response)
+          return response
+      }catch(error){
+          console.log('error: ',error)
+          return error
+      }
+  },
   createHowItWorks: async function(dataBody){
     const headers = {
       "content-type": "multipart/form-data",
