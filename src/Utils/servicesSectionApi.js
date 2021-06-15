@@ -15,9 +15,9 @@ const SERVICES = {
 };
 
 export const addServicesApi = async (data) => {
+  console.log("Data", data);
   try {
     let result = await axiosInstance.post(`${SERVICES.SERVICES}`, data);
-    console.log("Data", data);
     return result.data;
   } catch (error) {
     console.log(error);
@@ -31,6 +31,34 @@ export const addServicesApi = async (data) => {
 export const getAllServicesApi = async () => {
   try {
     let result = await axiosInstance.get(`${SERVICES.SERVICES}`);
+
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    if (error.response === undefined) {
+      return { status: 403, message: "Something Went Wrong!" };
+    }
+    return error.response.data;
+  }
+};
+
+export const getOneServicesApi = async (id) => {
+  try {
+    let result = await axiosInstance.get(`${SERVICES.SERVICES}/${id}`);
+
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    if (error.response === undefined) {
+      return { status: 403, message: "Something Went Wrong!" };
+    }
+    return error.response.data;
+  }
+};
+
+export const updateServicesApi = async (id, data) => {
+  try {
+    let result = await axiosInstance.patch(`${SERVICES.SERVICES}/${id}`, data);
 
     return result.data;
   } catch (error) {

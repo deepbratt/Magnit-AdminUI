@@ -37,8 +37,7 @@ const GlobalStyles = makeStyles((theme) => ({
   },
   buttonWrap: {
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 

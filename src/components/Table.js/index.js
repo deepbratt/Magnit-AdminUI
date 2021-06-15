@@ -51,7 +51,7 @@ export default function ServicesTable({
 }) {
   return (
     <TableContainer component={Paper}>
-      <Table stickyHeader aria-label="services-added-table">
+      <Table aria-label="services-added-table">
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>

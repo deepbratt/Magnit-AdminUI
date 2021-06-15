@@ -6,7 +6,9 @@ import {
   InputLabel,
   Tooltip,
   TextField,
+  Card,
 } from "@material-ui/core";
+import ColorPicker from "material-ui-color-picker";
 import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
@@ -17,17 +19,34 @@ import { useEffect, useState, useCallback } from "react";
 import {
   deleteServiceApi,
   getAllServicesApi,
+  getOneServicesApi,
 } from "../../Utils/servicesSectionApi";
 
 const AddServices = ({ open, handleClose }) => {
+  const getAllServices = useCallback(async () => {
+    let response = await getAllServicesApi();
+    if (response.data) {
+      console.log(response.data.data);
+      setRows(response.data.data);
+    }
+  }, []);
+
+  const [id, setId] = useState(null);
   const {
+    color,
+    setColor,
     values,
+    setValues,
     errors,
+    update,
+    setUpdate,
     handleInputChange,
     selectedFile,
+    setSelectedFile,
     handleCapture,
     handleSubmit,
-  } = useForm();
+    resetForm,
+  } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
   const tableHead = [
@@ -38,14 +57,6 @@ const AddServices = ({ open, handleClose }) => {
   ];
 
   const [rows, setRows] = useState([]);
-
-  const getAllServices = useCallback(async () => {
-    let response = await getAllServicesApi();
-    if (response.data) {
-      console.log(response.data.data);
-      setRows(response.data.data);
-    }
-  }, []);
 
   useEffect(() => {
     getAllServices();
@@ -67,8 +78,29 @@ const AddServices = ({ open, handleClose }) => {
       });
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = async (id) => {
+    setUpdate(true);
+    setId(id);
     console.log(id);
+    await getOneServicesApi(id)
+      .then((response) => {
+        if (response.status === "success") {
+          setValues({
+            title: response.data.data.title,
+            description: response.data.data.description,
+            buttonLabel: response.data.data.buttonLabel,
+            buttonLink: response.data.data.buttonLink,
+            id: id,
+          });
+          setSelectedFile(response.data.data.image);
+        }
+        if (response.status === "fail") {
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -139,7 +171,7 @@ const AddServices = ({ open, handleClose }) => {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid className={buttonWrap} item xs={12} md={6}>
               <input
                 accept="image/png"
                 name={fieldNames.image}
@@ -160,17 +192,70 @@ const AddServices = ({ open, handleClose }) => {
                 </label>
               </Tooltip>
               <label>{selectedFile ? selectedFile.name : "Select Image"}</label>
+              <Card
+                style={{
+                  backgroundColor: color,
+                  padding: "20px",
+                  margin: "0 50px",
+                  minHeight: "120px",
+                  maxHeight: "120px",
+                  minWidth: "100px",
+                }}
+              >
+                {typeof selectedFile === "string" ? (
+                  <img
+                    src={selectedFile}
+                    height="80px"
+                    width="auto"
+                    alt=""
+                    srcset=""
+                  />
+                ) : selectedFile && typeof selectedFile !== "string" ? (
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    height="80px"
+                    width="auto"
+                    alt=""
+                    srcset=""
+                  />
+                ) : null}
+              </Card>
+
+              <ColorPicker
+                variant="outlined"
+                label="Pick a Color"
+                name={fieldNames.color}
+                value={color}
+                onChange={(color) => setColor(color.toString())}
+              />
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
               <Button
                 type="submit"
-                style={{ maxWidth: "100px" }}
+                style={{
+                  margin: "0 10px",
+                  minWidth: "120px",
+                  maxHeight: "50px",
+                }}
                 variant="contained"
                 color="primary"
                 size="large"
               >
-                Save
+                {update ? "Update" : "Add"} Item
+              </Button>
+              <Button
+                style={{
+                  margin: "0 10px",
+                  minWidth: "120px",
+                  maxHeight: "50px",
+                }}
+                variant="outlined"
+                color="secondary"
+                size="large"
+                onClick={resetForm}
+              >
+                Reset
               </Button>
             </Grid>
           </form>

@@ -17,6 +17,7 @@ export const fieldNames = {
   buttonLabel: "buttonLabel",
   buttonLink: "buttonLink",
   image: "image",
+  color: "color",
 };
 
 export const regex = {
