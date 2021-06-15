@@ -5,7 +5,7 @@ import Alert from "@material-ui/lab/Alert";
 import EditList from "./EditList";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
-export default function EditData({ id }) {
+export default function EditData({ id,edit}) {
   const { updateData, isPending } = useApi("http://3.138.190.235/v1/sliders");
 
   const [file, setFile] = useState(null);
@@ -64,6 +64,9 @@ export default function EditData({ id }) {
                 type="submit"
                 onClick={() => {
                   updateData(id, formData);
+                  setTimeout(() => {
+                    edit(false)
+                  }, 1000);
                 }}
                 variant="contained"
                 color="primary"

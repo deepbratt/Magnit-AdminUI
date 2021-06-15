@@ -14,15 +14,24 @@ const DisplayData = ({ array }) => {
   const link = "http://3.138.190.235/v1/sliders"
   return (
     <div>
+      {!edit ? 
       <Grid justify="center" container>
         <Grid className={heading} item lg={12} xs={12}>
           <Typography variant="h4">Home Slider Data</Typography>
         </Grid>
         <Grid item lg={12}>
-          {!edit ? <AddData edit={setEdit} /> : <EditData id={id}/>}
+          <AddData /> 
         </Grid>
         <Table dataArray={array} url={link} edit={setEdit} handleId={setId}/>
       </Grid>
+      :  <Grid justify="center" container>
+      <Grid className={heading} item lg={12} xs={12}>
+        <Typography variant="h4">Edit Data</Typography>
+      </Grid>
+      <Grid item lg={12}>
+        <EditData id={id} edit={setEdit}/>
+      </Grid>
+    </Grid>}
     </div>
   );
 };
