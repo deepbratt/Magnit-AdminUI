@@ -73,6 +73,15 @@ export default function EditData({ id,edit}) {
               >
                 Update Data
               </Button>
+              <Button
+                type="submit"
+                onClick={() => edit(false)}
+                variant="contained"
+                color="secondary"
+                style={{marginLeft: "15px"}}
+              >
+                Cancel Edit
+              </Button>
             </Grid>
           </Grid>
         <Grid
