@@ -1,64 +1,37 @@
 import React, { useState } from "react";
 import { Grid, Button } from "@material-ui/core";
 import TextFieldContext from "./TextFieldContext";
-import ListItems from "./ListItems";
 import Alert from "@material-ui/lab/Alert";
 import useStyles from "./useStyles";
 import useApi from "../../Utils/useApi";
 
 const AddData = () => {
-  const { addData, isPending } = useApi("http://3.138.190.235/v1/sliders");
+  const { addData, isPending } = useApi("http://3.138.190.235/v1/awards");
   const { grid, btn } = useStyles();
-  let id = "form";
-  const [list, setList] = useState("");
   const [file, setFile] = useState(null);
-  const [array, setArray] = useState([]);
   const [data, setData] = useState({
-    title: "",
-    buttonLink: "",
-    buttonLabel: "",
+    clientName: "",
+    link: "",
   });
-  const { title, buttonLabel, buttonLink } = data;
+  const { title, link ,clientName} = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const InputChange = (e) => {
-    setList(e.target.value);
-  };
-
-  const add = () => {
-    setArray((prevData) => {
-      return [...prevData, list];
-    });
-    document.getElementById("form").reset();
-  };
 
   const formData = new FormData();
-  formData.append("backgroundImage", file);
-  formData.append("title", title);
-  formData.append("items", array);
-  formData.append("buttonLabel", buttonLabel);
-  formData.append("buttonLink", buttonLink);
+  formData.append("clientName", clientName);
+  formData.append("image", file);
+  formData.append("link", link);
 
   return (
     <>
       <Grid className={grid} lg={12} item xs={12}>
         <TextFieldContext
-          title={title}
-          buttonLabel={buttonLabel}
+          clientName={clientName}
+          link={link}
           inputChange={inputChange}
-          buttonLink={buttonLink}
           setFile={setFile}
-        />
-
-        <ListItems
-          handleAddList={add}
-          value={list}
-          arr={array}
-          input={InputChange}
-          setArr={setArray}
-          id={id}
         />
       </Grid>
       <Grid

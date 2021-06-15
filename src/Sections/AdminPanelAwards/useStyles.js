@@ -18,8 +18,10 @@ const useStyles = makeStyles(() => ({
         justifyContent: "space-evenly",
         color: "black",
         alignItems: "center",
-        margin: "30px 0 30px 0px",
-        flexDirection: "column",
+        margin: "30px 0 30px 0",
+        [breakpoints.down("sm")]: {
+            flexDirection: "column"
+          },
       },
       labels: {
         marginBottom: "10px",
@@ -50,6 +52,7 @@ const useStyles = makeStyles(() => ({
       btn:{
         background: "green",
         color: "white",
+        marginTop: "20px",
         "&:hover":{
           background: "green"
         }

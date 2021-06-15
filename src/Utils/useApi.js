@@ -22,7 +22,7 @@ const useApi = (url) => {
 
   const loadData = async () => {
     try {
-      const { data } = await axios.get("http://3.138.190.235/v1/sliders");
+      const { data } = await axios.get(`${url}`);
       setSuccess({ successMessage: data.success });
       setData(data.data.data);
       setIsMounted(true);

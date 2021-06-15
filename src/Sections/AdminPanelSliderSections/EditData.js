@@ -66,7 +66,7 @@ export default function EditData({ id,edit}) {
                   updateData(id, formData);
                   setTimeout(() => {
                     edit(false)
-                  }, 1000);
+                  }, 2000);
                 }}
                 variant="contained"
                 color="primary"

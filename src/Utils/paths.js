@@ -10,6 +10,7 @@ const ModerateSections = lazy(() => import("../pages/ModerateSections"));
 const Users = lazy(() => import("../pages/users"));
 const Settings = lazy(() => import("../pages/settings"));
 const AdminPanelSlider = lazy(() => import("../pages/AdminPanelSlider/Container"));
+const AdminPanelAwards = lazy(() => import("../pages/AdminPanelAwards/Container"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -21,6 +22,7 @@ export const paths = {
   users: "users",
   setting: "setting",
   homeSlider: "home-slider",
+  awards: "awards",
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
@@ -33,6 +35,7 @@ export const routes = {
   users: "/users",
   settings: "/account-settings",
   homeSlider: "/home-slider",
+  awards: "/awards",
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
@@ -73,6 +76,11 @@ export const pagesRoutes = {
     name: "Section/HomeSlider",
     path: routes.homeSlider,
     component: AdminPanelSlider,
+  },
+  [paths.awards]: {
+    name: "Section/Awards",
+    path: routes.awards,
+    component: AdminPanelAwards,
   }
 };
 

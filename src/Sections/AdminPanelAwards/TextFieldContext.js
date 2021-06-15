@@ -3,23 +3,21 @@ import { TextField, InputLabel, Grid } from "@material-ui/core";
 import useStyles from "./useStyles";
 
 const TextFieldContext = ({
-  title,
-  buttonLabel,
+  clientName,
+  link,
   inputChange,
-  buttonLink,
   setFile,
 }) => {
   const { labels, common } = useStyles();
   return (
     <>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
-        <InputLabel className={labels}>Heading</InputLabel>
+        <InputLabel className={labels}>ClientName</InputLabel>
         <TextField
           variant="outlined"
-          required
           type="text"
-          name="title"
-          value={title}
+          name="clientName"
+          value={clientName}
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
@@ -29,20 +27,8 @@ const TextFieldContext = ({
         <TextField
           variant="outlined"
           type="text"
-          name="buttonLink"
-          value={buttonLink}
-          onChange={(e) => inputChange(e)}
-          style={{ width: "100%" }}
-        />
-      </Grid>
-
-      <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
-        <InputLabel className={labels}>Button Label</InputLabel>
-        <TextField
-          variant="outlined"
-          type="text"
-          name="buttonLabel"
-          value={buttonLabel}
+          name="link"
+          value={link}
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
