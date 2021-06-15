@@ -25,6 +25,15 @@ const EditList = ({ arr, setArr }) => {
     setEditingText(todo);
   }
 
+  function handleDeleteClick(id, todo) {
+   setArr((prev) => {
+     return prev.filter((array,index) => {
+       return index !== id
+     })
+   })
+  }
+
+
   return (
     <>
       <Grid item xs={12}>
@@ -60,9 +69,11 @@ const EditList = ({ arr, setArr }) => {
                   Submit
                 </Button>
               ) : (
+                <>
                 <Button
                   style={{
                     margin: "20px 0px 20px 0px",
+                    background: "green"
                   }}
                   size="small"
                   variant="contained"
@@ -71,6 +82,18 @@ const EditList = ({ arr, setArr }) => {
                 >
                   Edit
                 </Button>
+                 <Button
+                 style={{
+                   margin: "20px 0px 20px 10px",
+                 }}
+                 size="small"
+                 variant="contained"
+                 color="secondary"
+                 onClick={() => handleDeleteClick(id, data)}
+               >
+                 Delete
+               </Button>
+                </>
               )}
             </div>
           ))}
