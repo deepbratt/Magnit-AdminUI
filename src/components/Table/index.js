@@ -3,24 +3,31 @@ import React from "react";
 import CreateIcon from "@material-ui/icons/Create";
 import DeleteIcon from "@material-ui/icons/Delete";
 import useContentTable from "./useContentTable";
+import { contentTableConstants } from "./constants";
 
-const ContentTable = ({dataArray}) => {
-    const {editItem, deleteItem} = useContentTable()
+const ContentTable = ({dataArray, updateItem, removeItem}) => {
+    const {editItem, deleteItem} = useContentTable(updateItem, removeItem)
+
+    if(dataArray.length < 1){
+      return <div style={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,50%)"}}>
+        <Typography variant="h3" color="textSecondary">{contentTableConstants.noResult}</Typography>
+      </div>
+    }
   return (
     <Grid container style={{ border: "2px solid grey" }}>
       <Grid container item xs={12} style={{ borderBottom: "1px solid grey", padding:"5px" }}>
         <Grid item xs={3}>
-          <Typography variant="subtitle1">ID</Typography>
+          <Typography variant="subtitle1">{contentTableConstants.tableColumnHeadings.tableId}</Typography>
         </Grid>
         <Grid item xs={4}>
-          <Typography variant="subtitle1">Title</Typography>
+          <Typography variant="subtitle1">{contentTableConstants.tableColumnHeadings.tableTitle}</Typography>
         </Grid>
         <Grid item xs={3}>
-          <Typography variant="subtitle1">Query Params</Typography>
+          <Typography variant="subtitle1">{contentTableConstants.tableColumnHeadings.tableParams}</Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography variant="subtitle1" style={{ textAlign: "center" }}>
-            Actions
+            {contentTableConstants.tableColumnHeadings.tableAction}
           </Typography>
         </Grid>
       </Grid>
@@ -57,7 +64,7 @@ const ContentTable = ({dataArray}) => {
 };
 
 ContentTable.defaultProps = {
-    dataArray: [{}]
+    dataArray: []
   };
 
 export default ContentTable;
