@@ -6,6 +6,15 @@ const GlobalStyles = makeStyles((theme) => ({
     background:
       "linear-gradient(180.04deg, #2CD400 -46.18%, rgba(255, 255, 255, 0) 99.96%)",
   },
+  form: {
+    minWidth: "100%",
+    padding: "20px",
+    display: "flex",
+    flexWrap: "wrap",
+    "& > *": {
+      padding: "10px",
+    },
+  },
   formCard: {
     display: "flex",
     flexDirection: "column",
@@ -29,7 +38,7 @@ const GlobalStyles = makeStyles((theme) => ({
   buttonWrap: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-end",
+    justifyContent: "center",
   },
 }));
 

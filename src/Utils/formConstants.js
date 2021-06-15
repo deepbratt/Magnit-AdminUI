@@ -12,6 +12,11 @@ export const fieldNames = {
   email: "email",
   password: "password",
   confirmPassword: "confirmPassword",
+  title: "title",
+  description: "description",
+  buttonLabel: "buttonLabel",
+  buttonLink: "buttonLink",
+  image: "image",
 };
 
 export const regex = {

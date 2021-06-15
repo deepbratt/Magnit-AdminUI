@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Typography, Grid } from "@material-ui/core";
-import NewItemButton from "../../components/NewItemButton";
-import ServicesSection from "../../components/ServicesSection";
+import NewItemButton from "../NewItemButton";
+import AddServices from "./addServices";
 
 const ModeratePages = () => {
   const [open, setOpen] = useState(false);
@@ -17,12 +17,9 @@ const ModeratePages = () => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h4" gutterBottom>
-          Available Sections/Components
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <ServicesSection />
+        <NewItemButton name="Services Section" handleClick={handleClickOpen} />
+
+        <AddServices open={open} handleClose={handleClose} />
       </Grid>
     </Grid>
   );
