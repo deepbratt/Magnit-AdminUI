@@ -97,7 +97,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                       background: "white",
                       margin: "10px 0px 10px 0px",
                       display: "flex",
-                      // justifyContent: "space-evenly",
+                      justifyContent: "space-evenly",
                     }}
                     key={index}
                   >
@@ -105,7 +105,6 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                     <Button
                       style={{
                         background: "green",
-                        marginLeft: "100px",
                       }}
                       size="small"
                       variant="contained"
