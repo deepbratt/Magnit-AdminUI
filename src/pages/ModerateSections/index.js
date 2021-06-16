@@ -1,20 +1,9 @@
-import { useState } from "react";
 import { Typography, Grid } from "@material-ui/core";
-import NewItemButton from "../../components/NewItemButton";
 import ServicesSection from "../../components/ServicesSection";
 import OurWorkSection from "../../components/OurWorkSection";
+import BannersSection from "../../components/Banners";
 
 const ModerateSections = () => {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -28,6 +17,9 @@ const ModerateSections = () => {
         </Grid>
         <Grid item xs={3}>
           <OurWorkSection />
+        </Grid>
+        <Grid item xs={3}>
+          <BannersSection />
         </Grid>
       </Grid>
     </Grid>

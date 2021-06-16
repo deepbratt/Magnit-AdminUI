@@ -14,8 +14,11 @@ export const fieldNames = {
   confirmPassword: "confirmPassword",
   title: "title",
   description: "description",
+  heading: "heading",
+  subHeading: "subHeading",
   buttonLabel: "buttonLabel",
   buttonLink: "buttonLink",
+  type: "type",
   image: "image",
   color: "color",
 };

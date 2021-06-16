@@ -18,7 +18,7 @@ function Row(props) {
     <React.Fragment>
       <TableRow>
         <TableCell>{row._id}</TableCell>
-        <TableCell>{row.title}</TableCell>
+        <TableCell>{row.title ? row.title : row.heading}</TableCell>
         <TableCell align="right">
           <IconButton onClick={() => handleDelete(row._id)}>
             <DeleteRoundedIcon color="error" />

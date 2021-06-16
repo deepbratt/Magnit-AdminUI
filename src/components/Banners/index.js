@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Grid } from "@material-ui/core";
 import NewItemButton from "../NewItemButton";
-import AddServices from "./addServices";
 import AddBanners from "./addBanners";
 
-const Banners = () => {
+const BannersSection = () => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -18,7 +17,7 @@ const Banners = () => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <NewItemButton name="Services Section" handleClick={handleClickOpen} />
+        <NewItemButton name="Banner Section" handleClick={handleClickOpen} />
 
         <AddBanners open={open} handleClose={handleClose} />
       </Grid>
@@ -26,4 +25,4 @@ const Banners = () => {
   );
 };
 
-export default Banners;
+export default BannersSection;

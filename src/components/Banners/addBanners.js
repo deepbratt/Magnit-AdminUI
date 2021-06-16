@@ -7,8 +7,8 @@ import {
   Tooltip,
   TextField,
   Card,
+  MenuItem,
 } from "@material-ui/core";
-import ColorPicker from "material-ui-color-picker";
 import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
@@ -17,24 +17,33 @@ import { fieldNames } from "../../Utils/formConstants";
 import ServicesTable from "../../components/Table.js/index";
 import { useEffect, useState, useCallback } from "react";
 import {
-  deleteServiceApi,
-  getAllServicesApi,
-  getOneServicesApi,
-} from "../../Utils/servicesSectionApi";
+  deleteBannerApi,
+  getAllBannersApi,
+  getOneBannerApi,
+} from "../../Utils/bannersApi";
+
+const types = [
+  {
+    value: "center",
+    label: "Center",
+  },
+  {
+    value: "right",
+    label: "Right",
+  },
+];
 
 const AddBanners = ({ open, handleClose }) => {
-  const getAllServices = useCallback(async () => {
-    let response = await getAllServicesApi();
+  const getAllBanners = useCallback(async () => {
+    let response = await getAllBannersApi();
     if (response.data) {
-      console.log(response.data.data);
-      setRows(response.data.data);
+      console.log(response.data.banner);
+      setRows(response.data.banner);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
-    color,
-    setColor,
     values,
     setValues,
     errors,
@@ -59,15 +68,15 @@ const AddBanners = ({ open, handleClose }) => {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    getAllServices();
-  }, [getAllServices]);
+    getAllBanners();
+  }, [getAllBanners]);
 
   const handleDelete = async (id) => {
-    await deleteServiceApi(id)
+    await deleteBannerApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
-          getAllServices();
+          getAllBanners();
         }
         if (response.status === "fail") {
           console.log(response);
@@ -81,18 +90,19 @@ const AddBanners = ({ open, handleClose }) => {
   const handleUpdate = async (id) => {
     setUpdate(true);
     setId(id);
-    await getOneServicesApi(id)
+    await getOneBannerApi(id)
       .then((response) => {
         if (response.status === "success") {
           setValues({
-            title: response.data.data.title,
-            description: response.data.data.description,
-            buttonLabel: response.data.data.buttonLabel,
-            buttonLink: response.data.data.buttonLink,
+            heading: response.data.banner.heading,
+            subHeading: response.data.banner.subHeading,
+            buttonLabel: response.data.banner.buttonLabel,
+            buttonLink: response.data.banner.buttonLink,
+            type: response.data.banner.type,
             id: id,
           });
-          setColor();
-          setSelectedFile(response.data.data.image);
+
+          setSelectedFile(response.data.banner.image);
         }
         if (response.status === "fail") {
           console.log(response);
@@ -105,7 +115,7 @@ const AddBanners = ({ open, handleClose }) => {
 
   return (
     <FullPageDialog
-      header="Manage Services Section"
+      header="Manage Banners Section"
       open={open}
       handleClose={handleClose}
     >
@@ -113,19 +123,34 @@ const AddBanners = ({ open, handleClose }) => {
         <Grid container item xs={12}>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-title">Title</InputLabel>
+              <InputLabel id="input-heading">Heading</InputLabel>
               <TextField
-                name={fieldNames.title}
-                id="input-title"
+                name={fieldNames.heading}
+                id="input-heading"
                 variant="outlined"
                 placeholder="e.g Web Development"
-                value={values.title}
-                {...(errors && { error: true, helperText: errors.title })}
+                value={values.heading}
+                {...(errors && { error: true, helperText: errors.heading })}
                 onChange={handleInputChange}
                 fullWidth
                 required
               />
             </Grid>
+
+            <Grid item xs={12} md={6}>
+              <InputLabel id="input-subHeading">Sub Heading</InputLabel>
+              <TextField
+                name={fieldNames.subHeading}
+                id="input-subHeading"
+                variant="outlined"
+                placeholder="lorem ipsum...."
+                value={values.subHeading}
+                {...(errors && { error: true, helperText: errors.subHeading })}
+                onChange={handleInputChange}
+                fullWidth
+              />
+            </Grid>
+
             <Grid item xs={12} md={6}>
               <InputLabel id="input-button-label">Button Label</InputLabel>
               <TextField
@@ -156,19 +181,24 @@ const AddBanners = ({ open, handleClose }) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-description">Discription</InputLabel>
+              <InputLabel id="input-type">Type</InputLabel>
               <TextField
-                name={fieldNames.description}
-                id="input-description"
+                name={fieldNames.type}
+                select
+                id="input-type"
                 variant="outlined"
-                placeholder="lorem ipsum...."
-                value={values.description}
-                {...(errors && { error: true, helperText: errors.description })}
+                placeholder="/services/web-development"
+                value={values.type}
+                {...(errors && { error: true, helperText: errors.type })}
                 onChange={handleInputChange}
                 fullWidth
-                multiline
-                rows={3}
-              />
+              >
+                {types.map((type) => (
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
@@ -194,7 +224,7 @@ const AddBanners = ({ open, handleClose }) => {
               <label>{selectedFile ? selectedFile.name : "Select Image"}</label>
               <Card
                 style={{
-                  backgroundColor: color,
+                  backgroundColor: "#eee",
                   padding: "20px",
                   margin: "0 50px",
                   minHeight: "120px",
@@ -220,14 +250,6 @@ const AddBanners = ({ open, handleClose }) => {
                   />
                 ) : null}
               </Card>
-
-              <ColorPicker
-                variant="outlined"
-                label="Pick a Color"
-                name={fieldNames.color}
-                value={color}
-                onChange={(color) => setColor(color.toString())}
-              />
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
