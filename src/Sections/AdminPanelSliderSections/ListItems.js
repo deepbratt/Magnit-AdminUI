@@ -48,7 +48,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
           Add List
         </Button>
       </Grid>
-      <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
+      <Grid className={common} item lg={10} md={5} sm={10} xs={12}>
         <List className={listItem}>
           {arr.map((data, index) => {
             return (
@@ -72,6 +72,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                         value={editingText}
                         variant="outlined"
                         autoComplete="off"
+                        style={{ width: "100%" }}
                         required
                         onChange={(e) => handleEditInputChange(e)}
                       />
@@ -96,7 +97,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                       background: "white",
                       margin: "10px 0px 10px 0px",
                       display: "flex",
-                      justifyContent: "space-evenly",
+                      // justifyContent: "space-evenly",
                     }}
                     key={index}
                   >
@@ -104,6 +105,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                     <Button
                       style={{
                         background: "green",
+                        marginLeft: "700px",
                       }}
                       size="small"
                       variant="contained"
@@ -114,7 +116,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                     </Button>
                     <Button
                       style={{
-                        margin: "10px 0px 10px ",
+                        margin: "10px 0px 10px 20px",
                       }}
                       size="small"
                       variant="contained"
