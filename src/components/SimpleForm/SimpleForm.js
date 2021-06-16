@@ -78,12 +78,13 @@ const SimpleForm = ({
           >
             <div>
               {typeof formData.image === "string" ? (
-                <img src={formData.image} height="auto" width="100px" />
+                <img src={formData.image} height="auto" width="100px" alt="" />
               ) : formData.image && typeof formData !== "string" ? (
                 <img
                   src={URL.createObjectURL(formData.image)}
                   height="auto"
                   width="100px"
+                  alt=""
                 />
               ) : (
                 ""

@@ -1,8 +1,7 @@
 import { Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { withRouter } from "react-router";
 import ContentTable from "../../components/Table";
-import api from "../../Utils/loginApi";
 import SimpleForm from "../../components/SimpleForm/SimpleForm";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import useHowItWorks from "./useHowItWorks";

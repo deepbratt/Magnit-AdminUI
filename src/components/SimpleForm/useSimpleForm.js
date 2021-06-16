@@ -28,7 +28,7 @@ const useSimpleForm = (
   const [openToast, setOpenToast] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [toastType, setToastType] = useState('error')
-  const {createSuccess, createFail, updateSuccess, updateFail} = serverResponseMessages
+  const {createFail, updateSuccess, updateFail} = serverResponseMessages
   const handleChange = (event) => {
     setFormData({
       name: event.target.name,

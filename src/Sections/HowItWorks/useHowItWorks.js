@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { serverResponseMessages } from "../../Utils/formConstants";
 import { isResponseSuccess } from "../../Utils/helperFunctions";
-import api from "../../Utils/loginApi";
 import {getAllHowItWorks, deleteHowItWorks} from "../../Utils/loginApi";
 
 const useHowItWorks = () => {
