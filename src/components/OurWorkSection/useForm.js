@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
-import {
-  addServicesApi,
-  updateServicesApi,
-} from "../../Utils/servicesSectionApi";
+import { addOurWorkApi, updateOurWorkApi } from "../../Utils/ourWorkSectionApi";
 
 const initialValues = {
   title: "",
   description: "",
-  buttonLabel: "",
+
   buttonLink: "",
   image: null,
-  color: "",
+
   id: null,
 };
 
@@ -19,7 +16,6 @@ export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [color, setColor] = useState(values.color);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,10 +37,7 @@ export const useForm = (validateOnChange = false, id) => {
       temp.description =
         fieldValues.description.trim() === "" ? messages.isRequired : "";
     }
-    if (fieldNames.buttonLabel in fieldValues) {
-      temp.buttonLabel =
-        fieldValues.buttonLabel.trim() === "" ? messages.isRequired : "";
-    }
+
     if (fieldNames.buttonLink in fieldValues) {
       temp.buttonLink =
         fieldValues.buttonLink.trim() === "" ? messages.isRequired : "";
@@ -72,7 +65,6 @@ export const useForm = (validateOnChange = false, id) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-    setColor("");
     setSelectedFile(null);
   };
 
@@ -84,26 +76,25 @@ export const useForm = (validateOnChange = false, id) => {
       var formData = new FormData();
       formData.append("title", values.title);
       formData.append("description", values.description);
-      formData.append("buttonLabel", values.buttonLabel);
       formData.append("buttonLink", values.buttonLink);
-      formData.append("color", color);
       formData.append("image", selectedFile);
       console.log(formData, values.title);
+
       if (!update) {
-        await addServicesApi(formData)
+        await addOurWorkApi(formData)
           .then((response) => {
             setIsLoading(false);
-            resetForm();
+            console.log("response", response);
           })
           .catch((error) => {
             setResponseMessage(error.message);
           });
       } else {
         console.log("id", id);
-        await updateServicesApi(values.id, formData)
+        await updateOurWorkApi(values.id, formData)
           .then((response) => {
             setIsLoading(false);
-            resetForm();
+            console.log("response", response);
           })
           .catch((error) => {
             setResponseMessage(error.message);
@@ -113,8 +104,6 @@ export const useForm = (validateOnChange = false, id) => {
   };
 
   return {
-    color,
-    setColor,
     values,
     setValues,
     errors,

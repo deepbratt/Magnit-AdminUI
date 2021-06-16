@@ -61,14 +61,15 @@ export default function ServicesTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row
-              key={row._id}
-              row={row}
-              handleDelete={handleDelete}
-              handleUpdate={handleUpdate}
-            />
-          ))}
+          {rows &&
+            rows.map((row) => (
+              <Row
+                key={row._id}
+                row={row}
+                handleDelete={handleDelete}
+                handleUpdate={handleUpdate}
+              />
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

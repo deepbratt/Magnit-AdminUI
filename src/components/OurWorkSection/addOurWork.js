@@ -8,7 +8,6 @@ import {
   TextField,
   Card,
 } from "@material-ui/core";
-import ColorPicker from "material-ui-color-picker";
 import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
@@ -17,23 +16,21 @@ import { fieldNames } from "../../Utils/formConstants";
 import ServicesTable from "../../components/Table.js/index";
 import { useEffect, useState, useCallback } from "react";
 import {
-  deleteServiceApi,
-  getAllServicesApi,
-  getOneServicesApi,
-} from "../../Utils/servicesSectionApi";
+  getAllOurWorkApi,
+  getOneOurWorkApi,
+  deleteOurWorkApi,
+} from "../../Utils/ourWorkSectionApi";
 
-const AddServices = ({ open, handleClose }) => {
-  const getAllServices = useCallback(async () => {
-    let response = await getAllServicesApi();
-    if (response) {
-      setRows(response.data.service);
+const AddOurWork = ({ open, handleClose }) => {
+  const getAllOurWork = useCallback(async () => {
+    let response = await getAllOurWorkApi();
+    if (response.data) {
+      setRows(response.data.ourwork);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
-    color,
-    setColor,
     values,
     setValues,
     errors,
@@ -58,15 +55,15 @@ const AddServices = ({ open, handleClose }) => {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    getAllServices();
-  }, [getAllServices, handleSubmit]);
+    getAllOurWork();
+  }, [getAllOurWork]);
 
   const handleDelete = async (id) => {
-    await deleteServiceApi(id)
+    await deleteOurWorkApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
-          getAllServices();
+          getAllOurWork();
         }
         if (response.status === "fail") {
           console.log(response);
@@ -80,18 +77,17 @@ const AddServices = ({ open, handleClose }) => {
   const handleUpdate = async (id) => {
     setUpdate(true);
     setId(id);
-    await getOneServicesApi(id)
+    await getOneOurWorkApi(id)
       .then((response) => {
         if (response.status === "success") {
           setValues({
-            title: response.data.service.title,
-            description: response.data.service.description,
-            buttonLabel: response.data.service.buttonLabel,
-            buttonLink: response.data.service.buttonLink,
+            title: response.data.ourwork.title,
+            description: response.data.ourwork.description,
+            buttonLink: response.data.ourwork.buttonLink,
             id: id,
           });
-          setColor(response.data.service.color);
-          setSelectedFile(response.data.service.image);
+
+          setSelectedFile(response.data.ourwork.image);
         }
         if (response.status === "fail") {
           console.log(response);
@@ -104,7 +100,7 @@ const AddServices = ({ open, handleClose }) => {
 
   return (
     <FullPageDialog
-      header="Manage Services Section"
+      header="Manage Our Work Section"
       open={open}
       handleClose={handleClose}
     >
@@ -120,20 +116,6 @@ const AddServices = ({ open, handleClose }) => {
                 placeholder="e.g Web Development"
                 value={values.title}
                 {...(errors && { error: true, helperText: errors.title })}
-                onChange={handleInputChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-button-label">Button Label</InputLabel>
-              <TextField
-                name={fieldNames.buttonLabel}
-                id="input-button-label"
-                variant="outlined"
-                placeholder="e.g Learn More"
-                value={values.buttonLabel}
-                {...(errors && { error: true, helperText: errors.buttonLabel })}
                 onChange={handleInputChange}
                 fullWidth
                 required
@@ -193,12 +175,12 @@ const AddServices = ({ open, handleClose }) => {
               <label>{selectedFile ? selectedFile.name : "Select Image"}</label>
               <Card
                 style={{
-                  backgroundColor: color,
+                  backgroundColor: "#eee",
                   padding: "20px",
                   margin: "0 50px",
                   minHeight: "120px",
                   maxHeight: "120px",
-                  minWidth: "100px",
+                  minWidth: "120px",
                 }}
               >
                 {typeof selectedFile === "string" ? (
@@ -219,14 +201,6 @@ const AddServices = ({ open, handleClose }) => {
                   />
                 ) : null}
               </Card>
-
-              <ColorPicker
-                variant="outlined"
-                label="Pick a Color"
-                name={fieldNames.color}
-                value={color}
-                onChange={(color) => setColor(color.toString())}
-              />
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
@@ -272,9 +246,9 @@ const AddServices = ({ open, handleClose }) => {
   );
 };
 
-AddServices.propTypes = {
+AddOurWork.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 
-export default AddServices;
+export default AddOurWork;

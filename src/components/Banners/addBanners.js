@@ -22,11 +22,12 @@ import {
   getOneServicesApi,
 } from "../../Utils/servicesSectionApi";
 
-const AddServices = ({ open, handleClose }) => {
+const AddBanners = ({ open, handleClose }) => {
   const getAllServices = useCallback(async () => {
     let response = await getAllServicesApi();
-    if (response) {
-      setRows(response.data.service);
+    if (response.data) {
+      console.log(response.data.data);
+      setRows(response.data.data);
     }
   }, []);
 
@@ -59,7 +60,7 @@ const AddServices = ({ open, handleClose }) => {
 
   useEffect(() => {
     getAllServices();
-  }, [getAllServices, handleSubmit]);
+  }, [getAllServices]);
 
   const handleDelete = async (id) => {
     await deleteServiceApi(id)
@@ -84,14 +85,14 @@ const AddServices = ({ open, handleClose }) => {
       .then((response) => {
         if (response.status === "success") {
           setValues({
-            title: response.data.service.title,
-            description: response.data.service.description,
-            buttonLabel: response.data.service.buttonLabel,
-            buttonLink: response.data.service.buttonLink,
+            title: response.data.data.title,
+            description: response.data.data.description,
+            buttonLabel: response.data.data.buttonLabel,
+            buttonLink: response.data.data.buttonLink,
             id: id,
           });
-          setColor(response.data.service.color);
-          setSelectedFile(response.data.service.image);
+          setColor();
+          setSelectedFile(response.data.data.image);
         }
         if (response.status === "fail") {
           console.log(response);
@@ -272,9 +273,9 @@ const AddServices = ({ open, handleClose }) => {
   );
 };
 
-AddServices.propTypes = {
+AddBanners.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 
-export default AddServices;
+export default AddBanners;
