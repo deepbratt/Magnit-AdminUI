@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Grid, TextField } from "@material-ui/core";
 import useSimpleForm from "./useSimpleForm";
+import LoadingSpinner from "../LoadingSpinner";
 
 const SimpleForm = ({
   itemId,
@@ -8,16 +9,21 @@ const SimpleForm = ({
   createApi,
   updateApi,
   getItemApi,
+  updateDataArray,
+  dataArray
 }) => {
-  const { handleChange, handleSubmit, formData, clearFields } = useSimpleForm(
+  const { handleChange, handleSubmit, formData, clearFields, isLoading } = useSimpleForm(
     itemId,
     clearItemId,
     createApi,
     updateApi,
-    getItemApi
+    getItemApi,
+    updateDataArray,
+    dataArray
   );
   return (
     <form onSubmit={handleSubmit}>
+      <LoadingSpinner open={isLoading}/>
       <Grid container alignItems="center" spacing={2}>
         <Grid item xs={6}>
           <TextField

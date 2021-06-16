@@ -70,30 +70,30 @@ const api = {
       try{
           const response = await axiosInstance.get("howitworks")
           console.log(response)
-          return response
+          return  {server: response, success: true}
       }catch(error){
           console.log('error: ',error)
-          return error
+          return  {server: error, success: false}
       }
   },
   getOneHowItWorks: async function(itemId){
       try{
           const response = await axiosInstance.get("howitworks/"+itemId)
           console.log(response)
-          return response
+          return {server: response, success: true}
       }catch(error){
           console.log('error: ',error)
-          return error
+          return {server: error, success: false}
       }
   },
   deleteHowItWorks: async function(itemId){
       try{
           const response = await axiosInstance.delete("howitworks/"+itemId)
           console.log(response)
-          return response
+          return  {server: response, success: true}
       }catch(error){
           console.log('error: ',error)
-          return error
+          return  {server: error, success: false}
       }
   },
 
@@ -101,10 +101,10 @@ const api = {
       try{
           const response = await axiosFormInstance.patch("howitworks/"+itemId, dataBody)
           console.log(response)
-          return response
+          return  {server: response, success: true}
       }catch(error){
           console.log('error: ',error)
-          return error
+          return  {server: error, success: false}
       }
   },
   createHowItWorks: async function(dataBody){
@@ -116,10 +116,10 @@ const api = {
             headers,
           })
           console.log(response)
-          return response
+          return  {server: response, success: true}
       }catch(error){
           console.log('error: ',error)
-          return error
+          return  {server: error, success: false}
       }
   }
 }
