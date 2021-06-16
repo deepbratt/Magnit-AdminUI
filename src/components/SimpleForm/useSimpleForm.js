@@ -1,4 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
+import { serverResponseMessages } from "../../Utils/formConstants";
+import { isResponseSuccess } from "../../Utils/helperFunctions";
 
 const formReducer = (state, event) => {
   return {
@@ -23,6 +25,10 @@ const useSimpleForm = (
 ) => {
   const [formData, setFormData] = useReducer(formReducer, initialFieldValues);
   const [isLoading, setIsLoading] = useState(false)
+  const [openToast, setOpenToast] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+  const [toastType, setToastType] = useState('error')
+  const {createSuccess, createFail, updateSuccess, updateFail} = serverResponseMessages
   const handleChange = (event) => {
     setFormData({
       name: event.target.name,
@@ -43,18 +49,28 @@ const useSimpleForm = (
     setIsLoading(true)
     if (itemId) {
       updateApi(itemId, fd).then((response) => {
-        if(response.success){
+        if(isResponseSuccess(response)){
           temp = temp.filter(item=>item._id!==itemId)
-          updateDataArray(oldArray => [...temp, response.server.data.data.data])
-          // clearFields()
+          updateDataArray(oldArray => [...temp, response.data.data.howItWork])
+          setResponseMessage(updateSuccess)
+          setToastType('success')
+        }else{
+          setResponseMessage(updateFail)
+          setToastType('error')
         }
+        setOpenToast(true)
       }).then(()=>setIsLoading(false));
     }else{
       createApi(fd).then((response) => {
-        if(response.success){
-          updateDataArray(oldArray => [...oldArray, response.server.data.data.data])
-          // clearFields()
+        if(isResponseSuccess(response)){
+          updateDataArray(oldArray => [...oldArray, response.data.data.newHowItWork])
+          setResponseMessage(response.data.message)
+          setToastType('success')
+        }else{
+          setResponseMessage(createFail)
+          setToastType('error')
         }
+        setOpenToast(true)
       }).then(()=>setIsLoading(false));
     }
   };
@@ -71,10 +87,10 @@ const useSimpleForm = (
       // fetch data and populate the fields
       setIsLoading(true)
       getItemApi(itemId).then((response) => {
-        if(response.success){
-          setFormData({ name: "title", value: response.server.data.data.data.title });
-          setFormData({ name: "text", value: response.server.data.data.data.text });
-          setFormData({ name: "image", value: response.server.data.data.data.image });
+        if(isResponseSuccess(response)){
+          setFormData({ name: "title", value: response.data.data.howItWork.title });
+          setFormData({ name: "text", value: response.data.data.howItWork.text });
+          setFormData({ name: "image", value: response.data.data.howItWork.image });
         }
       }).then(()=>setIsLoading(false));
     }
@@ -88,7 +104,7 @@ const useSimpleForm = (
     handleChange,
     formData,
     clearFields,
-    isLoading
+    isLoading, openToast, setOpenToast, toastType, responseMessage
   };
 };
 

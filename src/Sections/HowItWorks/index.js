@@ -6,9 +6,11 @@ import api from "../../Utils/loginApi";
 import SimpleForm from "../../components/SimpleForm/SimpleForm";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import useHowItWorks from "./useHowItWorks";
+import Toast from "../../components/Toast";
+import {createHowItWorks, updateHowItWorks, getOneHowItWorks} from "../../Utils/loginApi";
 
 const HowItWorks = () => {
-  const {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem} = useHowItWorks()
+  const {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem, openToast, setOpenToast, toastType, responseMessage} = useHowItWorks()
 
   return (
     <Grid container spacing={2}>
@@ -19,18 +21,24 @@ const HowItWorks = () => {
           clearItemId={() => setItemId("")}
           dataArray={dataArray}
           updateDataArray={setDataArray}
-          createApi={api.createHowItWorks}
-          updateApi={api.updateHowItWorks}
-          getItemApi={api.getOneHowItWorks}
+          createApi={createHowItWorks}
+          updateApi={updateHowItWorks}
+          getItemApi={getOneHowItWorks}
         />
       </Grid>
       <Grid item xs={12}>
         <ContentTable
-          dataArray={[]}
+          dataArray={dataArray}
           updateItem={setItemId}
           removeItem={deleteItem}
         />
       </Grid>
+      <Toast
+          open={openToast}
+          onClose={() => setOpenToast(false)}
+          severity={toastType}
+          message={responseMessage}
+        />
     </Grid>
   );
 };

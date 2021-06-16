@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Grid, TextField } from "@material-ui/core";
 import useSimpleForm from "./useSimpleForm";
 import LoadingSpinner from "../LoadingSpinner";
+import Toast from "../Toast";
 
 const SimpleForm = ({
   itemId,
@@ -12,7 +13,7 @@ const SimpleForm = ({
   updateDataArray,
   dataArray
 }) => {
-  const { handleChange, handleSubmit, formData, clearFields, isLoading } = useSimpleForm(
+  const { handleChange, handleSubmit, formData, clearFields, isLoading, openToast, setOpenToast, toastType, responseMessage } = useSimpleForm(
     itemId,
     clearItemId,
     createApi,
@@ -104,6 +105,12 @@ const SimpleForm = ({
           </Grid>
         </Grid>
       </Grid>
+      <Toast
+          open={openToast}
+          onClose={() => setOpenToast(false)}
+          severity={toastType}
+          message={responseMessage}
+        />
     </form>
   );
 };

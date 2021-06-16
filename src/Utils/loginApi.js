@@ -65,63 +65,54 @@ export const resetPasswordApi = async (token, data) => {
   }
 };
 
-const api = {
-  getAllHowItWorks: async function(){
-      try{
-          const response = await axiosInstance.get("howitworks")
-          console.log(response)
-          return  {server: response, success: true}
-      }catch(error){
-          console.log('error: ',error)
-          return  {server: error, success: false}
-      }
-  },
-  getOneHowItWorks: async function(itemId){
-      try{
-          const response = await axiosInstance.get("howitworks/"+itemId)
-          console.log(response)
-          return {server: response, success: true}
-      }catch(error){
-          console.log('error: ',error)
-          return {server: error, success: false}
-      }
-  },
-  deleteHowItWorks: async function(itemId){
-      try{
-          const response = await axiosInstance.delete("howitworks/"+itemId)
-          console.log(response)
-          return  {server: response, success: true}
-      }catch(error){
-          console.log('error: ',error)
-          return  {server: error, success: false}
-      }
-  },
-
-  updateHowItWorks: async function(itemId, dataBody){
-      try{
-          const response = await axiosFormInstance.patch("howitworks/"+itemId, dataBody)
-          console.log(response)
-          return  {server: response, success: true}
-      }catch(error){
-          console.log('error: ',error)
-          return  {server: error, success: false}
-      }
-  },
-  createHowItWorks: async function(dataBody){
-    const headers = {
-      "content-type": "multipart/form-data",
-    };
-      try{
-          const response = await axios.post(BASE_URL+"howitworks", dataBody, {
-            headers,
-          })
-          console.log(response)
-          return  {server: response, success: true}
-      }catch(error){
-          console.log('error: ',error)
-          return  {server: error, success: false}
-      }
+export const getAllHowItWorks = async()=>{
+  try{
+      const response = await axiosInstance.get("howitworks")
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
   }
 }
 
-export default api
+export const getOneHowItWorks = async(itemId)=>{
+  try{
+      const response = await axiosInstance.get("howitworks/"+itemId)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+export const deleteHowItWorks = async(itemId)=>{
+  try{
+      const response = await axiosInstance.delete("howitworks/"+itemId)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const updateHowItWorks = async(itemId, dataBody)=>{
+  try{
+      const response = await axiosFormInstance.patch("howitworks/"+itemId, dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const createHowItWorks = async(dataBody)=>{
+    try{
+        const response = await axiosFormInstance.post("howitworks/", dataBody)
+        console.log(response)
+        return  response
+    }catch(error){
+        console.log('error: ',error)
+        return  error
+    }
+}
