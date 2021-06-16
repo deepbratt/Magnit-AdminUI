@@ -18,6 +18,7 @@ const useFunctions = (setArr,setEditing,setEditingText,editingText,arr) =>{
 
   function handleCancelClick( todo) {
     setEditingText(todo);
+    setEditing(false);
   }
 
   function handleEditClick(id, todo) {
