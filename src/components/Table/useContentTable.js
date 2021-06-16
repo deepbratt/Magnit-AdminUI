@@ -1,3 +1,5 @@
+
+
 const useContentTable = (updateItem, removeItem) =>{
 
     const editItem = (id) =>{
@@ -8,7 +10,8 @@ const useContentTable = (updateItem, removeItem) =>{
       removeItem(id)
   }
 
-  return {editItem, deleteItem}
-}
 
-export default useContentTable
+  return { editItem, deleteItem };
+};
+
+export default useContentTable;
