@@ -14,6 +14,15 @@ export const fieldNames = {
   confirmPassword: "confirmPassword",
 };
 
+export const serverResponseMessages = {
+  createSuccess:"Create Data Operation Successful",
+  createFail:"Create Data Operation Failed",
+  updateSuccess:"Update Operation Successful",
+  updateFail:"Update Operation Failed",
+  deleteSuccess:"Delete Operation Successful",
+  deleteFail:"Delete Operation Failed",
+}
+
 export const regex = {
   email: /$^|.+@.+..+/,
 };
