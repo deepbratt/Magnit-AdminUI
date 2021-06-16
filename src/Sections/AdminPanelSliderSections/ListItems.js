@@ -105,7 +105,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                     <Button
                       style={{
                         background: "green",
-                        marginLeft: "700px",
+                        marginLeft: "100px",
                       }}
                       size="small"
                       variant="contained"
