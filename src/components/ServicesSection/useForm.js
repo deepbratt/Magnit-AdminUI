@@ -23,7 +23,10 @@ export const useForm = (validateOnChange = false, id) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [responseMessage, setResponseMessage] = useState("");
+  const [responseMessage, setResponseMessage] = useState({
+    status: "",
+    message: "",
+  });
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -94,6 +97,12 @@ export const useForm = (validateOnChange = false, id) => {
           .then((response) => {
             setIsLoading(false);
             resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+            }
           })
           .catch((error) => {
             setResponseMessage(error.message);
@@ -130,5 +139,6 @@ export const useForm = (validateOnChange = false, id) => {
     selectedFile,
     setSelectedFile,
     handleCapture,
+    setResponseMessage,
   };
 };

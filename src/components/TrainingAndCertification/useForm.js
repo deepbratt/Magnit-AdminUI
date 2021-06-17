@@ -104,5 +104,6 @@ export const useForm = (validateOnChange = false, id) => {
     handleSubmit,
     isLoading,
     responseMessage,
+    setResponseMessage,
   };
 };

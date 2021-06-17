@@ -11,13 +11,18 @@ import {
   getAllTrainingAndCertificationsApi,
   getOneTrainingAndCertificationsApi,
 } from "../../Utils/trainingAndCertificationApi";
+import Toast from "../../components/Toast";
 
 const AddTrainingAndCertification = ({ open, handleClose }) => {
   const getAllTrainingAndCertification = useCallback(async () => {
     let response = await getAllTrainingAndCertificationsApi();
     if (response) {
-      console.log(response.data.trainingCertifications);
-      setRows(response.data.trainingCertifications);
+      // console.log(response.data.trainingCertifications);
+      // setRows(response.data.trainingCertifications);
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
     }
   }, []);
 
@@ -31,6 +36,8 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
     handleInputChange,
     handleSubmit,
     resetForm,
+    responseMessage,
+    setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
@@ -181,6 +188,12 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
             handleUpdate={handleUpdate}
           />
         </Grid>
+        {responseMessage && (
+          <Toast
+            severity={responseMessage.status}
+            message={responseMessage.message}
+          />
+        )}
       </Grid>
     </FullPageDialog>
   );

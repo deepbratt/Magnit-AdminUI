@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import FullPageDialog from "../../components/FullPageDialog";
+import Toast from "../../components/Toast";
 import {
   Button,
   Grid,
@@ -26,7 +27,12 @@ const AddServices = ({ open, handleClose }) => {
   const getAllServices = useCallback(async () => {
     let response = await getAllServicesApi();
     if (response) {
-      setRows(response.data.service);
+      setRows(response.data.result);
+
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
     }
   }, []);
 
@@ -45,6 +51,8 @@ const AddServices = ({ open, handleClose }) => {
     handleCapture,
     handleSubmit,
     resetForm,
+    responseMessage,
+    setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
@@ -84,14 +92,14 @@ const AddServices = ({ open, handleClose }) => {
       .then((response) => {
         if (response.status === "success") {
           setValues({
-            title: response.data.service.title,
-            description: response.data.service.description,
-            buttonLabel: response.data.service.buttonLabel,
-            buttonLink: response.data.service.buttonLink,
+            title: response.data.result.title,
+            description: response.data.result.description,
+            buttonLabel: response.data.result.buttonLabel,
+            buttonLink: response.data.result.buttonLink,
             id: id,
           });
-          setColor(response.data.service.color);
-          setSelectedFile(response.data.service.image);
+          setColor(response.data.result.color);
+          setSelectedFile(response.data.result.image);
         }
         if (response.status === "fail") {
           console.log(response);
@@ -267,6 +275,12 @@ const AddServices = ({ open, handleClose }) => {
             handleUpdate={handleUpdate}
           />
         </Grid>
+        {responseMessage && (
+          <Toast
+            severity={responseMessage.status}
+            message={responseMessage.message}
+          />
+        )}
       </Grid>
     </FullPageDialog>
   );
