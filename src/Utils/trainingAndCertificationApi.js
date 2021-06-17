@@ -12,11 +12,11 @@ const axiosInstance = axios.create({
 });
 
 const TRAININGANDCERTIFICATIONS = {
-  create: `trainingCertification/create`,
-  getAll: `trainingCertification/getAll`,
-  getOne: `trainingCertification/getOne`,
-  update: `trainingCertification/update`,
-  delete: `trainingCertification/delete`,
+  create: `trainingCertification`,
+  getAll: `trainingCertification`,
+  getOne: `trainingCertification`,
+  update: `trainingCertification`,
+  delete: `trainingCertification`,
 };
 
 export const addTrainingAndCertificationsApi = async (data) => {

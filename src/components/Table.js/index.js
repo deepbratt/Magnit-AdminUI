@@ -12,7 +12,7 @@ import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 
 function Row(props) {
-  const { row, handleDelete, handleUpdate,valueskeys } = props;
+  const { row, handleDelete, handleUpdate, valueskeys } = props;
 
   return (
     <React.Fragment>
@@ -34,6 +34,12 @@ function Row(props) {
   );
 }
 
+Row.defaultProps = {
+  valueskeys: {
+    title: "title",
+  },
+};
+
 Row.propTypes = {
   row: PropTypes.shape({
     _id: PropTypes.string.isRequired,
@@ -41,6 +47,7 @@ Row.propTypes = {
   }).isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
+  valueskeys: PropTypes.object,
 };
 
 export default function ServicesTable({
@@ -48,7 +55,7 @@ export default function ServicesTable({
   rows,
   handleDelete,
   handleUpdate,
-  valueskeys
+  valueskeys,
 }) {
   return (
     <TableContainer component={Paper}>

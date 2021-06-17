@@ -37,8 +37,8 @@ const AddBanners = ({ open, handleClose }) => {
   const getAllBanners = useCallback(async () => {
     let response = await getAllBannersApi();
     if (response.data) {
-      console.log(response.data.banner);
-      setRows(response.data.banner);
+      console.log(response.data.result);
+      setRows(response.data.result);
     }
   }, []);
 
@@ -94,15 +94,15 @@ const AddBanners = ({ open, handleClose }) => {
       .then((response) => {
         if (response.status === "success") {
           setValues({
-            heading: response.data.banner.heading,
-            subHeading: response.data.banner.subHeading,
-            buttonLabel: response.data.banner.buttonLabel,
-            buttonLink: response.data.banner.buttonLink,
-            type: response.data.banner.type,
+            heading: response.data.result.heading,
+            subHeading: response.data.result.subHeading,
+            buttonLabel: response.data.result.buttonLabel,
+            buttonLink: response.data.result.buttonLink,
+            type: response.data.result.type,
             id: id,
           });
 
-          setSelectedFile(response.data.banner.image);
+          setSelectedFile(response.data.result.image);
         }
         if (response.status === "fail") {
           console.log(response);
@@ -111,6 +111,10 @@ const AddBanners = ({ open, handleClose }) => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const valueskeys = {
+    title: "heading",
   };
 
   return (
@@ -288,6 +292,7 @@ const AddBanners = ({ open, handleClose }) => {
             rows={rows}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
+            valueskeys={valueskeys}
           />
         </Grid>
       </Grid>

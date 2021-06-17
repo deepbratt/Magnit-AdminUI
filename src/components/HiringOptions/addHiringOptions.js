@@ -27,7 +27,7 @@ const AddHiringOptions = ({ open, handleClose }) => {
   const getAllServices = useCallback(async () => {
     let response = await getAllHiringOptionsApi();
     if (response) {
-      setRows(response.data.hiringOptions);
+      setRows(response.data.result);
     }
   }, []);
 
@@ -92,13 +92,13 @@ const AddHiringOptions = ({ open, handleClose }) => {
         console.log("res", response);
         if (response.status === "success") {
           setValues({
-            heading: response.data.hiringOption.heading,
-            text: response.data.hiringOption.text,
-            buttonLabel: response.data.hiringOption.buttonLabel,
-            buttonLink: response.data.hiringOption.buttonLink,
+            heading: response.data.result.heading,
+            text: response.data.result.text,
+            buttonLabel: response.data.result.buttonLabel,
+            buttonLink: response.data.result.buttonLink,
             id: id,
           });
-          setItems(response.data.hiringOption.items)
+          setItems(response.data.result.items);
         }
         if (response.status === "fail") {
           console.log(response);
@@ -107,6 +107,10 @@ const AddHiringOptions = ({ open, handleClose }) => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const valueskeys = {
+    title: "heading",
   };
 
   return (
@@ -258,6 +262,7 @@ const AddHiringOptions = ({ open, handleClose }) => {
             rows={rows}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
+            valueskeys={valueskeys}
           />
         </Grid>
       </Grid>

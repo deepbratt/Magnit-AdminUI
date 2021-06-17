@@ -25,7 +25,7 @@ const AddOurWork = ({ open, handleClose }) => {
   const getAllOurWork = useCallback(async () => {
     let response = await getAllOurWorkApi();
     if (response.data) {
-      setRows(response.data.ourwork);
+      setRows(response.data.result);
     }
   }, []);
 
@@ -81,13 +81,13 @@ const AddOurWork = ({ open, handleClose }) => {
       .then((response) => {
         if (response.status === "success") {
           setValues({
-            title: response.data.ourwork.title,
-            description: response.data.ourwork.description,
-            buttonLink: response.data.ourwork.buttonLink,
+            title: response.data.result.title,
+            description: response.data.result.description,
+            buttonLink: response.data.result.buttonLink,
             id: id,
           });
 
-          setSelectedFile(response.data.ourwork.image);
+          setSelectedFile(response.data.result.image);
         }
         if (response.status === "fail") {
           console.log(response);

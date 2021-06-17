@@ -16,7 +16,7 @@ const AddOpportunities = ({ open, handleClose }) => {
   const getAllOpportunities = useCallback(async () => {
     let response = await getAllOpportunitiesApi();
     if (response) {
-      setRows(response.data.opportunites);
+      setRows(response.data.result);
     }
   }, []);
 
@@ -69,10 +69,10 @@ const AddOpportunities = ({ open, handleClose }) => {
         console.log("resp", response);
         if (response.status === "success") {
           setValues({
-            title: response.data.opportunite.title,
-            buttonLabel: response.data.opportunite.buttonLabel,
-            buttonLink: response.data.opportunite.link,
-            location: response.data.opportunite.location,
+            title: response.data.result.title,
+            buttonLabel: response.data.result.buttonLabel,
+            buttonLink: response.data.result.link,
+            location: response.data.result.location,
             id: id,
           });
         }
