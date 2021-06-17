@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
-  addHiringOptionsApi,
-  updateHiringOptionsApi,
-} from "../../Utils/hiringOptionsApi";
+  addOpportunitiesApi,
+  updateOpportunitiesApi,
+} from "../../Utils/opportunitiesApi";
 
 const initialValues = {
-  heading: "",
-  text: "",
+  title: "",
+  description: "",
   buttonLabel: "",
   buttonLink: "",
-  items: [],
+  location: "",
   id: null,
 };
 
@@ -18,8 +18,6 @@ export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [item, setItem] = useState("");
-  const [items, setItems] = useState([values.items]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,12 +26,16 @@ export const useForm = (validateOnChange = false, id) => {
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
 
-    if (fieldNames.heading in fieldValues) {
-      temp.heading =
-        fieldValues.heading.trim() === "" ? messages.isRequired : "";
+    if (fieldNames.title in fieldValues) {
+      temp.title = fieldValues.title.trim() === "" ? messages.isRequired : "";
     }
-    if (fieldNames.text in fieldValues) {
-      temp.text = fieldValues.text.trim() === "" ? messages.isRequired : "";
+    // if (fieldNames.description in fieldValues) {
+    //   temp.description =
+    //     fieldValues.description.trim() === "" ? messages.isRequired : "";
+    // }
+    if (fieldNames.location in fieldValues) {
+      temp.location =
+        fieldValues.location.trim() === "" ? messages.isRequired : "";
     }
     if (fieldNames.buttonLabel in fieldValues) {
       temp.buttonLabel =
@@ -66,8 +68,6 @@ export const useForm = (validateOnChange = false, id) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-    setItems([]);
-    setItem("");
   };
 
   const handleSubmit = async (e) => {
@@ -76,15 +76,14 @@ export const useForm = (validateOnChange = false, id) => {
     if (validate()) {
       setIsLoading(true);
       let requestBody = {
-        heading: values.heading,
-        text: values.text,
+        title: values.title,
+        location: values.location,
         buttonLabel: values.buttonLabel,
-        buttonLink: values.buttonLink,
-        items: items,
+        link: values.buttonLink,
       };
-      console.log("request", requestBody);
+      console.log(requestBody);
       if (!update) {
-        await addHiringOptionsApi(requestBody)
+        await addOpportunitiesApi(requestBody)
           .then((response) => {
             setIsLoading(false);
             resetForm();
@@ -94,7 +93,7 @@ export const useForm = (validateOnChange = false, id) => {
           });
       } else {
         console.log("id", id);
-        await updateHiringOptionsApi(values.id, requestBody)
+        await updateOpportunitiesApi(values.id, requestBody)
           .then((response) => {
             setIsLoading(false);
             resetForm();
@@ -107,10 +106,6 @@ export const useForm = (validateOnChange = false, id) => {
   };
 
   return {
-    item,
-    setItem,
-    items,
-    setItems,
     values,
     setValues,
     errors,

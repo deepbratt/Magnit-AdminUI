@@ -59,7 +59,7 @@ const AddServices = ({ open, handleClose }) => {
 
   useEffect(() => {
     getAllServices();
-  }, [getAllServices, handleSubmit]);
+  }, [getAllServices]);
 
   const handleDelete = async (id) => {
     await deleteServiceApi(id)

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Grid } from "@material-ui/core";
 import NewItemButton from "../NewItemButton";
-import AddServices from "./addServices";
+import AddOpportunities from "./addOpportunities";
 
-const ServicesSection = () => {
+const Opportunities = () => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -17,12 +17,15 @@ const ServicesSection = () => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <NewItemButton name="Services Section" handleClick={handleClickOpen} />
+        <NewItemButton
+          name="Opportunities Section"
+          handleClick={handleClickOpen}
+        />
 
-        <AddServices open={open} handleClose={handleClose} />
+        <AddOpportunities open={open} handleClose={handleClose} />
       </Grid>
     </Grid>
   );
 };
 
-export default ServicesSection;
+export default Opportunities;

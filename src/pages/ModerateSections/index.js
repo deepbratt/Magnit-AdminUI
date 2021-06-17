@@ -3,6 +3,7 @@ import ServicesSection from "../../components/ServicesSection";
 import OurWorkSection from "../../components/OurWorkSection";
 import BannersSection from "../../components/Banners";
 import HiringOptions from "../../components/HiringOptions";
+import Opportunities from "../../components/OpportunitiesSection";
 
 const ModerateSections = () => {
   return (
@@ -24,6 +25,9 @@ const ModerateSections = () => {
         </Grid>
         <Grid item xs={3}>
           <HiringOptions />
+        </Grid>
+        <Grid item xs={3}>
+          <Opportunities />
         </Grid>
       </Grid>
     </Grid>

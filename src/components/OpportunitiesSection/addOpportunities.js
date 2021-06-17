@@ -1,42 +1,27 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../../components/FullPageDialog";
-import {
-  Button,
-  Grid,
-  InputLabel,
-  TextField,
-  ListItemSecondaryAction,
-} from "@material-ui/core";
+import FullPageDialog from "../FullPageDialog";
+import { Button, Grid, InputLabel, TextField } from "@material-ui/core";
 import GlobalStyles from "../../globalStyles";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../../components/Table.js/index";
+import ServicesTable from "../Table.js/index";
 import { useEffect, useState, useCallback } from "react";
 import {
-  deleteHiringOptionsApi,
-  getAllHiringOptionsApi,
-  getOneHiringOptionsApi,
-} from "../../Utils/hiringOptionsApi";
-import { List } from "@material-ui/core";
-import { ListItem } from "@material-ui/core";
-import { ListItemText } from "@material-ui/core";
-import { IconButton } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+  getAllOpportunitiesApi,
+  deleteOpportunitiesApi,
+  getOneOpportunitiesApi,
+} from "../../Utils/opportunitiesApi";
 
-const AddHiringOptions = ({ open, handleClose }) => {
-  const getAllServices = useCallback(async () => {
-    let response = await getAllHiringOptionsApi();
+const AddOpportunities = ({ open, handleClose }) => {
+  const getAllOpportunities = useCallback(async () => {
+    let response = await getAllOpportunitiesApi();
     if (response) {
-      setRows(response.data.hiringOptions);
+      setRows(response.data.opportunites);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
-    item,
-    setItem,
-    items,
-    setItems,
     values,
     setValues,
     errors,
@@ -58,15 +43,14 @@ const AddHiringOptions = ({ open, handleClose }) => {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    getAllServices();
-  }, [getAllServices]);
+    getAllOpportunities();
+  }, [getAllOpportunities]);
 
   const handleDelete = async (id) => {
-    await deleteHiringOptionsApi(id)
+    await deleteOpportunitiesApi(id)
       .then((response) => {
-        console.log("response", response);
         if (response.status === "success") {
-          getAllServices();
+          getAllOpportunities();
         }
         if (response.status === "fail") {
           console.log(response);
@@ -77,28 +61,20 @@ const AddHiringOptions = ({ open, handleClose }) => {
       });
   };
 
-  const deleteItemByIndex = (index) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
-
-    setItems(newItems);
-  };
-
   const handleUpdate = async (id) => {
     setUpdate(true);
     setId(id);
-    await getOneHiringOptionsApi(id)
+    await getOneOpportunitiesApi(id)
       .then((response) => {
-        console.log("res", response);
+        console.log("resp", response);
         if (response.status === "success") {
           setValues({
-            heading: response.data.hiringOption.heading,
-            text: response.data.hiringOption.text,
-            buttonLabel: response.data.hiringOption.buttonLabel,
-            buttonLink: response.data.hiringOption.buttonLink,
+            title: response.data.opportunite.title,
+            buttonLabel: response.data.opportunite.buttonLabel,
+            buttonLink: response.data.opportunite.link,
+            location: response.data.opportunite.location,
             id: id,
           });
-          setItems(response.data.hiringOption.items)
         }
         if (response.status === "fail") {
           console.log(response);
@@ -111,7 +87,7 @@ const AddHiringOptions = ({ open, handleClose }) => {
 
   return (
     <FullPageDialog
-      header="Manage Hiring Options Section"
+      header="Manage Services Section"
       open={open}
       handleClose={handleClose}
     >
@@ -119,32 +95,17 @@ const AddHiringOptions = ({ open, handleClose }) => {
         <Grid container item xs={12}>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-heading">Heading</InputLabel>
+              <InputLabel id="input-title">Title</InputLabel>
               <TextField
-                name={fieldNames.heading}
-                id="input-heading"
+                name={fieldNames.title}
+                id="input-title"
                 variant="outlined"
                 placeholder="e.g Web Development"
-                value={values.heading}
-                {...(errors && { error: true, helperText: errors.heading })}
+                value={values.title}
+                {...(errors && { error: true, helperText: errors.title })}
                 onChange={handleInputChange}
                 fullWidth
                 required
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-text">Text</InputLabel>
-              <TextField
-                name={fieldNames.text}
-                id="input-text"
-                variant="outlined"
-                placeholder="lorem ipsum...."
-                value={values.text}
-                {...(errors && { error: true, helperText: errors.text })}
-                onChange={handleInputChange}
-                fullWidth
-                multiline
               />
             </Grid>
 
@@ -178,48 +139,33 @@ const AddHiringOptions = ({ open, handleClose }) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-items">Items</InputLabel>
+              <InputLabel id="input-location">Location</InputLabel>
               <TextField
-                name={fieldNames.items}
-                id="input-items"
+                name={fieldNames.location}
+                id="input-location"
+                variant="outlined"
+                placeholder="Karachi, Pakistan"
+                value={values.location}
+                {...(errors && { error: true, helperText: errors.location })}
+                onChange={handleInputChange}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <InputLabel id="input-description">Discription</InputLabel>
+              <TextField
+                name={fieldNames.description}
+                id="input-description"
                 variant="outlined"
                 placeholder="lorem ipsum...."
-                value={item}
-                {...(errors && { error: true, helperText: errors.text })}
-                onChange={(e) => setItem(e.target.value)}
+                value={values.description}
+                {...(errors && { error: true, helperText: errors.description })}
+                onChange={handleInputChange}
                 fullWidth
                 multiline
+                rows={3}
               />
-              <Button
-                style={{
-                  minWidth: "120px",
-                  maxHeight: "50px",
-                }}
-                variant="outlined"
-                color="success"
-                size="large"
-                onClick={() => {
-                  setItems([...items, item]);
-                }}
-              >
-                Add Items
-              </Button>
-              <List>
-                {items &&
-                  items.map((item, index) => (
-                    <ListItem key={index}>
-                      <ListItemText>{item}</ListItemText>
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          color="warning"
-                          onClick={() => deleteItemByIndex(index)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-              </List>
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
@@ -265,9 +211,9 @@ const AddHiringOptions = ({ open, handleClose }) => {
   );
 };
 
-AddHiringOptions.propTypes = {
+AddOpportunities.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 
-export default AddHiringOptions;
+export default AddOpportunities;

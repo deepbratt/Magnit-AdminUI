@@ -19,6 +19,7 @@ export const fieldNames = {
   subHeading: "subHeading",
   buttonLabel: "buttonLabel",
   buttonLink: "buttonLink",
+  location: "location",
   type: "type",
   image: "image",
   color: "color",
