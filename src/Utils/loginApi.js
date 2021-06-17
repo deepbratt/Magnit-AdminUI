@@ -9,6 +9,14 @@ const axiosInstance = axios.create({
     "Access-Control-Allow-Origin": "*",
   },
 });
+const axiosFormInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    Accept: "application/json",
+    'Content-Type': 'multipart/form-data',
+    "Access-Control-Allow-Origin": "*",
+  },
+});
 
 const USERS = {
   LOGIN: `users/login`,
@@ -56,3 +64,55 @@ export const resetPasswordApi = async (token, data) => {
     return error.response.data;
   }
 };
+
+export const getAllHowItWorks = async()=>{
+  try{
+      const response = await axiosInstance.get("howitworks")
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+
+export const getOneHowItWorks = async(itemId)=>{
+  try{
+      const response = await axiosInstance.get("howitworks/"+itemId)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+export const deleteHowItWorks = async(itemId)=>{
+  try{
+      const response = await axiosInstance.delete("howitworks/"+itemId)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const updateHowItWorks = async(itemId, dataBody)=>{
+  try{
+      const response = await axiosFormInstance.patch("howitworks/"+itemId, dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const createHowItWorks = async(dataBody)=>{
+    try{
+        const response = await axiosFormInstance.post("howitworks/", dataBody)
+        console.log(response)
+        return  response
+    }catch(error){
+        console.log('error: ',error)
+        return  error
+    }
+}
