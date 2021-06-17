@@ -89,7 +89,20 @@ const useApi = (url) => {
     }
   };
 
-  return { data, addData, isPending, error, updateData, success };
+  const deleteItem = async (id) => {
+    try {
+      await axios.delete(`${url}/${id}`);
+      window.location.reload();
+    } catch (error) {
+      console.error("There was an error!", error);
+      if (error.response) {
+        setError({ errorMessage: error.message });
+      }
+      console.log(error.config);
+    }
+  };
+
+  return { data, addData, isPending, error, updateData, success, deleteItem };
 };
 
 export default useApi;
