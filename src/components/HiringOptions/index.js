@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Grid } from "@material-ui/core";
 import NewItemButton from "../NewItemButton";
-import AddServices from "./addServices";
+import AddHiringOptions from "./addHiringOptions";
 
-const ModeratePages = () => {
+const HiringOptions = () => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -17,12 +17,12 @@ const ModeratePages = () => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <NewItemButton name="Services Section" handleClick={handleClickOpen} />
+        <NewItemButton name="Hiring Options Section" handleClick={handleClickOpen} />
 
-        <AddServices open={open} handleClose={handleClose} />
+        <AddHiringOptions open={open} handleClose={handleClose} />
       </Grid>
     </Grid>
   );
 };
 
-export default ModeratePages;
+export default HiringOptions;

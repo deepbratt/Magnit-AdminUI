@@ -2,6 +2,7 @@ import { Typography, Grid } from "@material-ui/core";
 import ServicesSection from "../../components/ServicesSection";
 import OurWorkSection from "../../components/OurWorkSection";
 import BannersSection from "../../components/Banners";
+import HiringOptions from "../../components/HiringOptions";
 
 const ModerateSections = () => {
   return (
@@ -20,6 +21,9 @@ const ModerateSections = () => {
         </Grid>
         <Grid item xs={3}>
           <BannersSection />
+        </Grid>
+        <Grid item xs={3}>
+          <HiringOptions />
         </Grid>
       </Grid>
     </Grid>
