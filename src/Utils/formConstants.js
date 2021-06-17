@@ -20,6 +20,7 @@ export const fieldNames = {
   buttonLabel: "buttonLabel",
   buttonLink: "buttonLink",
   location: "location",
+  jsonText: "jsonText",
   type: "type",
   image: "image",
   color: "color",

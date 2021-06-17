@@ -4,6 +4,7 @@ import OurWorkSection from "../../components/OurWorkSection";
 import BannersSection from "../../components/Banners";
 import HiringOptions from "../../components/HiringOptions";
 import Opportunities from "../../components/OpportunitiesSection";
+import TrainingAndCertification from "../../components/TrainingAndCertification";
 
 const ModerateSections = () => {
   return (
@@ -13,21 +14,30 @@ const ModerateSections = () => {
           Available Sections/Components
         </Typography>
       </Grid>
-      <Grid item container justify="flex-start" alignContent="center">
-        <Grid item xs={3}>
+      <Grid
+        container
+        justify="flex-start"
+        alignContent="center"
+        alignItems="center"
+        spacing={2}
+      >
+        <Grid item xs={12} sm={6} md={3} lg={2}>
           <ServicesSection />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
           <OurWorkSection />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
           <BannersSection />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
           <HiringOptions />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
           <Opportunities />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
+          <TrainingAndCertification />
         </Grid>
       </Grid>
     </Grid>
