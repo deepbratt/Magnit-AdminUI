@@ -53,11 +53,13 @@ const AddData = () => {
           Add Data
         </Button>
       </Grid>
+      <Grid item style={{marginBottom: "30px"}}>
       {isPending ? (
         <Alert severity="info">Status: pending!</Alert>
       ) : (
         <Alert severity="success">Status: Added successfully!</Alert>
       )}
+      </Grid>
     </>
   );
 };

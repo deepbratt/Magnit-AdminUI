@@ -10,18 +10,21 @@ const ContentTable = ({ dataArray, updateItem, removeItem, edit }) => {
 
   if (dataArray.length < 1) {
     return (
-      <div
+      <Grid
+        item
+        xs={12}
         style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,50%)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          opacity: "0.5",
+          zIndex: -1,
         }}
       >
         <Typography variant="h3" color="textSecondary">
           {contentTableConstants.noResult}
         </Typography>
-      </div>
+      </Grid>
     );
   }
 
