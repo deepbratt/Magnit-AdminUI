@@ -5,31 +5,41 @@ import Alert from "@material-ui/lab/Alert";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 export default function EditData({ id, edit }) {
-  const { updateData, isPending } = useApi("http://3.138.190.235/v1/awards");
+  const { updateData, isPending } = useApi("");
 
+  const [date, setDate] = useState(new Date());
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
-    clientName: "",
+    title: "",
     link: "",
+    text: "",
+    buttonLabel: "",
+    views: 0,
   });
-  const { link, clientName } = data;
+  const { title, link, text, buttonLabel, views } = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const formData = new FormData();
-  formData.append("link", link);
-  formData.append("image", file);
-  formData.append("clientName", clientName);
-
-  useEffect(() => {
-    loadSelectedData();
-  }, []);
-
-  const loadSelectedData = async () => {
-    const {data} = await axios.get(`http://3.138.190.235/v1/awards/${id}`);
-    setData(data.data.result);
+  const items = {
+    views: Number(views),
+    title: title,
+    link: link,
+    date: date,
+    text: text,
+    buttonLabel: buttonLabel,
+    image: file,
   };
+
+  // useEffect(() => {
+  //   loadSelectedData();
+  // }, []);
+
+  // const loadSelectedData = async () => {
+  //   const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
+  //   setData(result.data.data.data);
+  //   setArray(result.data.data.data.items);
+  // };
   return (
     <div>
       <Grid justify="center" container>
@@ -45,30 +55,24 @@ export default function EditData({ id, edit }) {
           xs={12}
         >
           <TextFieldContext
-            clientName={clientName}
+            title={title}
             link={link}
+            buttonLabel={buttonLabel}
+            text={text}
+            views={views}
             inputChange={inputChange}
             setFile={setFile}
+            setDate={setDate}
+            date={date}
           />
-          <Grid
-            item
-            lg={12}
-            md={12}
-            sm={12}
-            xs={12}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
-          >
+          <Grid item>
             <Button
               type="submit"
               onClick={() => {
-                updateData(id, formData);
+                // updateData(id, formData);
                 setTimeout(() => {
                   edit(false);
-                }, 1000);
+                }, 2000);
               }}
               variant="contained"
               color="primary"

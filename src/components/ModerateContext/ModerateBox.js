@@ -1,50 +1,60 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Typography, Button } from "@material-ui/core";
-import useNavigate from "./useNavigate";
+import { Grid, Typography, CardContent, Card } from "@material-ui/core";
+import { NavLink } from "react-router-dom";
+import { payload } from "../../Utils/Text";
 const useStyles = makeStyles({
   root: {
     display: "flex",
     flexFlow: "wrap",
     justifyContent: "flex-start",
-    marginTop: "20px"
+    marginTop: "20px",
   },
   box: {
     height: 170,
     borderRadius: "5px",
-    backgroundColor: "#3f51b5",
+    backgroundColor: "white",
     margin: "10px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  },
-  btn: {
-    color: "white",
-    textTransform: "none",
+    transition: "all .25s linear",
+    "&:hover": {
+      boxShadow: "0px 2px 15px 5px rgba(0, 0, 0, 0.2)",
+      transition: "all .25s linear",
+      backgroundColor: "rgba(0, 0, 0, 0.06)",
+    },
   },
 });
 
-const ModerateBox = ({ payload }) => {
-  const { root, box, btn } = useStyles();
-  const { handleId } = useNavigate();
+const ModerateBox = () => {
+  const { root, box } = useStyles();
 
   return (
     <>
       <Grid justify="center" container>
         <Grid className={root} item lg={12} md={12} sm={12} xs={12}>
-          {payload.length ? (
-            payload.map((data, id) => {
-              return (
-                <Grid key={id} className={box} item lg={2} md={4} sm={6} xs={6}>
-                  <Button onClick={() => handleId(data.id)} className={btn}>
-                    <Typography variant="h6">{data.page}</Typography>
-                  </Button>
-                </Grid>
-              );
-            })
-          ) : (
-            <p>Loading data...</p>
-          )}
+          {payload.map((data, index) => {
+            return (
+              <Grid key={index} item lg={2} md={4} sm={6} xs={6}>
+                <NavLink
+                  style={{
+                    textDecoration: "none",
+                    textAlign: "center",
+                    color: "black",
+                  }}
+                  to={data.path}
+                  key={`route-${index}}`}
+                >
+                  <Card className={box}>
+                    <CardContent>
+                      <Typography variant="h6">{data.text}</Typography>
+                    </CardContent>
+                  </Card>
+                </NavLink>
+              </Grid>
+            );
+          })}
         </Grid>
       </Grid>
     </>

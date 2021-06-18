@@ -9,23 +9,31 @@ export const HomeSlider = [
 
 
 
-// dummy data moderate box
+// routes
 
-export const BoxData = [{
-    page: "Home Slider",
-    id: 1
-},
-{
-    page: "Services",
-    id: 2
-},
-{
-    page: "Solutions",
-    id: 3
-},
-{
-    page: "Footer",
-    id: 4
-},
-
-]
+export const payload = [
+    {
+      path: "/home-slider",
+      text: "Home Slider",
+    },
+    {
+      path: "/awards",
+      text: "Awards",
+    },
+    {
+      path: "/blogs",
+      text: "Blogs",
+    },
+    {
+      path: "/workflow",
+      text: "WorkFlow",
+    },
+    {
+      path: "/footer",
+      text: "Footer",
+    },
+    {
+      path: "/join-our-team",
+      text: "Join Our Team",
+    },
+  ]

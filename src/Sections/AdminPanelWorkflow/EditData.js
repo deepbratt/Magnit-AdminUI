@@ -1,35 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, TextField, InputLabel } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
+import useStyles from "../AdminPanelSliderSections/useStyles";
 export default function EditData({ id, edit }) {
-  const { updateData, isPending } = useApi("http://3.138.190.235/v1/awards");
-
+  const { updateData, isPending } = useApi("");
+  const { common, labels } = useStyles();
   const [file, setFile] = useState(null);
-  const [data, setData] = useState({
-    clientName: "",
-    link: "",
-  });
-  const { link, clientName } = data;
-  const inputChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
-
-  const formData = new FormData();
-  formData.append("link", link);
-  formData.append("image", file);
-  formData.append("clientName", clientName);
 
   useEffect(() => {
     loadSelectedData();
   }, []);
 
   const loadSelectedData = async () => {
-    const {data} = await axios.get(`http://3.138.190.235/v1/awards/${id}`);
-    setData(data.data.result);
+    const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
+    setFile(result.data.data.result);
   };
+
+  const formData = new FormData();
+  formData.append("image", file);
   return (
     <div>
       <Grid justify="center" container>
@@ -44,31 +34,32 @@ export default function EditData({ id, edit }) {
           item
           xs={12}
         >
-          <TextFieldContext
-            clientName={clientName}
-            link={link}
-            inputChange={inputChange}
-            setFile={setFile}
-          />
           <Grid
+            className={common}
+            style={{ marginBottom: "20px" }}
             item
             lg={12}
-            md={12}
-            sm={12}
+            md={5}
+            sm={10}
             xs={12}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
           >
+            <InputLabel className={labels}>Image</InputLabel>
+            <TextField
+              variant="outlined"
+              type="file"
+              name="file"
+              onChange={(e) => setFile(e.target.files[0])}
+              style={{ width: "100%" }}
+            />
+          </Grid>
+          <Grid item>
             <Button
               type="submit"
               onClick={() => {
                 updateData(id, formData);
                 setTimeout(() => {
                   edit(false);
-                }, 1000);
+                }, 3000);
               }}
               variant="contained"
               color="primary"

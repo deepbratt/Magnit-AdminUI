@@ -3,29 +3,29 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import useStyles from "./useStyles";
+import useStyles from "../AdminPanelSliderSections/useStyles";
 import AddData from "./AddData"
 import EditData from "./EditData"
 import Table from "../../components/Table"
 import useApi from "../../Utils/useApi"
-const DisplayData = ({ array }) => {
+const JoinTeamContext = ({ array }) => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
-  const link = "http://3.138.190.235/v1/awards"
+  const link = "http://3.138.190.235/v1/teams"
   const {deleteItem} = useApi(link)
-console.log(array)
+
   return (
     <div>
       {!edit ? 
       <Grid justify="center" container>
         <Grid className={heading} item lg={12} xs={12}>
-          <Typography variant="h4">Awards Data</Typography>
+          <Typography variant="h4">Join Our Team Data</Typography>
         </Grid>
         <Grid item lg={12}>
           <AddData /> 
         </Grid>
-        <Table dataArray={array} url={link} edit={setEdit} updateItem={setId} removeItem={deleteItem}/>
+        <Table dataArray={array}  edit={setEdit} updateItem={setId} removeItem={deleteItem}/>
       </Grid>
       :  <Grid justify="center" container>
       <Grid className={heading} item lg={12} xs={12}>
@@ -39,4 +39,4 @@ console.log(array)
   );
 };
 
-export default DisplayData;
+export default JoinTeamContext;

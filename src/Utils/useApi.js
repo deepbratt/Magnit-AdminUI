@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const headers = {
-  "content-type": "multipart/form-data",
-};
+  Accept: "multipart/form-data",
+  "Content-Type": "multipart/form-data",
+  "Access-Control-Allow-Origin": "*",
+}
 
 const useApi = (url) => {
   const [data, setData] = useState([]);
@@ -20,21 +22,15 @@ const useApi = (url) => {
     }
   }, [data]);
 
+
   const loadData = async () => {
     try {
-      const { data } = await axios.get(`${url}`);
-      setSuccess({ successMessage: data.success });
-      setData(data.data.data);
+      const {data,status} = await axios.get(`${url}`, {headers});
+      setSuccess({ successMessage: status });
+      setData(data.data.result);
       setIsMounted(true);
     } catch (error) {
       setError({ errorMessage: error.message });
-      console.error("There was an error!", error);
-      console.log(error);
-      if (error.response) {
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      }
-      console.log(error.config);
     }
   };
 
@@ -46,20 +42,18 @@ const useApi = (url) => {
       if (status === 200) {
         setSuccess({ successMessage: data.success });
         setData((prev) => {
-          return [...prev, data.data.data];
+          return [...prev, data.data.result];
         });
       }
       setIsPending(false);
       setIsMounted(false);
     } catch (error) {
-      setError({ errorMessage: error.message });
+     
       console.error("There was an error!", error);
       setIsPending(true);
       if (error.response) {
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        setError({ errorMessage: error.message });
       }
-      console.log(error.config);
     }
   };
 
@@ -73,7 +67,7 @@ const useApi = (url) => {
         setError(false);
         setIsPending(false);
         setData((prev) => {
-          return [...prev, data.data.data];
+          return [...prev, data.data.result];
         });
       }
       setIsMounted(false);
@@ -82,8 +76,8 @@ const useApi = (url) => {
       console.error("There was an error!", error);
       setIsPending(true);
       if (error.response) {
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        
+      setError({ errorMessage: error.message });
       }
       console.log(error.config);
     }
@@ -98,11 +92,68 @@ const useApi = (url) => {
       if (error.response) {
         setError({ errorMessage: error.message });
       }
-      console.log(error.config);
     }
   };
 
-  return { data, addData, isPending, error, updateData, success, deleteItem };
+  const handleAddData = async (text,link,buttonLabel) => {
+  
+    try{
+     const rawResponse = await fetch("http://3.138.190.235/v1/teams", {
+       method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({   
+         text: text,
+         link: link,
+         buttonLabel: buttonLabel})
+     });
+     const {content,status} = await rawResponse.json();
+   
+     if(status === "success"){
+       setIsPending(false)
+     }
+    }
+    catch(error){
+      if(error){
+        setIsPending(true)
+      }
+    }
+};
+
+const handleEdit = async (text,link,buttonLabel,id) => {
+  
+  try{
+   const rawResponse = await fetch(`http://3.138.190.235/v1/teams/${id}`, {
+     method: 'PUT',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
+     },
+     body: JSON.stringify({   
+       text: text,
+       link: link,
+       buttonLabel: buttonLabel})
+   });
+   const {content,status} = await rawResponse.json();
+ 
+   if(status === "success"){
+     setIsPending(false)
+   }
+  }
+  catch(error){
+    if(error){
+      setIsPending(true)
+    }
+  }
+};
+
+  return { data, addData, isPending, error, updateData, success, deleteItem,handleAddData,handleEdit };
 };
 
 export default useApi;
+
+
+
+

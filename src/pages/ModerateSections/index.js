@@ -6,7 +6,7 @@ import HiringOptions from "../../components/HiringOptions";
 import Opportunities from "../../components/OpportunitiesSection";
 import TrainingAndCertification from "../../components/TrainingAndCertification";
 import ModerateBox from "../../components/ModerateContext/ModerateBox";
-import { BoxData } from "../../Utils/Text";
+
 
 const ModerateSections = () => {
   return (
@@ -45,7 +45,7 @@ const ModerateSections = () => {
       <Typography variant="h4" style={{ textAlign: "center" }}>
         Manage Sections
       </Typography>
-      <ModerateBox payload={BoxData} />
+      <ModerateBox />
     </Grid>
   );
 };

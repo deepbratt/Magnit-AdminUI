@@ -33,8 +33,8 @@ export default function EditData({ id,edit}) {
 
   const loadSelectedData = async () => {
     const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
-    setData(result.data.data.data);
-    setArray(result.data.data.data.items);
+    setData(result.data.data.result);
+    setArray(result.data.data.result.items);
   };
   return (
     <div>
