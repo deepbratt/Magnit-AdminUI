@@ -12,7 +12,7 @@ const DisplayData = ({ array }) => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
-  const link = ""
+  const link = "http://3.138.190.235/v1/blogs"
   const {deleteItem} = useApi(link)
   return (
     <div>

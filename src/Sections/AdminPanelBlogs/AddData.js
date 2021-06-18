@@ -5,7 +5,7 @@ import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 const AddData = () => {
-  const { addData, isPending } = useApi("");
+  const { addData, isPending } = useApi("http://3.138.190.235/v1/blogs");
   const [date, setDate] = useState(new Date());
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
@@ -21,19 +21,13 @@ const AddData = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const items = {
-    views: Number(views),
-    title: title,
-    link: link,
-    date: date,
-    text: text,
-    buttonLabel: buttonLabel,
-    image: file
-  }
-  const formData = new FormData();
-  // formData.append("clientName", clientName);
-  // formData.append("image", file);
-  // formData.append("link", link);
+  const formData = new FormData()
+  formData.append("views", views)
+  formData.append("image", file)
+  formData.append("title", title)
+  formData.append("text", text)
+  formData.append("link", link)
+  formData.append("buttonLabel", buttonLabel)
 
   return (
     <>
@@ -61,8 +55,7 @@ const AddData = () => {
       >
         <Button
           onClick={() => {
-            // addData(formData);
-            console.log(items)
+            addData(formData);
           }}
           variant="contained"
           className={btn}

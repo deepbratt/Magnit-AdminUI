@@ -5,7 +5,7 @@ import Alert from "@material-ui/lab/Alert";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 export default function EditData({ id, edit }) {
-  const { updateData, isPending } = useApi("");
+  const { updateData, isPending } = useApi("http://3.138.190.235/v1/blogs");
 
   const [date, setDate] = useState(new Date());
   const [file, setFile] = useState(null);
@@ -21,25 +21,25 @@ export default function EditData({ id, edit }) {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const items = {
-    views: Number(views),
-    title: title,
-    link: link,
-    date: date,
-    text: text,
-    buttonLabel: buttonLabel,
-    image: file,
+
+  useEffect(() => {
+    loadSelectedData();
+  }, []);
+
+  const loadSelectedData = async () => {
+    const result = await axios.get(`http://3.138.190.235/v1/blogs/${id}`);
+    setData(result.data.data.result);
+    console.log(result.data.data.result)
   };
 
-  // useEffect(() => {
-  //   loadSelectedData();
-  // }, []);
+  const formData = new FormData()
+  formData.append("views", views)
+  formData.append("image", file)
+  formData.append("title", title)
+  formData.append("text", text)
+  formData.append("link", link)
+  formData.append("buttonLabel", buttonLabel)
 
-  // const loadSelectedData = async () => {
-  //   const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
-  //   setData(result.data.data.data);
-  //   setArray(result.data.data.data.items);
-  // };
   return (
     <div>
       <Grid justify="center" container>
@@ -69,7 +69,7 @@ export default function EditData({ id, edit }) {
             <Button
               type="submit"
               onClick={() => {
-                // updateData(id, formData);
+                updateData(id, formData);
                 setTimeout(() => {
                   edit(false);
                 }, 2000);
