@@ -33,13 +33,6 @@ const AddOpportunities = ({ open, handleClose }) => {
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
-  const tableHead = [
-    { title: "ID", align: "left" },
-    { title: "Title", align: "left" },
-    { title: "Delete", align: "right" },
-    { title: "Update", align: "right" },
-  ];
-
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -87,7 +80,7 @@ const AddOpportunities = ({ open, handleClose }) => {
 
   return (
     <FullPageDialog
-      header="Manage Services Section"
+      header="Manage Opportunities Section"
       open={open}
       handleClose={handleClose}
     >
@@ -200,7 +193,6 @@ const AddOpportunities = ({ open, handleClose }) => {
         </Grid>
         <Grid item xs={10}>
           <ServicesTable
-            tableHead={tableHead}
             rows={rows}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
