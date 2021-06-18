@@ -36,7 +36,7 @@ const types = [
 const AddBanners = ({ open, handleClose }) => {
   const getAllBanners = useCallback(async () => {
     let response = await getAllBannersApi();
-    if (response.data) {
+    if (response.status === "success") {
       console.log(response.data.result);
       setRows(response.data.result);
     }
@@ -57,13 +57,6 @@ const AddBanners = ({ open, handleClose }) => {
     resetForm,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
-
-  const tableHead = [
-    { title: "ID", align: "left" },
-    { title: "Title", align: "left" },
-    { title: "Delete", align: "right" },
-    { title: "Update", align: "right" },
-  ];
 
   const [rows, setRows] = useState([]);
 
@@ -114,6 +107,7 @@ const AddBanners = ({ open, handleClose }) => {
   };
 
   const valueskeys = {
+    _id: "_id",
     title: "heading",
   };
 
@@ -288,7 +282,6 @@ const AddBanners = ({ open, handleClose }) => {
         </Grid>
         <Grid item xs={10}>
           <ServicesTable
-            tableHead={tableHead}
             rows={rows}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}

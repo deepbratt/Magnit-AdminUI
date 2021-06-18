@@ -21,22 +21,26 @@ import {
   getAllServicesApi,
   getOneServicesApi,
 } from "../../Utils/servicesSectionApi";
+import Toast from "../../components/Toast";
 
 const AddServices = ({ open, handleClose }) => {
   const getAllServices = useCallback(async () => {
     let response = await getAllServicesApi();
-    if (response) {
+    if (response.status === "success") {
       setRows(response.data.result);
-
+    } else {
       setResponseMessage({
         status: response.status,
         message: response.message,
       });
+      setAlertOpen(true);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     color,
     setColor,
     values,
@@ -50,19 +54,20 @@ const AddServices = ({ open, handleClose }) => {
     handleCapture,
     handleSubmit,
     resetForm,
-   
+    responseMessage,
     setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
-  const tableHead = [
-    { title: "ID", align: "left" },
-    { title: "Title", align: "left" },
-    { title: "Delete", align: "right" },
-    { title: "Update", align: "right" },
-  ];
-
   const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     getAllServices();
@@ -71,15 +76,21 @@ const AddServices = ({ open, handleClose }) => {
   const handleDelete = async (id) => {
     await deleteServiceApi(id)
       .then((response) => {
-        console.log("response", response);
         if (response.status === "success") {
           getAllServices();
         }
-        if (response.status === "fail") {
-          console.log(response);
-        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -105,7 +116,11 @@ const AddServices = ({ open, handleClose }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
   };
 
@@ -280,13 +295,20 @@ const AddServices = ({ open, handleClose }) => {
           </Grid>
           <Grid item xs={10}>
             <ServicesTable
-              tableHead={tableHead}
               rows={rows}
               handleDelete={handleDelete}
               handleUpdate={handleUpdate}
             />
           </Grid>
         </Grid>
+        {responseMessage && (
+          <Toast
+            open={alertOpen}
+            onClose={handleAlertClose}
+            severity={responseMessage.status}
+            message={responseMessage.message}
+          />
+        )}
       </FullPageDialog>
     </>
   );

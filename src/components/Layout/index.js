@@ -68,7 +68,7 @@ const Layout = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Magnit DashBoard
+            Magnit Admin Panel
           </Typography>
         </Toolbar>
       </AppBar>

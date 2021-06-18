@@ -20,6 +20,7 @@ export const useForm = (validateOnChange = false, id) => {
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
   const [color, setColor] = useState(values.color);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -100,28 +101,56 @@ export const useForm = (validateOnChange = false, id) => {
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
+                message: "Item Added Successfully",
+              });
+              setAlertOpen(true);
+            } else {
+              setResponseMessage({
+                status: response.status,
                 message: response.message,
               });
+              setAlertOpen(true);
             }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       } else {
         console.log("id", id);
         await updateServicesApi(values.id, formData)
           .then((response) => {
-            setIsLoading(false);
-            resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: "Item Updated Successfully",
+              });
+              setAlertOpen(true);
+            } else {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+              setAlertOpen(true);
+            }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       }
     }
   };
 
   return {
+    alertOpen,
+    setAlertOpen,
     color,
     setColor,
     values,

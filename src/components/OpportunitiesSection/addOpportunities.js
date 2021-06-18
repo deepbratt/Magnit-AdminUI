@@ -15,7 +15,7 @@ import {
 const AddOpportunities = ({ open, handleClose }) => {
   const getAllOpportunities = useCallback(async () => {
     let response = await getAllOpportunitiesApi();
-    if (response) {
+    if (response.status === "success") {
       setRows(response.data.result);
     }
   }, []);

@@ -17,8 +17,9 @@ function Row(props) {
   return (
     <React.Fragment>
       <TableRow>
-        <TableCell>{row._id}</TableCell>
+        <TableCell>{row[valueskeys._id]}</TableCell>
         <TableCell>{row[valueskeys.title]}</TableCell>
+        {valueskeys.roles && <TableCell>{row[valueskeys.roles]}</TableCell>}
         <TableCell align="right">
           <IconButton onClick={() => handleDelete(row._id)}>
             <DeleteRoundedIcon color="error" />
@@ -36,6 +37,7 @@ function Row(props) {
 
 Row.defaultProps = {
   valueskeys: {
+    _id: "_id",
     title: "title",
   },
 };
@@ -50,7 +52,12 @@ Row.propTypes = {
   valueskeys: PropTypes.object,
 };
 
-export default function ServicesTable({
+const tableHead = [
+  { title: "ID", align: "left" },
+  { title: "Title", align: "left" },
+];
+
+export default function DataTable({
   tableHead,
   rows,
   handleDelete,
@@ -62,8 +69,9 @@ export default function ServicesTable({
       <Table aria-label="services-added-table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Title</TableCell>
+            {tableHead.map((col, index) => (
+              <TableCell align={col.align}>{col.title}</TableCell>
+            ))}
             <TableCell align="right">Delete</TableCell>
             <TableCell align="right">Update</TableCell>
           </TableRow>
@@ -85,7 +93,11 @@ export default function ServicesTable({
   );
 }
 
-ServicesTable.propTypes = {
+DataTable.defaultProps = {
+  tableHead: tableHead,
+};
+
+DataTable.propTypes = {
   tableHead: PropTypes.array.isRequired,
   tableData: PropTypes.array.isRequired,
   handleDelete: PropTypes.func.isRequired,

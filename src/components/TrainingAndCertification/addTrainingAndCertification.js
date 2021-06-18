@@ -16,13 +16,8 @@ import Toast from "../../components/Toast";
 const AddTrainingAndCertification = ({ open, handleClose }) => {
   const getAllTrainingAndCertification = useCallback(async () => {
     let response = await getAllTrainingAndCertificationsApi();
-    if (response) {
-      // console.log(response.data.trainingCertifications);
-      // setRows(response.data.trainingCertifications);
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
+    if (response.status === "success") {
+      setRows(response.data.trainingCertifications);
     }
   }, []);
 
@@ -40,13 +35,6 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
     setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
-
-  const tableHead = [
-    { title: "ID", align: "left" },
-    { title: "Title", align: "left" },
-    { title: "Delete", align: "right" },
-    { title: "Update", align: "right" },
-  ];
 
   const [rows, setRows] = useState([]);
 
@@ -182,7 +170,6 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
         </Grid>
         <Grid item xs={10}>
           <ServicesTable
-            tableHead={tableHead}
             rows={rows}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}

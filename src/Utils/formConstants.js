@@ -9,31 +9,34 @@ export const messages = {
 };
 
 export const fieldNames = {
+  firstName: "firstName",
+  lastName: "lastName",
   email: "email",
   password: "password",
   confirmPassword: "confirmPassword",
   title: "title",
+  heading: "heading",
   description: "description",
   text: "text",
-  heading: "heading",
   subHeading: "subHeading",
   buttonLabel: "buttonLabel",
   buttonLink: "buttonLink",
   location: "location",
   jsonText: "jsonText",
   type: "type",
+  role: "role",
   image: "image",
   color: "color",
 };
 
 export const serverResponseMessages = {
-  createSuccess:"Create Data Operation Successful",
-  createFail:"Create Data Operation Failed",
-  updateSuccess:"Update Operation Successful",
-  updateFail:"Update Operation Failed",
-  deleteSuccess:"Delete Operation Successful",
-  deleteFail:"Delete Operation Failed",
-}
+  createSuccess: "Create Data Operation Successful",
+  createFail: "Create Data Operation Failed",
+  updateSuccess: "Update Operation Successful",
+  updateFail: "Update Operation Failed",
+  deleteSuccess: "Delete Operation Successful",
+  deleteFail: "Delete Operation Failed",
+};
 
 export const regex = {
   email: /$^|.+@.+..+/,

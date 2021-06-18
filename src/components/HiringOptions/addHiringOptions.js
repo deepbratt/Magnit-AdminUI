@@ -24,9 +24,9 @@ import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const AddHiringOptions = ({ open, handleClose }) => {
-  const getAllServices = useCallback(async () => {
+  const getAllHiringOptions = useCallback(async () => {
     let response = await getAllHiringOptionsApi();
-    if (response) {
+    if (response.status === "success") {
       setRows(response.data.result);
     }
   }, []);
@@ -48,25 +48,18 @@ const AddHiringOptions = ({ open, handleClose }) => {
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
-  const tableHead = [
-    { title: "ID", align: "left" },
-    { title: "Title", align: "left" },
-    { title: "Delete", align: "right" },
-    { title: "Update", align: "right" },
-  ];
-
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    getAllServices();
-  }, [getAllServices]);
+    getAllHiringOptions();
+  }, [getAllHiringOptions]);
 
   const handleDelete = async (id) => {
     await deleteHiringOptionsApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
-          getAllServices();
+          getAllHiringOptions();
         }
         if (response.status === "fail") {
           console.log(response);
@@ -110,6 +103,7 @@ const AddHiringOptions = ({ open, handleClose }) => {
   };
 
   const valueskeys = {
+    _id: "_id",
     title: "heading",
   };
 
@@ -258,7 +252,6 @@ const AddHiringOptions = ({ open, handleClose }) => {
         </Grid>
         <Grid item xs={10}>
           <ServicesTable
-            tableHead={tableHead}
             rows={rows}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}

@@ -24,7 +24,7 @@ import {
 const AddOurWork = ({ open, handleClose }) => {
   const getAllOurWork = useCallback(async () => {
     let response = await getAllOurWorkApi();
-    if (response.data) {
+    if (response.status === "success") {
       setRows(response.data.result);
     }
   }, []);
@@ -44,13 +44,6 @@ const AddOurWork = ({ open, handleClose }) => {
     resetForm,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
-
-  const tableHead = [
-    { title: "ID", align: "left" },
-    { title: "Title", align: "left" },
-    { title: "Delete", align: "right" },
-    { title: "Update", align: "right" },
-  ];
 
   const [rows, setRows] = useState([]);
 
@@ -235,7 +228,6 @@ const AddOurWork = ({ open, handleClose }) => {
         </Grid>
         <Grid item xs={10}>
           <ServicesTable
-            tableHead={tableHead}
             rows={rows}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
