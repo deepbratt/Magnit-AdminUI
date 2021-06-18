@@ -3,7 +3,7 @@ import { Grid, Typography } from "@material-ui/core";
 import useStyles from "./useStyles";
 import AddData from "./AddData";
 import EditData from "./EditData";
-import Table from "../../components/Table";
+import Table from "../../components/Table.js/index";
 import useApi from "../../Utils/useApi";
 const DisplayData = ({ array }) => {
   const { heading } = useStyles();
@@ -23,13 +23,12 @@ const DisplayData = ({ array }) => {
             <AddData />
           </Grid>
           <Grid item xs={12}>
-            <Table
-              dataArray={array}
-              url={link}
-              edit={setEdit}
-              updateItem={setId}
-              removeItem={deleteItem}
-            />
+          <Table
+            rows={array}
+            handleDelete={deleteItem}
+            handleUpdate={setId}
+            edit={setEdit}
+          />
           </Grid>
         </Grid>
       ) : (

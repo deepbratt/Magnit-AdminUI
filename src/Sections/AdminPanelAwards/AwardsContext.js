@@ -6,7 +6,7 @@ import {
 import useStyles from "./useStyles";
 import AddData from "./AddData"
 import EditData from "./EditData"
-import Table from "../../components/Table"
+import Table from "../../components/Table.js/index"
 import useApi from "../../Utils/useApi"
 const DisplayData = ({ array }) => {
   const { heading } = useStyles();
@@ -14,7 +14,10 @@ const DisplayData = ({ array }) => {
   const [id,setId] = useState(null)
   const link = "http://3.138.190.235/v1/awards"
   const {deleteItem} = useApi(link)
-console.log(array)
+const valueskeys = {
+  title: "clientName",
+  _id: "_id"
+}
   return (
     <div>
       {!edit ? 
@@ -25,7 +28,13 @@ console.log(array)
         <Grid item lg={12}>
           <AddData /> 
         </Grid>
-        <Table dataArray={array} url={link} edit={setEdit} updateItem={setId} removeItem={deleteItem}/>
+        <Table
+            rows={array}
+            handleDelete={deleteItem}
+            handleUpdate={setId}
+            edit={setEdit}
+            valueskeys={valueskeys}
+          />
       </Grid>
       :  <Grid justify="center" container>
       <Grid className={heading} item lg={12} xs={12}>

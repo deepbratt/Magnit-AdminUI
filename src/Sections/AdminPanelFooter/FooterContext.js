@@ -7,7 +7,7 @@ import {
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import AddData from "./AddData"
 import EditData from "./EditData"
-import Table from "../../components/Table"
+import Table from "../../components/Table.js/index"
 import useApi from "../../Utils/useApi"
 const DisplayData = ({array}) => {
   const { heading } = useStyles();
@@ -15,7 +15,10 @@ const DisplayData = ({array}) => {
   const [id,setId] = useState(null)
   const link = ""
   const {deleteItem} = useApi(link)
-
+  // const valueskeys = {
+  //   title: "heading",
+  //   _id: "_id"
+  // }
  
   return (
     <div>
@@ -27,7 +30,12 @@ const DisplayData = ({array}) => {
         <Grid item lg={12}>
           <AddData /> 
         </Grid>
-        <Table dataArray={array}  edit={setEdit} updateItem={setId} removeItem={deleteItem}/>
+        <Table
+            rows={array}
+            handleDelete={deleteItem}
+            handleUpdate={setId}
+            edit={setEdit}
+          />
       </Grid>
       :  <Grid justify="center" container>
       <Grid className={heading} item lg={12} xs={12}>
