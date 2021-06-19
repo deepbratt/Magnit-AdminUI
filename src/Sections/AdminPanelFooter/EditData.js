@@ -4,13 +4,26 @@ import axios from "axios";
 import AddressField from "./AddressField";
 import ContactField from "./ContactField";
 import SocialMediaField from "./SocialMediaField";
-import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
-import useApi from "../../Utils/useApi";
 import useStates from "./useStates";
+import Toast from "../../components/Toast";
 const EditData = ({ id, edit }) => {
-  const { addData, isPending } = useApi("");
   const { grid} = useStyles();
+  const [isPending, setIsPending] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [responseAlert, setResponseAlert] = useState({
+    status: "",
+    message: "",
+  });
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  
   const {
     numberTitle,
     addressTitle,
@@ -38,17 +51,72 @@ const EditData = ({ id, edit }) => {
     add,
     array,
     setArray,
+    setNumberTitle,
+    setAddressTitle,
+    setLinkTitle
   } = useStates();
 
-  // useEffect(() => {
-  //   loadSelectedData();
-  // }, []);
+  useEffect(() => {
+    loadSelectedData();
+  }, []);
 
   const loadSelectedData = async () => {
-    // const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
-    // setArray(result.data.data);
-    // // setArray(result.data.data.result.items);
+    const {data} = await axios.get(`http://3.138.190.235/v1/companies/${id}`);
+    setNumberTitle(data.data.result.contactUs.heading)
+    setAddressTitle(data.data.result.locations.heading)
+    setLinkTitle(data.data.result.socialMedia.heading)
+    setAddressArray(data.data.result.locations.dataArray);
+    setArray(data.data.result.contactUs.dataArray);
+    setLinkArray(data.data.result.socialMedia.dataArray);
+
+  
   };
+
+  const handleEdit = async () => {
+  
+    try{
+     const rawResponse = await fetch(`http://3.138.190.235/v1/companies/${id}`, {
+       method: 'PUT',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({   
+        locations:{
+          heading: addressTitle,
+          dataArray: addressArray
+        },
+        contactUs:{
+          heading: numberTitle,
+          dataArray: array
+        },
+        socialMedia:{
+          heading: linkTitle,
+          dataArray: linkArray
+        }
+        })
+     });
+     const {data,status} = await rawResponse.json();
+     if (status === "success") {
+      setIsPending(false);
+      setResponseAlert({
+        status: data.status,
+        message: "Updated Successfully",
+      });
+      setOpen(true);
+    }
+    }
+    catch(error){
+      if (error) {
+        setIsPending(true);
+        setResponseAlert({
+          status: error.status,
+          message: error.message,
+        });
+        setOpen(true);
+      }
+    }
+};
   return (
     <>
       <Grid className={grid} lg={12} item xs={12}>
@@ -95,10 +163,10 @@ const EditData = ({ id, edit }) => {
         <Button
           type="submit"
           onClick={() => {
-            // updateData(id, formData);
+            handleEdit()
             setTimeout(() => {
               edit(false);
-            }, 2000);
+            }, 3000);
           }}
           variant="contained"
           color="primary"
@@ -116,11 +184,14 @@ const EditData = ({ id, edit }) => {
         </Button>
       </Grid>
       <Grid item style={{marginTop: "20px"}} >
-      {isPending ? (
-        <Alert severity="info">Status: pending!</Alert>
-      ) : (
-        <Alert severity="success">Status: Added successfully!</Alert>
-      )}
+      {responseAlert && (
+          <Toast
+            open={open}
+            severity={responseAlert.status}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
       </Grid>
     </>
   );

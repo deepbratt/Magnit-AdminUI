@@ -52,6 +52,7 @@ const AddressField = ({
           type="text"
           name="addressTitle"
           value={title}
+          required
           onChange={(e) => setInput(e)}
           style={{ width: "100%" }}
         />

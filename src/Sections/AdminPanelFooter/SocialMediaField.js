@@ -14,9 +14,9 @@ const SocialMediaField = ({
   setLinkArray,
   addLink,
   edit,
+  file,
 }) => {
   const { labels, common } = useStyles();
-  const [fbFile, setfbFile] = useState(null);
   const [editing, setEditing] = useState(null);
   const [currentTodo, setCurrentTodo] = useState({
     title: "",
@@ -24,9 +24,9 @@ const SocialMediaField = ({
   });
   function submitEdits(id) {
     const updatedData = [...linkArray].map((data, index) => {
-      if (index === id) {
+      if (index === id ) {
         data = currentTodo;
-        data.icon = fbFile;
+        data.icon = file.base64URL;
       }
       return data;
     });
@@ -152,8 +152,9 @@ const SocialMediaField = ({
             secondField={currentTodo.link}
             firstName="title"
             secondName="link"
-            setfbFile={setfbFile}
+            setfbFile={setFile}
             edit={edit}
+            file={file}
           />
     </>
   );

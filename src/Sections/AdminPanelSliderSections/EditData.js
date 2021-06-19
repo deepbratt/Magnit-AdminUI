@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Grid } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import EditList from "./EditList";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
+import Toast from "../../components/Toast";
 export default function EditData({ id,edit}) {
-  const { updateData, isPending } = useApi("http://3.138.190.235/v1/sliders");
+  const { updateData,responseAlert,open,setOpen} = useApi("http://3.138.190.235/v1/sliders");
 
   const [file, setFile] = useState(null);
   const [array, setArray] = useState([]);
@@ -18,6 +18,14 @@ export default function EditData({ id,edit}) {
   const { title, buttonLabel, buttonLink } = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   const formData = new FormData();
@@ -65,7 +73,7 @@ export default function EditData({ id,edit}) {
                 onClick={() => {
                   updateData(id, formData);
                   setTimeout(() => {
-                    edit(false)
+                    edit(true)
                   }, 2000);
                 }}
                 variant="contained"
@@ -92,11 +100,14 @@ export default function EditData({ id,edit}) {
           xs={12}
           style={{ marginTop: "30px" }}
         >
-          {isPending ? (
-            <Alert severity="info">Status: pending!</Alert>
-          ) : (
-            <Alert severity="success">Status: updated successfully!</Alert>
-          )}
+         {responseAlert && (
+          <Toast
+            open={open}
+            severity={responseAlert.status}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
         </Grid>
       </Grid>
     </div>

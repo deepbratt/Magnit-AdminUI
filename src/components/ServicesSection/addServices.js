@@ -16,14 +16,10 @@ import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
 import ServicesTable from "../../components/Table.js/index";
 import { useEffect, useState, useCallback } from "react";
-import {
-  deleteServiceApi,
-  getAllServicesApi,
-  getOneServicesApi,
-} from "../../Utils/servicesSectionApi";
+
 import Toast from "../../components/Toast";
 
-const AddServices = ({ open, handleClose }) => {
+const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,deleteServiceApi,header }) => {
   const getAllServices = useCallback(async () => {
     let response = await getAllServicesApi();
     if (response.status === "success") {
@@ -127,7 +123,7 @@ const AddServices = ({ open, handleClose }) => {
   return (
     <>
       <FullPageDialog
-        header="Manage Services Section"
+        header={header}
         open={open}
         handleClose={handleClose}
       >

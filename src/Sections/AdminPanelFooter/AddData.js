@@ -1,14 +1,20 @@
-import React from "react";
+import React,{useState} from "react";
 import { Grid, Button } from "@material-ui/core";
 import AddressField from "./AddressField";
 import ContactField from "./ContactField";
 import SocialMediaField from "./SocialMediaField";
 import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
-import useApi from "../../Utils/useApi";
+import Toast from "../../components/Toast";
 import useStates from "./useStates";
 const AddData = () => {
-  const { addData, isPending } = useApi("");
+  const [isPending, setIsPending] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [responseAlert, setResponseAlert] = useState({
+    status: "",
+    message: "",
+  });
+
   const { grid, btn } = useStyles();
   let id = "form";
   const {
@@ -37,8 +43,60 @@ const AddData = () => {
     setLinkArray,
     add,
     array,
-    setArray
+    setArray,
+    file
   } = useStates();
+
+  
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
+  const handleAddData = async () => {
+  
+    try{
+     const rawResponse = await fetch("http://3.138.190.235/v1/companies", {
+       method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({   
+        locations:{
+          heading: addressTitle,
+          dataArray: addressArray
+        },
+        contactUs:{
+          heading: numberTitle,
+          dataArray: array
+        },
+        socialMedia:{
+          heading: linkTitle,
+          dataArray: linkArray
+        }
+        })
+     });
+     const {status} = await rawResponse.json();
+     if(status === "success"){
+      setIsPending(false);
+     }
+    }
+    catch(error){
+      if (error) {
+        setIsPending(true);
+        setResponseAlert({
+          status: error.status,
+          message: error.message,
+        });
+        setOpen(true);
+      }
+    }
+};
 
   return (
     <>
@@ -77,6 +135,7 @@ const AddData = () => {
           setLinkArray={setLinkArray}
           addLink={addLink}
           id={id}
+          file={file}
         />
       </Grid>
       <Grid
@@ -90,8 +149,8 @@ const AddData = () => {
       >
         <Button
           onClick={() => {
-            // addData(formData);
-            // console.log(addressArray,addressTitle)
+            handleAddData()
+     
           }}
           variant="contained"
           className={btn}
@@ -99,11 +158,17 @@ const AddData = () => {
           Add Data
         </Button>
       </Grid>
-      {isPending ? (
-        <Alert severity="info">Status: pending!</Alert>
-      ) : (
-        <Alert severity="success">Status: Added successfully!</Alert>
-      )}
+      <Grid item style={{marginBottom: "30px"}}>
+      {responseAlert && (
+          <Toast
+            open={open}
+            severity={responseAlert.status}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
+           {!isPending ?   <Alert severity="success">Status: Added successfully!</Alert> : null}
+      </Grid>
     </>
   );
 };

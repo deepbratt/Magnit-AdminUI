@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Grid } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import Toast from "../../components/Toast";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 export default function EditData({ id, edit }) {
-  const { handleEdit, isPending} = useApi();
+  const { handleEdit,responseAlert,open,setOpen} = useApi();
 
   const [data, setData] = useState({
     text: "",
@@ -24,6 +24,14 @@ export default function EditData({ id, edit }) {
   const loadSelectedData = async () => {
     const result = await axios.get(`http://3.138.190.235/v1/teams/${id}`);
     setData(result.data.data.result);
+  };
+
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -79,11 +87,14 @@ export default function EditData({ id, edit }) {
           xs={12}
           style={{ marginTop: "30px" }}
         >
-          {isPending ? (
-            <Alert severity="info">Status: pending!</Alert>
-          ) : (
-            <Alert severity="success">Status: updated successfully!</Alert>
-          )}
+          {responseAlert && (
+          <Toast
+            open={open}
+            severity={responseAlert.status}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
         </Grid>
       </Grid>
     </div>

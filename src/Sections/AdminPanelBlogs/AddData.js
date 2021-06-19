@@ -4,8 +4,9 @@ import TextFieldContext from "./TextFieldContext";
 import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
+import Toast from "../../components/Toast";
 const AddData = () => {
-  const { addData, isPending } = useApi("http://3.138.190.235/v1/blogs");
+  const { addData, isPending,responseAlert,open,setOpen } = useApi("http://3.138.190.235/v1/blogs");
   const [date, setDate] = useState(new Date());
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
@@ -28,6 +29,14 @@ const AddData = () => {
   formData.append("text", text)
   formData.append("link", link)
   formData.append("buttonLabel", buttonLabel)
+
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <>
@@ -63,11 +72,15 @@ const AddData = () => {
           Add Data
         </Button>
       </Grid>
-      {isPending ? (
-        <Alert severity="info">Status: pending!</Alert>
-      ) : (
-        <Alert severity="success">Status: Added successfully!</Alert>
-      )}
+      {responseAlert && (
+          <Toast
+            open={open}
+            severity={responseAlert.status}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
+           {!isPending ?   <Alert severity="success">Status: Added successfully!</Alert> : null}
     </>
   );
 };

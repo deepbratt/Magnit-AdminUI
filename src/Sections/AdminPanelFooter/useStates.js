@@ -1,7 +1,53 @@
 import { useState } from "react";
 
 const useStates = () => {
-  const [file, setFile] = useState(null);
+
+  const [file, setFile] = useState({
+    file: null,
+    base64URL: ""
+  })
+
+
+  const getBase64 = file => {
+    return new Promise(resolve => {
+      let fileInfo;
+      let baseURL = "";
+      // Make new FileReader
+      let reader = new FileReader();
+
+      // Convert the file to base64 text
+      reader.readAsDataURL(file);
+
+      // on reader load somthing...
+      reader.onload = () => {
+        // Make a fileInfo Object
+        baseURL = reader.result;
+        resolve(baseURL);
+      };
+    });
+  };
+
+  const fileChange = e => {
+
+
+const file = e.target.files[0];
+
+    getBase64(file)
+      .then(result => {
+        file["base64"] = result;
+        setFile({
+          base64URL: result,
+          file
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    setFile({
+      file: e.target.files[0]
+    });
+  };
   const [contact, setContact] = useState({
     country: "",
     number: null,
@@ -33,9 +79,6 @@ const useStates = () => {
     setLinkTitle(e.target.value);
   };
 
-  const fileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
 
   const addressTitleChange = (e) => {
     setAddressTitle(e.target.value);
@@ -89,7 +132,7 @@ const useStates = () => {
       {
         title: title,
         link: link,
-        icon: file,
+        icon: file.base64URL,
       },
     ]);
 
@@ -138,7 +181,10 @@ const useStates = () => {
     addressArray,
     addAddress,
     setAddressArray,
-    data
+    data,
+    setNumberTitle,
+    setAddressTitle,
+    setLinkTitle
   };
 };
 

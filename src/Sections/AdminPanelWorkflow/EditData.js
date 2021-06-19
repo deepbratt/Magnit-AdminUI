@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Grid, TextField, InputLabel } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import useApi from "../../Utils/useApi";
 import useStyles from "../AdminPanelSliderSections/useStyles";
+import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { updateData, isPending } = useApi("");
+  const { updateData, responseAlert,open,setOpen } = useApi("");
   const { common, labels } = useStyles();
   const [file, setFile] = useState(null);
 
@@ -18,8 +18,17 @@ export default function EditData({ id, edit }) {
     setFile(result.data.data.result);
   };
 
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const formData = new FormData();
   formData.append("image", file);
+
   return (
     <div>
       <Grid justify="center" container>
@@ -85,11 +94,14 @@ export default function EditData({ id, edit }) {
           xs={12}
           style={{ marginTop: "30px" }}
         >
-          {isPending ? (
-            <Alert severity="info">Status: pending!</Alert>
-          ) : (
-            <Alert severity="success">Status: updated successfully!</Alert>
-          )}
+          {responseAlert && (
+          <Toast
+            open={open}
+            severity={responseAlert.status}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
         </Grid>
       </Grid>
     </div>

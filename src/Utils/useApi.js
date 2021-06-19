@@ -5,14 +5,19 @@ const headers = {
   Accept: "multipart/form-data",
   "Content-Type": "multipart/form-data",
   "Access-Control-Allow-Origin": "*",
-}
+};
 
 const useApi = (url) => {
   const [data, setData] = useState([]);
   const [isPending, setIsPending] = useState(true);
-  const [error, setError] = useState({ errorMessage: "" });
+  const [errorResponse, setError] = useState({ errorMessage: "" });
   const [success, setSuccess] = useState({ successMessage: "" });
   const [isMounted, setIsMounted] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [responseAlert, setResponseAlert] = useState({
+    status: "",
+    message: "",
+  });
 
   useEffect(() => {
     if (isMounted) {
@@ -22,10 +27,9 @@ const useApi = (url) => {
     }
   }, [data]);
 
-
   const loadData = async () => {
     try {
-      const {data,status} = await axios.get(`${url}`, {headers});
+      const { data, status } = await axios.get(`${url}`, { headers });
       setSuccess({ successMessage: status });
       setData(data.data.result);
       setIsMounted(true);
@@ -48,12 +52,13 @@ const useApi = (url) => {
       setIsPending(false);
       setIsMounted(false);
     } catch (error) {
-     
       console.error("There was an error!", error);
       setIsPending(true);
-      if (error.response) {
-        setError({ errorMessage: error.message });
-      }
+      setResponseAlert({
+        status: error.status,
+        message: error.message,
+      });
+      setOpen(true);
     }
   };
 
@@ -63,23 +68,22 @@ const useApi = (url) => {
         headers,
       });
       if (status === 200) {
-        setSuccess({ successMessage: data.success });
-        setError(false);
-        setIsPending(false);
+        setResponseAlert({
+          status: data.status,
+          message: "Updated Successfully",
+        });
+        setOpen(true);
         setData((prev) => {
           return [...prev, data.data.result];
         });
       }
       setIsMounted(false);
     } catch (error) {
-      setError({ errorMessage: error.message });
-      console.error("There was an error!", error);
-      setIsPending(true);
-      if (error.response) {
-        
-      setError({ errorMessage: error.message });
-      }
-      console.log(error.config);
+      setResponseAlert({
+        status: error.status,
+        message: error.message,
+      });
+      setOpen(true);
     }
   };
 
@@ -90,70 +94,94 @@ const useApi = (url) => {
     } catch (error) {
       console.error("There was an error!", error);
       if (error.response) {
-        setError({ errorMessage: error.message });
+        setError({ errorMessage: error.status });
       }
     }
   };
 
-  const handleAddData = async (text,link,buttonLabel) => {
-  
-    try{
-     const rawResponse = await fetch("http://3.138.190.235/v1/teams", {
-       method: 'POST',
-       headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
-       },
-       body: JSON.stringify({   
-         text: text,
-         link: link,
-         buttonLabel: buttonLabel})
-     });
-     const {content,status} = await rawResponse.json();
-   
-     if(status === "success"){
-       setIsPending(false)
-     }
-    }
-    catch(error){
-      if(error){
-        setIsPending(true)
+  const handleAddData = async (text, link, buttonLabel) => {
+    try {
+      const rawResponse = await fetch("http://3.138.190.235/v1/teams", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: text,
+          link: link,
+          buttonLabel: buttonLabel,
+        }),
+      });
+      const { result, status } = await rawResponse.json();
+
+      if (status === "success") {
+        setIsPending(false);
+        setData((prev) => {
+          return [...prev, result.data.data.result];
+        });
+      }
+    } catch (error) {
+      if (error) {
+        setIsPending(true);
+        setResponseAlert({
+          status: error.status,
+          message: error.message,
+        });
+        setOpen(true);
       }
     }
-};
+  };
 
-const handleEdit = async (text,link,buttonLabel,id) => {
-  
-  try{
-   const rawResponse = await fetch(`http://3.138.190.235/v1/teams/${id}`, {
-     method: 'PUT',
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
-     },
-     body: JSON.stringify({   
-       text: text,
-       link: link,
-       buttonLabel: buttonLabel})
-   });
-   const {content,status} = await rawResponse.json();
- 
-   if(status === "success"){
-     setIsPending(false)
-   }
-  }
-  catch(error){
-    if(error){
-      setIsPending(true)
+  const handleEdit = async (text, link, buttonLabel, id) => {
+    try {
+      const rawResponse = await fetch(`http://3.138.190.235/v1/teams/${id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: text,
+          link: link,
+          buttonLabel: buttonLabel,
+        }),
+      });
+      const { data, status } = await rawResponse.json();
+
+      if (status === "success") {
+        setIsPending(false);
+        setResponseAlert({
+          status: data.status,
+          message: "Updated Successfully",
+        });
+        setOpen(true);
+      }
+    } catch (error) {
+      if (error) {
+        setIsPending(true);
+        setResponseAlert({
+          status: error.status,
+          message: error.message,
+        });
+        setOpen(true);
+      }
     }
-  }
-};
+  };
 
-  return { data, addData, isPending, error, updateData, success, deleteItem,handleAddData,handleEdit };
+  return {
+    data,
+    addData,
+    isPending,
+    updateData,
+    success,
+    deleteItem,
+    handleAddData,
+    handleEdit,
+    responseAlert,
+    open,
+    setOpen
+  };
 };
 
 export default useApi;
-
-
-
-

@@ -22,7 +22,7 @@ const ListItems = ({
   firstName,
   secondName,
   setfbFile,
-  edit,
+  edit
 }) => {
   function handleDeleteClick(id) {
     setArr((prev) => {
@@ -96,7 +96,7 @@ const ListItems = ({
                             type="file"
                             name="file"
                             onChange={(e) => {
-                              setfbFile(e.target.files[0]);
+                              setfbFile(e);
                             }}
                             style={{ width: "100%" }}
                           />
@@ -135,7 +135,7 @@ const ListItems = ({
                       <p>
                         {officeType} {address}
                       </p>
-                      {icon ? <p>{icon.name}</p> : null}
+                      {icon ? <p>Icon</p> : null}
                       <Button
                         style={{
                           background: "green",

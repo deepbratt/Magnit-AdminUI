@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Grid } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
+import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { updateData, isPending } = useApi("http://3.138.190.235/v1/awards");
+  const { updateData,responseAlert,open,setOpen} = useApi("http://3.138.190.235/v1/awards");
 
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
@@ -30,6 +30,16 @@ export default function EditData({ id, edit }) {
     const {data} = await axios.get(`http://3.138.190.235/v1/awards/${id}`);
     setData(data.data.result);
   };
+
+  
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <div>
       <Grid justify="center" container>
@@ -94,11 +104,14 @@ export default function EditData({ id, edit }) {
           xs={12}
           style={{ marginTop: "30px" }}
         >
-          {isPending ? (
-            <Alert severity="info">Status: pending!</Alert>
-          ) : (
-            <Alert severity="success">Status: updated successfully!</Alert>
-          )}
+            {responseAlert && (
+          <Toast
+            open={open}
+            severity={responseAlert.status}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
         </Grid>
       </Grid>
     </div>
