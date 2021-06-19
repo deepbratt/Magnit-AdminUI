@@ -13,6 +13,7 @@ const AddData = () => {
     link: "",
     buttonLabel: "",
   });
+  
   const {link ,text,buttonLabel} = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -54,6 +55,20 @@ const AddData = () => {
           className={btn}
         >
           Add Data
+        </Button>
+        <Button
+          onClick={() => {
+            setData({
+              text: "",
+              link: "",
+              buttonLabel: "",
+            })
+          }}
+          variant="contained"
+          color="secondary"
+          style={{marginLeft: "15px"}}
+        >
+         Clear Field
         </Button>
       </Grid>
       {responseAlert && (

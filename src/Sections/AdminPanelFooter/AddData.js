@@ -157,6 +157,13 @@ const AddData = () => {
         >
           Add Data
         </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{marginLeft: "15px"}}
+        >
+         Clear Field
+        </Button>
       </Grid>
       <Grid item style={{marginBottom: "30px"}}>
       {responseAlert && (

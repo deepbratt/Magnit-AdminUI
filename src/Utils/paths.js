@@ -15,6 +15,7 @@ const AdminPanelBlogs = lazy(() => import("../Sections/AdminPanelBlogs/BlogsCont
 const AdminPanelFooter = lazy(() => import("../Sections/AdminPanelFooter/FooterContext"));
 const AdminPanelWorkflow = lazy(() => import("../Sections/AdminPanelWorkflow/WorkFlowContext"));
 const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/JoinTeamContext"));
+const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -31,6 +32,7 @@ export const paths = {
   footer: "footer",
   workflow: "workflow",
   joinOurTeam: "joinOurTeam",
+  ourObjective: "ourObjective",
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
@@ -48,6 +50,7 @@ export const routes = {
   footer: "/footer",
   workflow: "/workflow",
   joinOurTeam: "/join-our-team",
+  ourObjective: "/our-objective",
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
@@ -108,6 +111,10 @@ export const pagesRoutes = {
   [paths.joinOurTeam]: {
     path: routes.joinOurTeam,
     component: AdminPanelJoinOurTeam,
+  },
+  [paths.ourObjective]: {
+    path: routes.ourObjective,
+    component: AdminPanelOurObjective,
   },
 };
 

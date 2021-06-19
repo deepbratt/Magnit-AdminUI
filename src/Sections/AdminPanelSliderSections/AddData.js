@@ -83,11 +83,30 @@ const AddData = () => {
         <Button
           onClick={() => {
             addData(formData);
+            setData({
+              title: "",
+              buttonLink: "",
+              buttonLabel: "",
+            })
           }}
           variant="contained"
           className={btn}
         >
           Add Data
+        </Button>
+        <Button
+          onClick={() => {
+            setData({
+              title: "",
+              buttonLink: "",
+              buttonLabel: "",
+            })
+          }}
+          variant="contained"
+          color="secondary"
+          style={{marginLeft: "15px"}}
+        >
+         Clear Field
         </Button>
       </Grid>
      <Grid item style={{marginBottom: "30px"}}>

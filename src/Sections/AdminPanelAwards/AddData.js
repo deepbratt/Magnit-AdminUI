@@ -55,13 +55,33 @@ const AddData = () => {
         <Button
           onClick={() => {
             addData(formData);
+            setData({
+              clientName: "",
+              link: "",
+            })
           }}
           variant="contained"
           className={btn}
         >
           Add Data
         </Button>
+        <Grid item>
+       <Button
+          onClick={() => {
+            setData({
+              clientName: "",
+              link: "",
+            })
+          }}
+          variant="contained"
+          color="secondary"
+          style={{marginLeft: "15px", marginTop: "20px"}}
+        >
+         Clear Field
+        </Button>
+       </Grid>
       </Grid>
+      
       <Grid item style={{marginBottom: "30px"}}>
       {responseAlert && (
           <Toast

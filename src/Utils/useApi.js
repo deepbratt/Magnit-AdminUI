@@ -87,6 +87,31 @@ const useApi = (url) => {
     }
   };
 
+  const handlePutMethod = async (Id, items) => {
+    try {
+      const { status, data } = await axios.put(`${url}/${Id}`, items, {
+        headers,
+      });
+      if (status === 200) {
+        setResponseAlert({
+          status: data.status,
+          message: "Updated Successfully",
+        });
+        setOpen(true);
+        setData((prev) => {
+          return [...prev, data.data.result];
+        });
+      }
+      setIsMounted(false);
+    } catch (error) {
+      setResponseAlert({
+        status: error.status,
+        message: error.message,
+      });
+      setOpen(true);
+    }
+  };
+
   const deleteItem = async (id) => {
     try {
       await axios.delete(`${url}/${id}`);
@@ -180,7 +205,8 @@ const useApi = (url) => {
     handleEdit,
     responseAlert,
     open,
-    setOpen
+    setOpen,
+    handlePutMethod
   };
 };
 

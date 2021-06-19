@@ -36,4 +36,8 @@ export const payload = [
       path: "/join-our-team",
       text: "Join Our Team",
     },
+    {
+      path: "/our-objective",
+      text: "Our Objective",
+    }
   ]
