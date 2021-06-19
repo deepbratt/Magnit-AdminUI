@@ -8,12 +8,12 @@ import AddData from "./AddData"
 import EditData from "./EditData"
 import Table from "../../components/Table.js/index"
 import useApi from "../../Utils/useApi"
-const JoinTeamContext = ({ array }) => {
+const JoinTeamContext = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
   const link = "http://3.138.190.235/v1/teams"
-  const {deleteItem} = useApi(link)
+  const {deleteItem,data} = useApi(link)
   const valueskeys = {
     title: "buttonLabel",
     _id: "_id"
@@ -29,7 +29,7 @@ const JoinTeamContext = ({ array }) => {
           <AddData /> 
         </Grid>
         <Table
-            rows={array}
+            rows={data}
             handleDelete={deleteItem}
             handleUpdate={setId}
             edit={setEdit}

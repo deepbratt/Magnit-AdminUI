@@ -8,12 +8,12 @@ import AddData from "./AddData"
 import EditData from "./EditData"
 import Table from "../../components/Table.js/index"
 import useApi from "../../Utils/useApi"
-const DisplayData = ({ array }) => {
+const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
   const link = "http://3.138.190.235/v1/workflows"
-  const {deleteItem} = useApi(link)
+  const {deleteItem,data} = useApi(link)
   return (
     <div>
       {!edit ? 
@@ -25,7 +25,7 @@ const DisplayData = ({ array }) => {
           <AddData /> 
         </Grid>
         <Table
-            rows={array}
+            rows={data}
             handleDelete={deleteItem}
             handleUpdate={setId}
             edit={setEdit}

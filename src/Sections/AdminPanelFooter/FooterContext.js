@@ -10,12 +10,12 @@ import EditData from "./EditData"
 import Table from "../../components/Table.js/index"
 import useApi from "../../Utils/useApi"
 
-const DisplayData = ({array}) => {
+const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
   const link = "http://3.138.190.235/v1/companies"
-  const {deleteItem} = useApi(link)
+  const {deleteItem,data} = useApi(link)
   const valueskeys = {
     title: "heading",
     _id: "_id"
@@ -32,7 +32,7 @@ const DisplayData = ({array}) => {
           <AddData /> 
         </Grid>
         <Table
-            rows={array}
+            rows={data}
             handleDelete={deleteItem}
             handleUpdate={setId}
             edit={setEdit}
