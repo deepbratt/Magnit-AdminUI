@@ -29,7 +29,8 @@ export default function EditData({ id,edit}) {
   };
 
   const formData = new FormData();
-  formData.append("backgroundImage", file);
+  
+  {file && formData.append("backgroundImage", file);}
   formData.append("title", title);
   formData.append("items", array);
   formData.append("buttonLabel", buttonLabel);
@@ -43,6 +44,7 @@ export default function EditData({ id,edit}) {
     const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
     setData(result.data.data.result);
     setArray(result.data.data.result.items);
+    setFile(result.data.data.result.backgroundImage)
   };
   return (
     <div>

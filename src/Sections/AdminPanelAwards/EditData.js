@@ -19,7 +19,7 @@ export default function EditData({ id, edit }) {
 
   const formData = new FormData();
   formData.append("link", link);
-  formData.append("image", file);
+  {file && formData.append("image", file)}
   formData.append("clientName", clientName);
 
   useEffect(() => {
@@ -29,6 +29,7 @@ export default function EditData({ id, edit }) {
   const loadSelectedData = async () => {
     const {data} = await axios.get(`http://3.138.190.235/v1/awards/${id}`);
     setData(data.data.result);
+    setFile(data.data.result.image)
   };
 
   
@@ -78,7 +79,7 @@ export default function EditData({ id, edit }) {
                 updateData(id, formData);
                 setTimeout(() => {
                   edit(false);
-                }, 1000);
+                }, 3000);
               }}
               variant="contained"
               color="primary"

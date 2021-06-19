@@ -29,17 +29,17 @@ export default function EditData({ id, edit }) {
   const loadSelectedData = async () => {
     const result = await axios.get(`http://3.138.190.235/v1/blogs/${id}`);
     setData(result.data.data.result);
-    console.log(result.data.data.result)
+    setFile(result.data.data.result.image)
   };
 
   const formData = new FormData()
   formData.append("views", views)
-  formData.append("image", file)
+  {file && formData.append("image", file)}
   formData.append("title", title)
   formData.append("text", text)
   formData.append("link", link)
   formData.append("buttonLabel", buttonLabel)
-  
+ 
     
   const handleToastClose = (event, reason) => {
     if (reason === "clickaway") {

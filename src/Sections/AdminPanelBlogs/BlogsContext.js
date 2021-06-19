@@ -14,6 +14,7 @@ const DisplayData = () => {
   const [id,setId] = useState(null)
   const link = "http://3.138.190.235/v1/blogs"
   const {deleteItem,data} = useApi(link)
+
   return (
     <div>
       {!edit ? 

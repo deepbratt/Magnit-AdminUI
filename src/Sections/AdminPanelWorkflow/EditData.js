@@ -14,8 +14,8 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
-    setFile(result.data.data.result);
+    const result = await axios.get(`http://3.138.190.235/v1/workflows/${id}`);
+    setFile(result.data.data.result.image);
   };
 
   const handleToastClose = (event, reason) => {
@@ -27,7 +27,7 @@ export default function EditData({ id, edit }) {
   };
 
   const formData = new FormData();
-  formData.append("image", file);
+  formData.append("image", file)
 
   return (
     <div>

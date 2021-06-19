@@ -25,6 +25,7 @@ export default function EditData({ id, edit }) {
   const loadSelectedData = async () => {
     const {data} = await axios.get(`http://3.138.190.235/v1/ourObjectives/${id}`);
     setData(data.data.result);
+    setFile(data.data.result.icon)
   };
 
   
@@ -37,7 +38,7 @@ export default function EditData({ id, edit }) {
   };
 
   const formData = new FormData();
-  formData.append("icon", file);
+  {file && formData.append("icon", file)}
   formData.append("title", title);
   formData.append("text", text);
 
