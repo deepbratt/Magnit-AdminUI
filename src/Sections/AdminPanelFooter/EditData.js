@@ -166,7 +166,7 @@ const EditData = ({ id, edit }) => {
             handleEdit()
             setTimeout(() => {
               edit(false);
-            }, 3000);
+            }, 5000);
           }}
           variant="contained"
           color="primary"

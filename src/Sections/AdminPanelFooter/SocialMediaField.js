@@ -28,6 +28,17 @@ const SocialMediaField = ({
     const updatedData = [...linkArray].map((data, index) => {
       if (index === id ) {
         data = currentTodo;
+      }
+      return data;
+    });
+
+    setLinkArray(updatedData);
+    setEditing(null);
+  }
+
+  function submitImg(id) {
+    const updatedData = [...linkArray].map((data, index) => {
+      if (index === id ) {
         data.icon = fbfile.base64URL;
       }
       return data;
@@ -48,12 +59,14 @@ const SocialMediaField = ({
     officeType,
     address,
     title,
-    link
+    link,
+    icon
   ) {
     setEditing(id);
     setCurrentTodo({
       title: title,
       link: link,
+      icon: icon
     });
   }
   return (
@@ -158,6 +171,7 @@ const SocialMediaField = ({
             edit={edit}
             file={file}
             setEditing={setEditing}
+            submitImg={submitImg}
           />
     </>
   );

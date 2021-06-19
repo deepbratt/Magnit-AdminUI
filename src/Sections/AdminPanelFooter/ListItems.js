@@ -24,6 +24,7 @@ const ListItems = ({
   setfbFile,
   edit,
   setEditing,
+  submitImg
 }) => {
   function handleDeleteClick(id) {
     setArr((prev) => {
@@ -93,7 +94,6 @@ const ListItems = ({
                               required
                               onChange={(e) => handleEditInputChange(e)}
                             />
-                            {icon ? (
                               <TextField
                                 variant="outlined"
                                 type="file"
@@ -103,7 +103,7 @@ const ListItems = ({
                                 }}
                                 style={{ width: "100%" }}
                               />
-                            ) : null}
+                    
 
                             <Button
                               style={{
@@ -116,6 +116,18 @@ const ListItems = ({
                               onClick={() => submitEdits(index)}
                             >
                               Submit
+                            </Button>
+                            <Button
+                              style={{
+                                background: "blue",
+                                margin: "18px 0px 0px 10px",
+                              }}
+                              size="small"
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => submitImg(index)}
+                            >
+                              Submit Icon
                             </Button>
                             <Button
                               style={{
