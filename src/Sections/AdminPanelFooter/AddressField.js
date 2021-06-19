@@ -108,6 +108,7 @@ const AddressField = ({
             firstName="officeType"
             secondName="address"
             edit={edit}
+            setEditing={setEditing}
           />
     </>
   );

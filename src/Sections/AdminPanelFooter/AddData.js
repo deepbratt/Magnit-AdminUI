@@ -161,6 +161,8 @@ const AddData = () => {
           variant="contained"
           color="secondary"
           style={{marginLeft: "15px"}}
+
+          
         >
          Clear Field
         </Button>

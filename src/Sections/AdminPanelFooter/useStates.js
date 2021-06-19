@@ -1,51 +1,42 @@
 import { useState } from "react";
 
 const useStates = () => {
-
   const [file, setFile] = useState({
     file: null,
-    base64URL: ""
-  })
+    base64URL: "",
+  });
 
-
-  const getBase64 = file => {
-    return new Promise(resolve => {
-      let fileInfo;
+  const getBase64 = (file) => {
+    return new Promise((resolve) => {
       let baseURL = "";
-      // Make new FileReader
       let reader = new FileReader();
 
-      // Convert the file to base64 text
       reader.readAsDataURL(file);
 
-      // on reader load somthing...
       reader.onload = () => {
-        // Make a fileInfo Object
         baseURL = reader.result;
         resolve(baseURL);
       };
     });
   };
 
-  const fileChange = e => {
-
-
-const file = e.target.files[0];
+  const fileChange = (e) => {
+    const file = e.target.files[0];
 
     getBase64(file)
-      .then(result => {
+      .then((result) => {
         file["base64"] = result;
         setFile({
           base64URL: result,
-          file
+          file,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 
     setFile({
-      file: e.target.files[0]
+      file: e.target.files[0],
     });
   };
   const [contact, setContact] = useState({
@@ -78,7 +69,6 @@ const file = e.target.files[0];
   const linkTitleChange = (e) => {
     setLinkTitle(e.target.value);
   };
-
 
   const addressTitleChange = (e) => {
     setAddressTitle(e.target.value);
@@ -113,6 +103,10 @@ const file = e.target.files[0];
       },
     ]);
 
+    setContact({
+      country: "",
+      number: "",
+    });
   };
 
   const addAddress = () => {
@@ -123,7 +117,10 @@ const file = e.target.files[0];
         address: address,
       },
     ]);
-
+    setLocation({
+      officeType: "",
+      address: "",
+    });
   };
 
   const addLink = () => {
@@ -136,22 +133,26 @@ const file = e.target.files[0];
       },
     ]);
 
+    setLinks({
+      title: "",
+      link: "",
+    });
   };
 
-    const data = {
+  const data = {
     locations: {
       heading: numberTitle,
-      array: array
+      array: array,
     },
     contactUs: {
       heading: addressTitle,
-      array: addressArray
+      array: addressArray,
     },
     socialMedia: {
       heading: linkTitle,
-      array: linkArray
-    }
-  }
+      array: linkArray,
+    },
+  };
 
   return {
     file,
@@ -184,7 +185,7 @@ const file = e.target.files[0];
     data,
     setNumberTitle,
     setAddressTitle,
-    setLinkTitle
+    setLinkTitle,
   };
 };
 

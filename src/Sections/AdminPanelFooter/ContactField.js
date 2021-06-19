@@ -108,6 +108,7 @@ const ContactField = ({
             firstName="country"
             secondName="number"
             edit={edit}
+            setEditing={setEditing}
           />
     </>
   );

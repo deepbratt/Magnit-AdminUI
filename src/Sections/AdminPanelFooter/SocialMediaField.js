@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextField, InputLabel, Grid } from "@material-ui/core";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import ListItems from "./ListItems";
+import Base64Img from "./Base64Img"
 const SocialMediaField = ({
   title,
   setInput,
@@ -22,11 +23,12 @@ const SocialMediaField = ({
     title: "",
     link: "",
   });
+  const {fbfile,fileChange} = Base64Img()
   function submitEdits(id) {
     const updatedData = [...linkArray].map((data, index) => {
       if (index === id ) {
         data = currentTodo;
-        data.icon = file.base64URL;
+        data.icon = fbfile.base64URL;
       }
       return data;
     });
@@ -152,9 +154,10 @@ const SocialMediaField = ({
             secondField={currentTodo.link}
             firstName="title"
             secondName="link"
-            setfbFile={setFile}
+            setfbFile={fileChange}
             edit={edit}
             file={file}
+            setEditing={setEditing}
           />
     </>
   );
