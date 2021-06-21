@@ -11,17 +11,26 @@ import {
   deleteOpportunitiesApi,
   getOneOpportunitiesApi,
 } from "../../Utils/opportunitiesApi";
+import Toast from "../../components/Toast";
 
 const AddOpportunities = ({ open, handleClose }) => {
   const getAllOpportunities = useCallback(async () => {
     let response = await getAllOpportunitiesApi();
     if (response.status === "success") {
       setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -30,10 +39,20 @@ const AddOpportunities = ({ open, handleClose }) => {
     handleInputChange,
     handleSubmit,
     resetForm,
+    responseMessage,
+    setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
   const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     getAllOpportunities();
@@ -45,11 +64,18 @@ const AddOpportunities = ({ open, handleClose }) => {
         if (response.status === "success") {
           getAllOpportunities();
         }
-        if (response.status === "fail") {
-          console.log(response);
-        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -64,6 +90,7 @@ const AddOpportunities = ({ open, handleClose }) => {
           setValues({
             title: response.data.result.title,
             buttonLabel: response.data.result.buttonLabel,
+            description: response.data.result.description,
             buttonLink: response.data.result.link,
             location: response.data.result.location,
             id: id,
@@ -74,7 +101,11 @@ const AddOpportunities = ({ open, handleClose }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
   };
 
@@ -199,6 +230,14 @@ const AddOpportunities = ({ open, handleClose }) => {
           />
         </Grid>
       </Grid>
+      {responseMessage && (
+        <Toast
+          open={alertOpen}
+          onClose={handleAlertClose}
+          severity={responseMessage.status}
+          message={responseMessage.message}
+        />
+      )}
     </FullPageDialog>
   );
 };

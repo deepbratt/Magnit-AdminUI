@@ -22,9 +22,7 @@ export const useForm = (validateOnChange = false, id) => {
   const [update, setUpdate] = useState(false);
   const [color, setColor] = useState(values.color);
   const [alertOpen, setAlertOpen] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [responseMessage, setResponseMessage] = useState({
     status: "",
     message: "",
