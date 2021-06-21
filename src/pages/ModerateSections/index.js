@@ -8,6 +8,7 @@ import TrainingAndCertification from "../../components/TrainingAndCertification"
 import AppSolutions from "../../components/AppSolutions";
 import ModerateBox from "../../components/ModerateContext/ModerateBox";
 import { BoxData } from "../../Utils/Text";
+import BenifitsSection from "../../components/BenifitsSection";
 
 const ModerateSections = () => {
   return (
@@ -44,6 +45,9 @@ const ModerateSections = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2}>
           <AppSolutions />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
+          <BenifitsSection />
         </Grid>
       </Grid>
       <Typography variant="h4" style={{ textAlign: "center" }}>
