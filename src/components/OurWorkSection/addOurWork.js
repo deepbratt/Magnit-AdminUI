@@ -20,6 +20,7 @@ import {
   getOneOurWorkApi,
   deleteOurWorkApi,
 } from "../../Utils/ourWorkSectionApi";
+import Toast from "../../components/Toast";
 
 const AddOurWork = ({ open, handleClose }) => {
   const getAllOurWork = useCallback(async () => {
@@ -31,6 +32,8 @@ const AddOurWork = ({ open, handleClose }) => {
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -41,11 +44,21 @@ const AddOurWork = ({ open, handleClose }) => {
     setSelectedFile,
     handleCapture,
     handleSubmit,
+    responseMessage,
+    setResponseMessage,
     resetForm,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
   const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     getAllOurWork();
@@ -58,11 +71,18 @@ const AddOurWork = ({ open, handleClose }) => {
         if (response.status === "success") {
           getAllOurWork();
         }
-        if (response.status === "fail") {
-          console.log(response);
-        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -87,7 +107,11 @@ const AddOurWork = ({ open, handleClose }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
   };
 
@@ -234,6 +258,14 @@ const AddOurWork = ({ open, handleClose }) => {
           />
         </Grid>
       </Grid>
+      {responseMessage && (
+        <Toast
+          open={alertOpen}
+          onClose={handleAlertClose}
+          severity={responseMessage.status}
+          message={responseMessage.message}
+        />
+      )}
     </FullPageDialog>
   );
 };
