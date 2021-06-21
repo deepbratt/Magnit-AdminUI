@@ -94,15 +94,19 @@ const ListItems = ({
                               required
                               onChange={(e) => handleEditInputChange(e)}
                             />
+                              {icon ? 
                               <TextField
-                                variant="outlined"
-                                type="file"
-                                name="file"
-                                onChange={(e) => {
-                                  setfbFile(e);
-                                }}
-                                style={{ width: "100%" }}
-                              />
+                              variant="outlined"
+                              type="file"
+                              name="file"
+                              onChange={(e) => {
+                                setfbFile(e);
+                              }}
+                              style={{ width: "100%" }}
+                            />
+                            : 
+                            null
+                            }
                     
 
                             <Button
@@ -117,18 +121,20 @@ const ListItems = ({
                             >
                               Submit
                             </Button>
+                            {icon ? 
                             <Button
-                              style={{
-                                background: "blue",
-                                margin: "18px 0px 0px 10px",
-                              }}
-                              size="small"
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => submitImg(index)}
-                            >
-                              Submit Icon
-                            </Button>
+                            style={{
+                              background: "blue",
+                              margin: "18px 0px 0px 10px",
+                            }}
+                            size="small"
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => submitImg(index)}
+                          >
+                            Submit Icon
+                          </Button> : null
+                          }
                             <Button
                               style={{
                                 margin: "18px 0px 0px 10px",
