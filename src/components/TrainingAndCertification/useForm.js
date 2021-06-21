@@ -8,7 +8,7 @@ import {
 const initialValues = {
   title: "",
   description: "",
-  jsonText: null,
+  jsonFile: null,
   id: null,
 };
 
@@ -16,10 +16,19 @@ export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-
+  const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [responseMessage, setResponseMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleCapture = ({ target }) => {
+    setSelectedFile(target.files[0]);
+  };
+
+  const [responseMessage, setResponseMessage] = useState({
+    status: "",
+    message: "",
+  });
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -61,37 +70,69 @@ export const useForm = (validateOnChange = false, id) => {
 
     if (validate()) {
       setIsLoading(true);
-      let requestBody = {
-        title: values.title,
-        description: values.description,
-        jsonText: JSON.parse(values.jsonText),
-      };
+      var formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("jsonFile", selectedFile);
 
-      console.log(requestBody, values.title);
       if (!update) {
-        await addTrainingAndCertificationsApi(requestBody)
+        await addTrainingAndCertificationsApi(formData)
           .then((response) => {
             setIsLoading(false);
             resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: "Item Added Successfully",
+              });
+              setAlertOpen(true);
+            } else {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+              setAlertOpen(true);
+            }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       } else {
         console.log("id", id);
-        await updateTrainingAndCertificationsApi(values.id, requestBody)
+        await updateTrainingAndCertificationsApi(values.id, formData)
           .then((response) => {
-            setIsLoading(false);
-            resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: "Item Updated Successfully",
+              });
+              setAlertOpen(true);
+            } else {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+              setAlertOpen(true);
+            }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       }
     }
   };
 
   return {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -102,6 +143,9 @@ export const useForm = (validateOnChange = false, id) => {
     resetForm,
     validate,
     handleSubmit,
+    selectedFile,
+    setSelectedFile,
+    handleCapture,
     isLoading,
     responseMessage,
     setResponseMessage,

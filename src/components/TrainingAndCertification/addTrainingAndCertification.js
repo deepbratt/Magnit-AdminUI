@@ -1,6 +1,14 @@
 import PropTypes from "prop-types";
 import FullPageDialog from "../FullPageDialog";
-import { Button, Grid, InputLabel, TextField } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  InputLabel,
+  TextField,
+  Tooltip,
+} from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import GlobalStyles from "../../globalStyles";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
@@ -17,12 +25,20 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
   const getAllTrainingAndCertification = useCallback(async () => {
     let response = await getAllTrainingAndCertificationsApi();
     if (response.status === "success") {
-      setRows(response.data.trainingCertifications);
+      setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -31,6 +47,9 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
     handleInputChange,
     handleSubmit,
     resetForm,
+    selectedFile,
+    setSelectedFile,
+    handleCapture,
     responseMessage,
     setResponseMessage,
   } = useForm(id);
@@ -48,12 +67,19 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
         console.log("response", response);
         if (response.status === "success") {
           getAllTrainingAndCertification();
-        }
-        if (response.status === "fail") {
-          console.log(response);
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -65,21 +91,31 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
       .then((response) => {
         if (response.status === "success") {
           setValues({
-            title: response.data.trainingCertification.title,
-            description: response.data.trainingCertification.description,
-            jsonText: JSON.stringify(
-              response.data.trainingCertification.jsonText
-            ),
+            title: response.data.result.title,
+            description: response.data.result.description,
             id: id,
           });
+          setSelectedFile(response.data.result.jsonFile);
         }
         if (response.status === "fail") {
           console.log(response);
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
   };
 
   return (
@@ -122,20 +158,29 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-jsonText">Json Text</InputLabel>
-              <TextField
+            <Grid className={buttonWrap} item xs={12} md={6}>
+              <input
+                accept=".json"
                 name={fieldNames.jsonText}
-                id="input-jsonText"
-                variant="outlined"
-                placeholder="lorem ipsum...."
-                value={values.jsonText}
-                {...(errors && { error: true, helperText: errors.jsonText })}
-                onChange={handleInputChange}
-                fullWidth
-                multiline
-                rows={3}
+                style={{ display: "none" }}
+                id="input-json-file"
+                type="file"
+                onChange={handleCapture}
               />
+              <Tooltip title="Select Json File">
+                <label htmlFor="input-json-file">
+                  <IconButton
+                    color="primary"
+                    aria-label="upload json file"
+                    component="span"
+                  >
+                    <InsertDriveFileIcon fontSize="large" />
+                  </IconButton>
+                </label>
+              </Tooltip>
+              <label>
+                {selectedFile ? selectedFile.name : "Select Json File"}
+              </label>
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
@@ -177,6 +222,8 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
         </Grid>
         {responseMessage && (
           <Toast
+            open={alertOpen}
+            onClose={handleAlertClose}
             severity={responseMessage.status}
             message={responseMessage.message}
           />
