@@ -86,6 +86,7 @@ export const useForm = (validateOnChange = false, id) => {
                 message: "Item Added Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
                 status: response.status,
@@ -111,6 +112,7 @@ export const useForm = (validateOnChange = false, id) => {
                 message: "Item Updated Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
                 status: response.status,

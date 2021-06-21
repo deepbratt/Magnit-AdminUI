@@ -106,6 +106,7 @@ const AddServices = ({ open, handleClose }) => {
             description: response.data.result.description,
             buttonLabel: response.data.result.buttonLabel,
             buttonLink: response.data.result.buttonLink,
+            type: response.data.result.type,
             id: id,
           });
           setColor(response.data.result.color);
@@ -260,6 +261,23 @@ const AddServices = ({ open, handleClose }) => {
                   name={fieldNames.color}
                   value={color}
                   onChange={(color) => setColor(color.toString())}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <InputLabel id="input-type">Type</InputLabel>
+                <TextField
+                  name={fieldNames.type}
+                  id="input-type"
+                  variant="outlined"
+                  placeholder="Web Development Services"
+                  value={values.services}
+                  {...(errors && {
+                    error: true,
+                    helperText: errors.services,
+                  })}
+                  onChange={handleInputChange}
+                  fullWidth
                 />
               </Grid>
 

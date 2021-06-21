@@ -12,6 +12,7 @@ const initialValues = {
   buttonLink: "",
   image: null,
   color: "",
+  type: "",
   id: null,
 };
 
@@ -53,6 +54,9 @@ export const useForm = (validateOnChange = false, id) => {
       temp.buttonLink =
         fieldValues.buttonLink.trim() === "" ? messages.isRequired : "";
     }
+    if (fieldNames.type in fieldValues) {
+      temp.type = fieldValues.type.trim() === "" ? messages.isRequired : "";
+    }
 
     setErrors({
       ...temp,
@@ -90,6 +94,7 @@ export const useForm = (validateOnChange = false, id) => {
       formData.append("description", values.description);
       formData.append("buttonLabel", values.buttonLabel);
       formData.append("buttonLink", values.buttonLink);
+      formData.append("type", values.type);
       formData.append("color", color);
       formData.append("image", selectedFile);
       console.log(formData, values.title);
@@ -104,6 +109,7 @@ export const useForm = (validateOnChange = false, id) => {
                 message: "Item Added Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
                 status: response.status,
@@ -129,6 +135,7 @@ export const useForm = (validateOnChange = false, id) => {
                 message: "Item Updated Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
                 status: response.status,
