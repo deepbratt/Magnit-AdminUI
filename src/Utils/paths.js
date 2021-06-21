@@ -16,6 +16,8 @@ const AdminPanelFooter = lazy(() => import("../Sections/AdminPanelFooter/FooterC
 const AdminPanelWorkflow = lazy(() => import("../Sections/AdminPanelWorkflow/WorkFlowContext"));
 const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/JoinTeamContext"));
 const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
+const AdminPanelApp = lazy(() => import("../Sections/AdminPanelApp/AppContext"));
+const AdminPanelReview = lazy(() => import("../Sections/AdminPanelReviews/ReviewContext"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -33,6 +35,8 @@ export const paths = {
   workflow: "workflow",
   joinOurTeam: "joinOurTeam",
   ourObjective: "ourObjective",
+  review: "review",
+  app: "app",
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
@@ -51,6 +55,8 @@ export const routes = {
   workflow: "/workflow",
   joinOurTeam: "/join-our-team",
   ourObjective: "/our-objective",
+  review: "/review",
+  app: "/admin-panel",
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
@@ -115,6 +121,18 @@ export const pagesRoutes = {
   [paths.ourObjective]: {
     path: routes.ourObjective,
     component: AdminPanelOurObjective,
+  },
+  [paths.app]: {
+    path: routes.app,
+    component: AdminPanelApp,
+  },
+  [paths.app]: {
+    path: routes.app,
+    component: AdminPanelApp,
+  },
+  [paths.review]: {
+    path: routes.review,
+    component: AdminPanelReview,
   },
 };
 

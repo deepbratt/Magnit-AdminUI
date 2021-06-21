@@ -39,5 +39,13 @@ export const payload = [
     {
       path: "/our-objective",
       text: "Our Objective",
+    },
+    {
+      path: "/admin-panel",
+      text: "Admin Panel Section",
+    },
+    {
+      path: "/review",
+      text: "Review",
     }
   ]
