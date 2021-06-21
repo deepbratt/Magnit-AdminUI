@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Typography, Grid } from "@material-ui/core";
 import AddNewUser from "./addNewUser";
 import NewItemButton from "../../components/NewItemButton";
+import DataTable from "../../components/Table.js";
 
 const Users = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -13,7 +14,7 @@ const Users = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -22,8 +23,6 @@ const Users = () => {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <NewItemButton handleClick={handleClickOpen} />
-
         <AddNewUser open={open} handleClose={handleClose} />
       </Grid>
     </Grid>

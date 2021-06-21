@@ -14,7 +14,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FullPageDialog = ({ open, handleClose, children }) => {
+const FullPageDialog = ({ header, open, handleClose, children }) => {
   const { root, appBar, title } = DialogBoxStyles();
   return (
     <Dialog
@@ -35,7 +35,7 @@ const FullPageDialog = ({ open, handleClose, children }) => {
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" className={title}>
-            Add New User
+            {header}
           </Typography>
           <Button autoFocus color="inherit" onClick={handleClose}>
             save
@@ -48,6 +48,7 @@ const FullPageDialog = ({ open, handleClose, children }) => {
 };
 
 FullPageDialog.propTypes = {
+  header: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
