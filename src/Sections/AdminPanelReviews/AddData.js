@@ -5,6 +5,7 @@ import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
+import validate from "./useValidate";
 const AddData = () => {
   const { addData, isPending, responseAlert, open, setOpen } = useApi(
     "http://3.138.190.235/v1/Reviews"
@@ -16,9 +17,12 @@ const AddData = () => {
     projectName: "",
     projectType: "",
     review: "",
-    rating: 1,
+    rating: 0,
   });
   const { clientName, projectName, projectType, review, rating } = data;
+  const {} = validate(data);
+  const [errors, setErrors] = useState({});
+
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -39,6 +43,24 @@ const AddData = () => {
     setOpen(false);
   };
 
+  const handleSubmit = () => {
+    const validationErrors = validate(data);
+    const noErrors = Object.keys(validationErrors).length === 0;
+    setErrors(validationErrors);
+    if (noErrors) {
+      addData(formData);
+      setData({
+        clientName: "",
+        projectName: "",
+        projectType: "",
+        review: "",
+        rating: 0,
+      });
+    } else {
+      return <p>errors try again</p>;
+    }
+  };
+
   return (
     <>
       <Grid className={grid} lg={12} item xs={12}>
@@ -50,6 +72,7 @@ const AddData = () => {
           rating={rating}
           inputChange={inputChange}
           setFile={setFile}
+          errors={errors}
         />
       </Grid>
       <Grid
@@ -63,14 +86,7 @@ const AddData = () => {
       >
         <Button
           onClick={() => {
-            addData(formData);
-            setData({
-              clientName: "",
-              projectName: "",
-              projectType: "",
-              review: "",
-              rating: 0,
-            });
+            handleSubmit();
           }}
           variant="contained"
           className={btn}

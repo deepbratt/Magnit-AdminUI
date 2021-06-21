@@ -5,6 +5,7 @@ import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
+import validate from "./useValidate";
 const AddData = () => {
   const { addData, isPending,responseAlert,open,setOpen } = useApi("http://3.138.190.235/v1/blogs");
   const [date, setDate] = useState(new Date());
@@ -18,6 +19,8 @@ const AddData = () => {
     views: 0
   });
   const { title, link ,text,buttonLabel,views} = data;
+  const {} = validate(data);
+  const [errors, setErrors] = useState({});
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -38,6 +41,24 @@ const AddData = () => {
     setOpen(false);
   };
 
+  const handleSubmit = () => {
+    const validationErrors = validate(data);
+    const noErrors = Object.keys(validationErrors).length === 0;
+    setErrors(validationErrors);
+    if (noErrors) {
+      addData(formData);
+      setData({
+        title: "",
+        link: "",
+        text: "",
+        buttonLabel: "",
+        views: 0
+      })
+    } else {
+      return <p>errors try again</p>;
+    }
+  };
+
   return (
     <>
       <Grid className={grid} lg={12} item xs={12}>
@@ -51,6 +72,7 @@ const AddData = () => {
           setFile={setFile}
           setDate={setDate}
           date={date}
+          errors={errors}
         />
       </Grid>
       <Grid
@@ -64,14 +86,7 @@ const AddData = () => {
       >
         <Button
           onClick={() => {
-            addData(formData);
-            setData({
-              title: "",
-              link: "",
-              text: "",
-              buttonLabel: "",
-              views: 0
-            })
+            handleSubmit()
           }}
           variant="contained"
           className={btn}

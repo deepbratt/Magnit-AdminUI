@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
 import TextFieldContext from "./TextFieldContext";
 import Alert from "@material-ui/lab/Alert";
 import useStyles from "./useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
+import validate from "./useValidate";
+
 const AddData = () => {
-  const { addData, isPending,responseAlert,open,setOpen } = useApi("http://3.138.190.235/v1/awards");
+  const { addData, isPending, responseAlert, open, setOpen } = useApi(
+    "http://3.138.190.235/v1/awards"
+  );
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
     clientName: "",
     link: "",
   });
-  const {link ,clientName} = data;
+  const [errors, setErrors] = useState({});
+  const { link, clientName } = data;
+  const {} = validate(data);
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -27,12 +33,25 @@ const AddData = () => {
   };
 
 
-
   const formData = new FormData();
   formData.append("clientName", clientName);
   formData.append("image", file);
   formData.append("link", link);
 
+  const handleSubmit = () => {
+    const validationErrors = validate(data);
+    const noErrors = Object.keys(validationErrors).length === 0;
+    setErrors(validationErrors);
+    if (noErrors) {
+      addData(formData);
+      setData({
+        clientName: "",
+        link: "",
+      });
+    } else {
+      return <p>errors try again</p>;
+    }
+  };
   return (
     <>
       <Grid className={grid} lg={12} item xs={12}>
@@ -41,6 +60,7 @@ const AddData = () => {
           link={link}
           inputChange={inputChange}
           setFile={setFile}
+          errors={errors}
         />
       </Grid>
       <Grid
@@ -54,11 +74,7 @@ const AddData = () => {
       >
         <Button
           onClick={() => {
-            addData(formData);
-            setData({
-              clientName: "",
-              link: "",
-            })
+            handleSubmit();
           }}
           variant="contained"
           className={btn}
@@ -66,24 +82,24 @@ const AddData = () => {
           Add Data
         </Button>
         <Grid item>
-       <Button
-          onClick={() => {
-            setData({
-              clientName: "",
-              link: "",
-            })
-          }}
-          variant="contained"
-          color="secondary"
-          style={{marginLeft: "15px", marginTop: "20px"}}
-        >
-         Clear Field
-        </Button>
-       </Grid>
+          <Button
+            onClick={() => {
+              setData({
+                clientName: "",
+                link: "",
+              });
+            }}
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: "15px", marginTop: "20px" }}
+          >
+            Clear Field
+          </Button>
+        </Grid>
       </Grid>
-      
-      <Grid item style={{marginBottom: "30px"}}>
-      {responseAlert && (
+
+      <Grid item style={{ marginBottom: "30px" }}>
+        {responseAlert && (
           <Toast
             open={open}
             severity={responseAlert.status}
@@ -91,7 +107,9 @@ const AddData = () => {
             onClose={handleToastClose}
           />
         )}
-           {!isPending ?   <Alert severity="success">Status: Added successfully!</Alert> : null}
+        {!isPending ? (
+          <Alert severity="success">Status: Added successfully!</Alert>
+        ) : null}
       </Grid>
     </>
   );

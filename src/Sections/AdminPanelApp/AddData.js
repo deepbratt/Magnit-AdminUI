@@ -5,14 +5,20 @@ import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
+import validate from "./useValidate";
 const AddData = () => {
-  const { addData, isPending,responseAlert,open,setOpen } = useApi("http://3.138.190.235/v1/adminPanel");
+  const { addData, isPending, responseAlert, open, setOpen } = useApi(
+    "http://3.138.190.235/v1/adminPanel"
+  );
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
     description: "",
   });
-  const {description} = data;
+
+  const { description } = data;
+  const {} = validate(data);
+  const [errors, setErrors] = useState({});
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -25,11 +31,23 @@ const AddData = () => {
     setOpen(false);
   };
 
-
-
   const formData = new FormData();
   formData.append("image", file);
   formData.append("description", description);
+
+  const handleSubmit = () => {
+    const validationErrors = validate(data);
+    const noErrors = Object.keys(validationErrors).length === 0;
+    setErrors(validationErrors);
+    if (noErrors) {
+      addData(formData);
+      setData({
+        description: "",
+      });
+    } else {
+      return <p>errors try again</p>;
+    }
+  };
 
   return (
     <>
@@ -38,6 +56,7 @@ const AddData = () => {
           text={description}
           inputChange={inputChange}
           setFile={setFile}
+          errors={errors}
         />
       </Grid>
       <Grid
@@ -49,38 +68,35 @@ const AddData = () => {
           marginBottom: "30px",
         }}
       >
-        <Grid item style={{marginTop: "20px"}}>
-        <Button
-          onClick={() => {
-            addData(formData);
-            setData({
-              description: ""
-            })
-          }}
-          variant="contained"
-          className={btn}
-        >
-          Add Data
-        </Button>
+        <Grid item style={{ marginTop: "20px" }}>
+          <Button
+            onClick={() => {
+              handleSubmit();
+            }}
+            variant="contained"
+            className={btn}
+          >
+            Add Data
+          </Button>
         </Grid>
         <Grid item>
-       <Button
-          onClick={() => {
-            setData({
-              description: ""
-            })
-          }}
-          variant="contained"
-          color="secondary"
-          style={{marginLeft: "15px", marginTop: "20px"}}
-        >
-         Clear Field
-        </Button>
-       </Grid>
+          <Button
+            onClick={() => {
+              setData({
+                description: "",
+              });
+            }}
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: "15px", marginTop: "20px" }}
+          >
+            Clear Field
+          </Button>
+        </Grid>
       </Grid>
-      
-      <Grid item style={{marginBottom: "30px"}}>
-      {responseAlert && (
+
+      <Grid item style={{ marginBottom: "30px" }}>
+        {responseAlert && (
           <Toast
             open={open}
             severity={responseAlert.status}
@@ -88,7 +104,9 @@ const AddData = () => {
             onClose={handleToastClose}
           />
         )}
-           {!isPending ?   <Alert severity="success">Status: Added successfully!</Alert> : null}
+        {!isPending ? (
+          <Alert severity="success">Status: Added successfully!</Alert>
+        ) : null}
       </Grid>
     </>
   );

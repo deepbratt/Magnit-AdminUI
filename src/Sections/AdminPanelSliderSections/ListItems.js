@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import useStyles from "./useStyles";
 import useFunctions from "./useFunctions";
-const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
+const ListItems = ({ handleAddList, arr, list, input, setArr, id}) => {
   const [editing, setEditing] = useState(null);
   const [editingText, setEditingText] = useState("");
   const {

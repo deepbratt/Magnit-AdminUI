@@ -6,6 +6,7 @@ const TextFieldContext = ({
   text,
   inputChange,
   setFile,
+  errors
 }) => {
   const { labels, common } = useStyles();
   return (
@@ -33,6 +34,9 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
+            {errors.description && (
+          <p style={{ color: "red" }}>{errors.description}</p>
+        )}
       </Grid>
      </Grid>
     </>

@@ -3,22 +3,25 @@ import { Grid, Button } from "@material-ui/core";
 import TextFieldContext from "./TextFieldContext";
 import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
-import useApi from "../../Utils/useApi"
+import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
+import validate from "./useValidate";
 const AddData = () => {
-  const {handleAddData,isPending,responseAlert,open,setOpen} = useApi()
+  const { handleAddData, isPending, responseAlert, open, setOpen } = useApi();
   const { grid, btn } = useStyles();
   const [data, setData] = useState({
     text: "",
     link: "",
     buttonLabel: "",
   });
-  
-  const {link ,text,buttonLabel} = data;
+
+  const { link, text, buttonLabel } = data;
+  const {} = validate(data);
+  const [errors, setErrors] = useState({});
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-  
+
   const handleToastClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -27,7 +30,17 @@ const AddData = () => {
     setOpen(false);
   };
 
-  
+  const handleSubmit = () => {
+    const validationErrors = validate(data);
+    const noErrors = Object.keys(validationErrors).length === 0;
+    setErrors(validationErrors);
+    if (noErrors) {
+      handleAddData(text, link, buttonLabel);
+    } else {
+      return <p>errors try again</p>;
+    }
+  };
+
   return (
     <>
       <Grid className={grid} lg={12} item xs={12}>
@@ -36,6 +49,7 @@ const AddData = () => {
           buttonLabel={buttonLabel}
           text={text}
           inputChange={inputChange}
+          errors={errors}
         />
       </Grid>
       <Grid
@@ -49,7 +63,7 @@ const AddData = () => {
       >
         <Button
           onClick={() => {
-            handleAddData(text,link,buttonLabel)
+            handleSubmit();
           }}
           variant="contained"
           className={btn}
@@ -62,24 +76,26 @@ const AddData = () => {
               text: "",
               link: "",
               buttonLabel: "",
-            })
+            });
           }}
           variant="contained"
           color="secondary"
-          style={{marginLeft: "15px"}}
+          style={{ marginLeft: "15px" }}
         >
-         Clear Field
+          Clear Field
         </Button>
       </Grid>
       {responseAlert && (
-          <Toast
-            open={open}
-            severity={responseAlert.status}
-            message={responseAlert.message}
-            onClose={handleToastClose}
-          />
-        )}
-           {!isPending ?   <Alert severity="success">Status: Added successfully!</Alert> : null}
+        <Toast
+          open={open}
+          severity={responseAlert.status}
+          message={responseAlert.message}
+          onClose={handleToastClose}
+        />
+      )}
+      {!isPending ? (
+        <Alert severity="success">Status: Added successfully!</Alert>
+      ) : null}
     </>
   );
 };
