@@ -89,7 +89,7 @@ const useApi = (url) => {
 
   const handlePutMethod = async (Id, items) => {
     try {
-      const { status, data } = await axios.put(`${url}/${Id}`, items, {
+      const { status, data,result } = await axios.put(`${url}/${Id}`, items, {
         headers,
       });
       if (status === 200) {
@@ -103,11 +103,14 @@ const useApi = (url) => {
         });
       }
       setIsMounted(false);
-    } catch (error) {
-      setResponseAlert({
-        status: error.status,
-        message: error.message,
-      });
+    } catch (error ) {
+      if(500){
+        setResponseAlert({
+          status: error.status,
+          message: error.message,
+        });
+        console.log(error)
+      }
       setOpen(true);
     }
   };

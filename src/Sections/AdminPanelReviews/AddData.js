@@ -16,7 +16,7 @@ const AddData = () => {
     projectName: "",
     projectType: "",
     review: "",
-    rating: 0,
+    rating: 1,
   });
   const { clientName, projectName, projectType, review, rating } = data;
   const inputChange = (e) => {

@@ -14,7 +14,10 @@ const DisplayData = () => {
   const [id,setId] = useState(null)
   const link = "http://3.138.190.235/v1/Reviews"
   const {deleteItem,data} = useApi(link)
-  
+  const valueskeys = {
+    title: "clientName",
+    _id: "_id"
+  }
   return (
     <div>
       {!edit ? 
@@ -30,6 +33,7 @@ const DisplayData = () => {
             handleDelete={deleteItem}
             handleUpdate={setId}
             edit={setEdit}
+            valueskeys={valueskeys}
           />
       </Grid>
       :  <Grid justify="center" container>
