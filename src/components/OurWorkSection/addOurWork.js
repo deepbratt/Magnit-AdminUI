@@ -27,6 +27,12 @@ const AddOurWork = ({ open, handleClose }) => {
     let response = await getAllOurWorkApi();
     if (response.status === "success") {
       setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
     }
   }, []);
 

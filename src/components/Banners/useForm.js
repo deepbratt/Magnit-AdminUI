@@ -16,10 +16,14 @@ export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [responseMessage, setResponseMessage] = useState("");
+  const [responseMessage, setResponseMessage] = useState({
+    status: "",
+    message: "",
+  });
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -93,25 +97,61 @@ export const useForm = (validateOnChange = false, id) => {
           .then((response) => {
             setIsLoading(false);
             resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: "Item Added Successfully",
+              });
+              setAlertOpen(true);
+              resetForm();
+            } else {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+              setAlertOpen(true);
+            }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       } else {
         console.log("id", id);
         await updateBannerApi(values.id, formData)
           .then((response) => {
-            setIsLoading(false);
-            resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: "Item Updated Successfully",
+              });
+              setAlertOpen(true);
+              resetForm();
+            } else {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+              setAlertOpen(true);
+            }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       }
     }
   };
 
   return {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -124,6 +164,7 @@ export const useForm = (validateOnChange = false, id) => {
     handleSubmit,
     isLoading,
     responseMessage,
+    setResponseMessage,
     selectedFile,
     setSelectedFile,
     handleCapture,

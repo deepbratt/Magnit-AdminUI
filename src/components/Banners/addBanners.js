@@ -21,6 +21,7 @@ import {
   getAllBannersApi,
   getOneBannerApi,
 } from "../../Utils/bannersApi";
+import Toast from "../../components/Toast";
 
 const types = [
   {
@@ -39,11 +40,19 @@ const AddBanners = ({ open, handleClose }) => {
     if (response.status === "success") {
       console.log(response.data.result);
       setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -55,10 +64,20 @@ const AddBanners = ({ open, handleClose }) => {
     handleCapture,
     handleSubmit,
     resetForm,
+    responseMessage,
+    setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
   const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     getAllBanners();
@@ -71,11 +90,18 @@ const AddBanners = ({ open, handleClose }) => {
         if (response.status === "success") {
           getAllBanners();
         }
-        if (response.status === "fail") {
-          console.log(response);
-        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -102,7 +128,11 @@ const AddBanners = ({ open, handleClose }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
   };
 
@@ -289,6 +319,14 @@ const AddBanners = ({ open, handleClose }) => {
           />
         </Grid>
       </Grid>
+      {responseMessage && (
+        <Toast
+          open={alertOpen}
+          onClose={handleAlertClose}
+          severity={responseMessage.status}
+          message={responseMessage.message}
+        />
+      )}
     </FullPageDialog>
   );
 };
