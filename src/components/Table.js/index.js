@@ -78,7 +78,9 @@ export default function DataTable({
         <TableHead>
           <TableRow>
             {tableHead.map((col, index) => (
-              <TableCell align={col.align}>{col.title}</TableCell>
+              <TableCell key={index} align={col.align}>
+                {col.title}
+              </TableCell>
             ))}
             <TableCell align="right">Delete</TableCell>
             <TableCell align="right">Update</TableCell>

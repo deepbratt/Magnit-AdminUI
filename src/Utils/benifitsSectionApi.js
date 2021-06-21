@@ -10,16 +10,14 @@ const axiosInstance = axios.create({
   },
 });
 
-const TRAININGANDCERTIFICATIONS = {
-  TRAININGANDCERTIFICATIONS: `/trainingCertification`,
+const BENIFITS = {
+  BENIFITS: `benifits`,
 };
 
-export const addTrainingAndCertificationsApi = async (data) => {
+export const addBenifitsApi = async (data) => {
+  console.log("Data", data);
   try {
-    let result = await axiosInstance.post(
-      `${TRAININGANDCERTIFICATIONS.TRAININGANDCERTIFICATIONS}`,
-      data
-    );
+    let result = await axiosInstance.post(`${BENIFITS.BENIFITS}`, data);
     return result.data;
   } catch (error) {
     console.log(error);
@@ -30,13 +28,10 @@ export const addTrainingAndCertificationsApi = async (data) => {
   }
 };
 
-export const getAllTrainingAndCertificationsApi = async (data) => {
+export const getAllBenifitsApi = async () => {
   try {
-    let result = await axiosInstance.get(
-      `${TRAININGANDCERTIFICATIONS.TRAININGANDCERTIFICATIONS}`,
-      data
-    );
-    console.log(result);
+    let result = await axiosInstance.get(`${BENIFITS.BENIFITS}`);
+
     return result.data;
   } catch (error) {
     console.log(error);
@@ -47,11 +42,10 @@ export const getAllTrainingAndCertificationsApi = async (data) => {
   }
 };
 
-export const getOneTrainingAndCertificationsApi = async (id) => {
+export const getOneBenifitsApi = async (id) => {
   try {
-    let result = await axiosInstance.get(
-      `${TRAININGANDCERTIFICATIONS.TRAININGANDCERTIFICATIONS}/${id}`
-    );
+    let result = await axiosInstance.get(`${BENIFITS.BENIFITS}/${id}`);
+
     return result.data;
   } catch (error) {
     console.log(error);
@@ -62,12 +56,10 @@ export const getOneTrainingAndCertificationsApi = async (id) => {
   }
 };
 
-export const updateTrainingAndCertificationsApi = async (id, data) => {
+export const updateBenifitsApi = async (id, data) => {
   try {
-    let result = await axiosInstance.put(
-      `${TRAININGANDCERTIFICATIONS.TRAININGANDCERTIFICATIONS}/${id}`,
-      data
-    );
+    let result = await axiosInstance.patch(`${BENIFITS.BENIFITS}/${id}`, data);
+
     return result.data;
   } catch (error) {
     console.log(error);
@@ -78,11 +70,10 @@ export const updateTrainingAndCertificationsApi = async (id, data) => {
   }
 };
 
-export const deleteTrainingAndCertificationsApi = async (id) => {
+export const deleteServiceApi = async (id) => {
   try {
-    let result = await axiosInstance.delete(
-      `${TRAININGANDCERTIFICATIONS.TRAININGANDCERTIFICATIONS}/${id}`
-    );
+    let result = await axiosInstance.delete(`${BENIFITS.BENIFITS}/${id}`);
+
     return result.data;
   } catch (error) {
     console.log(error);

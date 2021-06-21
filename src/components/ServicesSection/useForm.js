@@ -12,6 +12,7 @@ const initialValues = {
   buttonLink: "",
   image: null,
   color: "",
+  type: "",
   id: null,
 };
 
@@ -21,9 +22,7 @@ export const useForm = (validateOnChange = false, id) => {
   const [update, setUpdate] = useState(false);
   const [color, setColor] = useState(values.color);
   const [alertOpen, setAlertOpen] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [responseMessage, setResponseMessage] = useState({
     status: "",
     message: "",
@@ -52,6 +51,9 @@ export const useForm = (validateOnChange = false, id) => {
     if (fieldNames.buttonLink in fieldValues) {
       temp.buttonLink =
         fieldValues.buttonLink.trim() === "" ? messages.isRequired : "";
+    }
+    if (fieldNames.type in fieldValues) {
+      temp.type = fieldValues.type.trim() === "" ? messages.isRequired : "";
     }
 
     setErrors({
@@ -90,6 +92,7 @@ export const useForm = (validateOnChange = false, id) => {
       formData.append("description", values.description);
       formData.append("buttonLabel", values.buttonLabel);
       formData.append("buttonLink", values.buttonLink);
+      formData.append("type", values.type);
       formData.append("color", color);
       formData.append("image", selectedFile);
       console.log(formData, values.title);
@@ -104,6 +107,7 @@ export const useForm = (validateOnChange = false, id) => {
                 message: "Item Added Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
                 status: response.status,
@@ -129,6 +133,7 @@ export const useForm = (validateOnChange = false, id) => {
                 message: "Item Updated Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
                 status: response.status,

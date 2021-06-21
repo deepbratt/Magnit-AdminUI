@@ -19,13 +19,11 @@ export const useForm = (validateOnChange = false, id) => {
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
   const [item, setItem] = useState("");
-  const [items, setItems] = useState(values.items);
-  const [alertOpen, setAlertOpen] = useState(false);
+  const [items, setItems] = useState([values.items]);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [responseMessage, setResponseMessage] = useState({
-    status: "",
-    message: "",
-  });
+
+  const [responseMessage, setResponseMessage] = useState("");
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -90,61 +88,25 @@ export const useForm = (validateOnChange = false, id) => {
           .then((response) => {
             setIsLoading(false);
             resetForm();
-            if (response.status === "success") {
-              setResponseMessage({
-                status: response.status,
-                message: "Item Added Successfully",
-              });
-              setAlertOpen(true);
-              resetForm();
-            } else {
-              setResponseMessage({
-                status: response.status,
-                message: response.message,
-              });
-              setAlertOpen(true);
-            }
           })
           .catch((error) => {
-            setResponseMessage({
-              status: error.status,
-              message: error.message,
-            });
-            setAlertOpen(true);
+            setResponseMessage(error.message);
           });
       } else {
         console.log("id", id);
         await updateHiringOptionsApi(values.id, requestBody)
           .then((response) => {
-            if (response.status === "success") {
-              setResponseMessage({
-                status: response.status,
-                message: "Item Updated Successfully",
-              });
-              setAlertOpen(true);
-              resetForm();
-            } else {
-              setResponseMessage({
-                status: response.status,
-                message: response.message,
-              });
-              setAlertOpen(true);
-            }
+            setIsLoading(false);
+            resetForm();
           })
           .catch((error) => {
-            setResponseMessage({
-              status: error.status,
-              message: error.message,
-            });
-            setAlertOpen(true);
+            setResponseMessage(error.message);
           });
       }
     }
   };
 
   return {
-    alertOpen,
-    setAlertOpen,
     item,
     setItem,
     items,
@@ -161,6 +123,5 @@ export const useForm = (validateOnChange = false, id) => {
     handleSubmit,
     isLoading,
     responseMessage,
-    setResponseMessage,
   };
 };

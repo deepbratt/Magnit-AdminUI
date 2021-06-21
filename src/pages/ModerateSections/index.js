@@ -5,6 +5,7 @@ import BannersSection from "../../components/Banners";
 import HiringOptions from "../../components/HiringOptions";
 import Opportunities from "../../components/OpportunitiesSection";
 import TrainingAndCertification from "../../components/TrainingAndCertification";
+import AppSolutions from "../../components/AppSolutions";
 import ModerateBox from "../../components/ModerateContext/ModerateBox";
 import JobBenefitsSection from "../../components/JobBenefitsSection/index";
 
@@ -40,6 +41,9 @@ const ModerateSections = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2}>
           <TrainingAndCertification />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
+          <AppSolutions />
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2}>
           <JobBenefitsSection />

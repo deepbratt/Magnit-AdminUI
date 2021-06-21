@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../../components/FullPageDialog";
+import FullPageDialog from "../FullPageDialog";
 import {
   Button,
   Grid,
@@ -8,20 +8,23 @@ import {
   TextField,
   Card,
 } from "@material-ui/core";
-import ColorPicker from "material-ui-color-picker";
 import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../../components/Table.js/index";
+import BenifitsTable from "../Table.js/index";
 import { useEffect, useState, useCallback } from "react";
+import {
+  deleteServiceApi,
+  getAllBenifitsApi,
+  getOneBenifitsApi,
+} from "../../Utils/benifitsSectionApi";
+import Toast from "../Toast";
 
-import Toast from "../../components/Toast";
-
-const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,deleteServiceApi,header }) => {
-  const getAllServices = useCallback(async () => {
-    let response = await getAllServicesApi();
+const AddBenifts = ({ open, handleClose }) => {
+  const getAllBenifits = useCallback(async () => {
+    let response = await getAllBenifitsApi();
     if (response.status === "success") {
       setRows(response.data.result);
     } else {
@@ -37,8 +40,7 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
   const {
     alertOpen,
     setAlertOpen,
-    color,
-    setColor,
+
     values,
     setValues,
     errors,
@@ -66,14 +68,14 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
   };
 
   useEffect(() => {
-    getAllServices();
-  }, [getAllServices]);
+    getAllBenifits();
+  }, [getAllBenifits]);
 
   const handleDelete = async (id) => {
     await deleteServiceApi(id)
       .then((response) => {
         if (response.status === "success") {
-          getAllServices();
+          getAllBenifits();
         }
         setResponseMessage({
           status: response.status,
@@ -94,18 +96,15 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
   const handleUpdate = async (id) => {
     setUpdate(true);
     setId(id);
-    await getOneServicesApi(id)
+    await getOneBenifitsApi(id)
       .then((response) => {
         if (response.status === "success") {
           setValues({
             title: response.data.result.title,
             description: response.data.result.description,
-            buttonLabel: response.data.result.buttonLabel,
-            buttonLink: response.data.result.buttonLink,
-            type: response.data.result.type,
             id: id,
           });
-          setColor(response.data.result.color);
+
           setSelectedFile(response.data.result.image);
         }
         if (response.status === "fail") {
@@ -124,7 +123,7 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
   return (
     <>
       <FullPageDialog
-        header={header}
+        header="Manage Benifits Section"
         open={open}
         handleClose={handleClose}
       >
@@ -143,40 +142,6 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
                   onChange={handleInputChange}
                   fullWidth
                   required
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <InputLabel id="input-button-label">Button Label</InputLabel>
-                <TextField
-                  name={fieldNames.buttonLabel}
-                  id="input-button-label"
-                  variant="outlined"
-                  placeholder="e.g Learn More"
-                  value={values.buttonLabel}
-                  {...(errors && {
-                    error: true,
-                    helperText: errors.buttonLabel,
-                  })}
-                  onChange={handleInputChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <InputLabel id="input-button-link">Button Link</InputLabel>
-                <TextField
-                  name={fieldNames.buttonLink}
-                  id="input-button-link"
-                  variant="outlined"
-                  placeholder="/services/web-development"
-                  value={values.buttonLink}
-                  {...(errors && {
-                    error: true,
-                    helperText: errors.buttonLink,
-                  })}
-                  onChange={handleInputChange}
-                  fullWidth
                 />
               </Grid>
 
@@ -224,7 +189,7 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
                 </label>
                 <Card
                   style={{
-                    backgroundColor: color,
+                    backgroundColor: "#eee",
                     padding: "20px",
                     margin: "0 50px",
                     minHeight: "120px",
@@ -250,31 +215,6 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
                     />
                   ) : null}
                 </Card>
-
-                <ColorPicker
-                  variant="outlined"
-                  label="Pick a Color"
-                  name={fieldNames.color}
-                  value={color}
-                  onChange={(color) => setColor(color.toString())}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <InputLabel id="input-type">Type</InputLabel>
-                <TextField
-                  name={fieldNames.type}
-                  id="input-type"
-                  variant="outlined"
-                  placeholder="Web Development Services"
-                  value={values.services}
-                  {...(errors && {
-                    error: true,
-                    helperText: errors.services,
-                  })}
-                  onChange={handleInputChange}
-                  fullWidth
-                />
               </Grid>
 
               <Grid className={buttonWrap} item xs={12} md={6}>
@@ -308,7 +248,7 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
             </form>
           </Grid>
           <Grid item xs={10}>
-            <ServicesTable
+            <BenifitsTable
               rows={rows}
               handleDelete={handleDelete}
               handleUpdate={handleUpdate}
@@ -328,9 +268,9 @@ const AddServices = ({ open, handleClose,getOneServicesApi,getAllServicesApi,del
   );
 };
 
-AddServices.propTypes = {
+AddBenifts.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 
-export default AddServices;
+export default AddBenifts;

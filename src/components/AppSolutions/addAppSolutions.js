@@ -1,138 +1,104 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../../components/FullPageDialog";
+import FullPageDialog from "../FullPageDialog";
 import {
   Button,
   Grid,
   InputLabel,
-  Tooltip,
   TextField,
-  Card,
-  MenuItem,
+  ListItemSecondaryAction,
 } from "@material-ui/core";
 import GlobalStyles from "../../globalStyles";
-import { IconButton } from "@material-ui/core";
-import { PhotoCamera } from "@material-ui/icons";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../../components/Table.js/index";
+import ServicesTable from "../Table.js/index";
 import { useEffect, useState, useCallback } from "react";
 import {
-  deleteBannerApi,
-  getAllBannersApi,
-  getOneBannerApi,
-} from "../../Utils/bannersApi";
-import Toast from "../../components/Toast";
+  deleteAppSolutionsApi,
+  getAllAppSolutionsApi,
+  getOneAppSolutionsApi,
+} from "../../Utils/appSolutionsApi";
+import { List } from "@material-ui/core";
+import { ListItem } from "@material-ui/core";
+import { ListItemText } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-const types = [
-  {
-    value: "center",
-    label: "Center",
-  },
-  {
-    value: "right",
-    label: "Right",
-  },
-];
-
-const AddBanners = ({ open, handleClose }) => {
-  const getAllBanners = useCallback(async () => {
-    let response = await getAllBannersApi();
+const AddAppSolutions = ({ open, handleClose }) => {
+  const getAllAppSolutions = useCallback(async () => {
+    let response = await getAllAppSolutionsApi();
     if (response.status === "success") {
-      console.log(response.data.result);
       setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
-    alertOpen,
-    setAlertOpen,
+    item,
+    setItem,
+    items,
+    setItems,
     values,
     setValues,
     errors,
     update,
     setUpdate,
     handleInputChange,
-    selectedFile,
-    setSelectedFile,
-    handleCapture,
     handleSubmit,
     resetForm,
-    responseMessage,
-    setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
   const [rows, setRows] = useState([]);
 
-  const handleAlertClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setAlertOpen(false);
-  };
-
   useEffect(() => {
-    getAllBanners();
-  }, [getAllBanners]);
+    getAllAppSolutions();
+  }, [getAllAppSolutions]);
 
   const handleDelete = async (id) => {
-    await deleteBannerApi(id)
+    await deleteAppSolutionsApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
-          getAllBanners();
-        }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
-      })
-      .catch((error) => {
-        setResponseMessage({
-          status: error.status,
-          message: error.message,
-        });
-        setAlertOpen(true);
-        console.error(error);
-      });
-  };
-
-  const handleUpdate = async (id) => {
-    setUpdate(true);
-    setId(id);
-    await getOneBannerApi(id)
-      .then((response) => {
-        if (response.status === "success") {
-          setValues({
-            heading: response.data.result.heading,
-            subHeading: response.data.result.subHeading,
-            buttonLabel: response.data.result.buttonLabel,
-            buttonLink: response.data.result.buttonLink,
-            type: response.data.result.type,
-            id: id,
-          });
-
-          setSelectedFile(response.data.result.image);
+          getAllAppSolutions();
         }
         if (response.status === "fail") {
           console.log(response);
         }
       })
       .catch((error) => {
-        setResponseMessage({
-          status: error.status,
-          message: error.message,
-        });
-        setAlertOpen(true);
+        console.error(error);
+      });
+  };
+
+  const deleteItemByIndex = (index) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+
+    setItems(newItems);
+  };
+
+  const handleUpdate = async (id) => {
+    setUpdate(true);
+    setId(id);
+    await getOneAppSolutionsApi(id)
+      .then((response) => {
+        console.log("res", response);
+        if (response.status === "success") {
+          setValues({
+            heading: response.data.result.heading,
+            text: response.data.result.text,
+            buttonLabel: response.data.result.buttonLabel,
+            buttonLink: response.data.result.buttonLink,
+            id: id,
+          });
+          setItems(response.data.result.items);
+        }
+        if (response.status === "fail") {
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
@@ -143,7 +109,7 @@ const AddBanners = ({ open, handleClose }) => {
 
   return (
     <FullPageDialog
-      header="Manage Banners Section"
+      header="Manage App Solutions Section"
       open={open}
       handleClose={handleClose}
     >
@@ -166,16 +132,17 @@ const AddBanners = ({ open, handleClose }) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-subHeading">Sub Heading</InputLabel>
+              <InputLabel id="input-text">Text</InputLabel>
               <TextField
-                name={fieldNames.subHeading}
-                id="input-subHeading"
+                name={fieldNames.text}
+                id="input-text"
                 variant="outlined"
                 placeholder="lorem ipsum...."
-                value={values.subHeading}
-                {...(errors && { error: true, helperText: errors.subHeading })}
+                value={values.text}
+                {...(errors && { error: true, helperText: errors.text })}
                 onChange={handleInputChange}
                 fullWidth
+                multiline
               />
             </Grid>
 
@@ -209,75 +176,48 @@ const AddBanners = ({ open, handleClose }) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <InputLabel id="input-type">Type</InputLabel>
+              <InputLabel id="input-items">Items</InputLabel>
               <TextField
-                name={fieldNames.type}
-                select
-                id="input-type"
+                name={fieldNames.items}
+                id="input-items"
                 variant="outlined"
-                placeholder="/services/web-development"
-                value={values.type}
-                {...(errors && { error: true, helperText: errors.type })}
-                onChange={handleInputChange}
+                placeholder="lorem ipsum...."
+                value={item}
+                {...(errors && { error: true, helperText: errors.text })}
+                onChange={(e) => setItem(e.target.value)}
                 fullWidth
-              >
-                {types.map((type) => (
-                  <MenuItem key={type.value} value={type.value}>
-                    {type.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-
-            <Grid className={buttonWrap} item xs={12} md={6}>
-              <input
-                accept="image/png"
-                name={fieldNames.image}
-                style={{ display: "none" }}
-                id="input-image"
-                type="file"
-                onChange={handleCapture}
+                multiline
               />
-              <Tooltip title="Select Image">
-                <label htmlFor="input-image">
-                  <IconButton
-                    color="primary"
-                    aria-label="upload picture"
-                    component="span"
-                  >
-                    <PhotoCamera fontSize="large" />
-                  </IconButton>
-                </label>
-              </Tooltip>
-              <label>{selectedFile ? selectedFile.name : "Select Image"}</label>
-              <Card
+              <Button
                 style={{
-                  backgroundColor: "#eee",
-                  padding: "20px",
-                  margin: "0 50px",
-                  minHeight: "120px",
-                  maxHeight: "120px",
-                  minWidth: "100px",
+                  minWidth: "120px",
+                  maxHeight: "50px",
+                }}
+                variant="outlined"
+                color="success"
+                size="large"
+                onClick={() => {
+                  setItems([...items, item]);
                 }}
               >
-                {typeof selectedFile === "string" ? (
-                  <img
-                    src={selectedFile}
-                    height="80px"
-                    width="auto"
-                    alt=""
-                    srcset=""
-                  />
-                ) : selectedFile && typeof selectedFile !== "string" ? (
-                  <img
-                    src={URL.createObjectURL(selectedFile)}
-                    height="80px"
-                    width="auto"
-                    alt=""
-                    srcset=""
-                  />
-                ) : null}
-              </Card>
+                Add Items
+              </Button>
+              <List>
+                {items &&
+                  items.map((item, index) => (
+                    <ListItem key={index}>
+                      <ListItemText>{item}</ListItemText>
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          color="warning"
+                          onClick={() => deleteItemByIndex(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+              </List>
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
@@ -319,21 +259,13 @@ const AddBanners = ({ open, handleClose }) => {
           />
         </Grid>
       </Grid>
-      {responseMessage && (
-        <Toast
-          open={alertOpen}
-          onClose={handleAlertClose}
-          severity={responseMessage.status}
-          message={responseMessage.message}
-        />
-      )}
     </FullPageDialog>
   );
 };
 
-AddBanners.propTypes = {
+AddAppSolutions.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 
-export default AddBanners;
+export default AddAppSolutions;
