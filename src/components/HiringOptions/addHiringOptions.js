@@ -3,6 +3,7 @@ import FullPageDialog from "../../components/FullPageDialog";
 import {
   Button,
   Grid,
+  Typography,
   InputLabel,
   TextField,
   ListItemSecondaryAction,
@@ -22,17 +23,26 @@ import { ListItem } from "@material-ui/core";
 import { ListItemText } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Toast from "../../components/Toast";
 
 const AddHiringOptions = ({ open, handleClose }) => {
   const getAllHiringOptions = useCallback(async () => {
     let response = await getAllHiringOptionsApi();
     if (response.status === "success") {
       setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     item,
     setItem,
     items,
@@ -45,10 +55,20 @@ const AddHiringOptions = ({ open, handleClose }) => {
     handleInputChange,
     handleSubmit,
     resetForm,
+    responseMessage,
+    setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
   const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     getAllHiringOptions();
@@ -61,11 +81,18 @@ const AddHiringOptions = ({ open, handleClose }) => {
         if (response.status === "success") {
           getAllHiringOptions();
         }
-        if (response.status === "fail") {
-          console.log(response);
-        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -98,7 +125,11 @@ const AddHiringOptions = ({ open, handleClose }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
   };
 
@@ -202,17 +233,15 @@ const AddHiringOptions = ({ open, handleClose }) => {
               >
                 Add Items
               </Button>
+              <Typography variant="h6">ITEMS LIST</Typography>
               <List>
                 {items &&
                   items.map((item, index) => (
                     <ListItem key={index}>
                       <ListItemText>{item}</ListItemText>
                       <ListItemSecondaryAction>
-                        <IconButton
-                          color="warning"
-                          onClick={() => deleteItemByIndex(index)}
-                        >
-                          <DeleteIcon />
+                        <IconButton onClick={() => deleteItemByIndex(index)}>
+                          <DeleteIcon color="error" />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
@@ -259,6 +288,14 @@ const AddHiringOptions = ({ open, handleClose }) => {
           />
         </Grid>
       </Grid>
+      {responseMessage && (
+        <Toast
+          open={alertOpen}
+          onClose={handleAlertClose}
+          severity={responseMessage.status}
+          message={responseMessage.message}
+        />
+      )}
     </FullPageDialog>
   );
 };
