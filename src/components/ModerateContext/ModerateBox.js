@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography, CardContent, Card } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-import { payload } from "../../Utils/Text";
+
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ModerateBox = () => {
+const ModerateBox = ({payload}) => {
   const { root, box } = useStyles();
 
   return (

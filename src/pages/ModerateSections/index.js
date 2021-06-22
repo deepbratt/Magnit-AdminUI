@@ -9,7 +9,7 @@ import AppSolutions from "../../components/AppSolutions";
 import ModerateBox from "../../components/ModerateContext/ModerateBox";
 import JobBenefitsSection from "../../components/JobBenefitsSection/index";
 import BenefitsSection from "../../components/BenifitsSection/index";
-
+import { payload } from "../../Utils/Text";
 const ModerateSections = () => {
   return (
     <Grid container>
@@ -56,7 +56,7 @@ const ModerateSections = () => {
       <Typography variant="h4" style={{ textAlign: "center" }}>
         Manage Sections
       </Typography>
-      <ModerateBox />
+      <ModerateBox payload={payload} />
     </Grid>
   );
 };
