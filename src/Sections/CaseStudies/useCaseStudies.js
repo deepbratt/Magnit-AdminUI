@@ -17,7 +17,7 @@ const useCaseStudies = () => {
     getAllCaseStudies()
       .then((response) => {
         if (isResponseSuccess(response)) {
-          setDataArray(response.data.data.CaseStudies);
+          setDataArray(response.data.data.result);
         }
       })
       .then(() => setIsLoading(false));

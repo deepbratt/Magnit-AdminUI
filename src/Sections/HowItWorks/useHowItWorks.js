@@ -17,7 +17,7 @@ const useHowItWorks = () => {
     getAllHowItWorks()
       .then((response) => {
         if (isResponseSuccess(response)) {
-          setDataArray(response.data.data.howItWorks);
+          setDataArray(response.data.data.result);
         }
       })
       .then(() => setIsLoading(false));
