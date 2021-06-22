@@ -32,6 +32,12 @@ const AddAppSolutions = ({ open, handleClose }) => {
     let response = await getAllAppSolutionsApi();
     if (response.status === "success") {
       setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
     }
   }, []);
 
@@ -85,11 +91,18 @@ const AddAppSolutions = ({ open, handleClose }) => {
         if (response.status === "success") {
           getAllAppSolutions();
         }
-        if (response.status === "fail") {
-          console.log(response);
-        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -109,7 +122,7 @@ const AddAppSolutions = ({ open, handleClose }) => {
         console.log("res", response);
         if (response.status === "success") {
           setValues({
-            id: id,
+            id: response.data.result._id,
           });
           setItems(response.data.result.dataArray);
           setSelectedFile(response.data.result.image);
@@ -119,13 +132,17 @@ const AddAppSolutions = ({ open, handleClose }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
   };
 
   const valueskeys = {
     _id: "_id",
-    title: "heading",
+    title: "dataArray[0].title",
   };
 
   return (
@@ -201,7 +218,6 @@ const AddAppSolutions = ({ open, handleClose }) => {
                   {...(errors && { error: true, helperText: errors.title })}
                   onChange={handleInputChange}
                   fullWidth
-                  required
                 />
               </Grid>
 

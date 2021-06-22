@@ -3,7 +3,6 @@ import axios from "axios";
 const BASE_URL = "http://3.138.190.235/v1/";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -11,13 +10,14 @@ const axiosInstance = axios.create({
   },
 });
 
-const APPSOLUTIONS = {
-  APPSOLUTIONS: `appSolutions`,
+const PAGES = {
+  PAGES: `pages`,
 };
 
-export const addAppSolutionsApi = async (data) => {
+export const addPagesApi = async (data) => {
+  console.log("Data", data);
   try {
-    let result = await axiosInstance.post(`${APPSOLUTIONS.APPSOLUTIONS}`, data);
+    let result = await axiosInstance.post(`${PAGES.PAGES}`, data);
     return result.data;
   } catch (error) {
     console.log(error);
@@ -28,10 +28,10 @@ export const addAppSolutionsApi = async (data) => {
   }
 };
 
-export const getAllAppSolutionsApi = async (data) => {
+export const getAllPagesApi = async () => {
   try {
-    let result = await axiosInstance.get(`${APPSOLUTIONS.APPSOLUTIONS}`, data);
-    console.log(result);
+    let result = await axiosInstance.get(`${PAGES.PAGES}`);
+
     return result.data;
   } catch (error) {
     console.log(error);
@@ -42,9 +42,10 @@ export const getAllAppSolutionsApi = async (data) => {
   }
 };
 
-export const getOneAppSolutionsApi = async (id) => {
+export const getOnePagesApi = async (id) => {
   try {
-    let result = await axiosInstance.get(`${APPSOLUTIONS.APPSOLUTIONS}/${id}`);
+    let result = await axiosInstance.get(`${PAGES.PAGES}/${id}`);
+
     return result.data;
   } catch (error) {
     console.log(error);
@@ -55,12 +56,10 @@ export const getOneAppSolutionsApi = async (id) => {
   }
 };
 
-export const updateAppSolutionsApi = async (id, data) => {
+export const updatePagesApi = async (id, data) => {
   try {
-    let result = await axiosInstance.patch(
-      `${APPSOLUTIONS.APPSOLUTIONS}/${id}`,
-      data
-    );
+    let result = await axiosInstance.patch(`${PAGES.PAGES}/${id}`, data);
+
     return result.data;
   } catch (error) {
     console.log(error);
@@ -71,11 +70,10 @@ export const updateAppSolutionsApi = async (id, data) => {
   }
 };
 
-export const deleteAppSolutionsApi = async (id) => {
+export const deletePagesApi = async (id) => {
   try {
-    let result = await axiosInstance.delete(
-      `${APPSOLUTIONS.APPSOLUTIONS}/${id}`
-    );
+    let result = await axiosInstance.delete(`${PAGES.PAGES}/${id}`);
+
     return result.data;
   } catch (error) {
     console.log(error);

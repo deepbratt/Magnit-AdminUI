@@ -32,11 +32,21 @@ export const useForm = (validateOnChange = false, id) => {
   });
 
   const handleCapture = ({ target }) => {
-    setSelectedFile(target.files[0]);
+    const file = target.files[0];
+    getBase64(file)
+      .then((result) => {
+        setSelectedFile(result);
+      })
+      .catch((e) => console.log(e));
   };
 
   const handleIconCapture = ({ target }) => {
-    setSelectedIcon(target.files[0]);
+    const file = target.files[0];
+    getBase64(file)
+      .then((result) => {
+        setSelectedIcon(result);
+      })
+      .catch((e) => console.log(e));
   };
 
   const validate = (fieldValues = values) => {
@@ -66,11 +76,19 @@ export const useForm = (validateOnChange = false, id) => {
         icon: selectedIcon,
       });
     }
-    // let temp = items;
-    // temp.push(item);
-    // setItems(temp);
-    // setValues({ image: selectedFile, dataArray: items });
+    let temp = items;
+    temp.push(item);
+    setItems(temp);
+    setValues({ image: selectedFile, dataArray: items });
   };
+
+  const getBase64 = (file) =>
+    new Promise(function (resolve, reject) {
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject("Error: ", error);
+    });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -101,18 +119,15 @@ export const useForm = (validateOnChange = false, id) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("item", item);
-
-    console.log("items", values);
-
     setIsLoading(true);
-    let formData = new FormData();
-    formData.append("image", values.image);
-    formData.append("dataArray", values.dataArray);
-    console.log("request", formData);
+
+    let requestBody = {
+      image: values.image,
+      dataArray: values.dataArray,
+    };
+    console.log("request", requestBody);
     if (!update) {
-      await addAppSolutionsApi(formData)
+      await addAppSolutionsApi(requestBody)
         .then((response) => {
           setIsLoading(false);
           resetForm();
@@ -140,13 +155,29 @@ export const useForm = (validateOnChange = false, id) => {
         });
     } else {
       console.log("id", id);
-      await updateAppSolutionsApi(values.id, formData)
+      await updateAppSolutionsApi(values.id, requestBody)
         .then((response) => {
-          setIsLoading(false);
-          resetForm();
+          if (response.status === "success") {
+            setResponseMessage({
+              status: response.status,
+              message: "Item Updated Successfully",
+            });
+            setAlertOpen(true);
+            resetForm();
+          } else {
+            setResponseMessage({
+              status: response.status,
+              message: response.message,
+            });
+            setAlertOpen(true);
+          }
         })
         .catch((error) => {
-          setResponseMessage(error.message);
+          setResponseMessage({
+            status: error.status,
+            message: error.message,
+          });
+          setAlertOpen(true);
         });
     }
   };

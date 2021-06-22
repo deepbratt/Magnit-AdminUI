@@ -1,171 +1,325 @@
-import { useTheme } from "@material-ui/core/styles";
-import { Button, Grid, InputLabel, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import FullPageDialog from "../../components/FullPageDialog";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Input from "@material-ui/core/Input";
-import Chip from "@material-ui/core/Chip";
-import { useState } from "react";
-import ModeratePagesStyles from "./style";
+import {
+  Button,
+  Grid,
+  InputLabel,
+  TextField,
+  MenuItem,
+} from "@material-ui/core";
+import GlobalStyles from "../../globalStyles";
+import { useForm } from "./useForm";
+import { fieldNames } from "../../Utils/formConstants";
+import { useEffect, useState, useCallback } from "react";
+import {
+  deletePagesApi,
+  getAllPagesApi,
+  getOnePagesApi,
+} from "../../Utils/pagesApi";
+import DataTable from "../../components/Table.js";
+import Toast from "../../components/Toast";
 
-const names = [
-  "Banner",
-  "Awards",
-  "Certificates",
-  "Reviews",
-  "Latest Blogs",
-  "Trending Blogs",
+const sections = [
+  {
+    value: "admin",
+    label: "Admin",
+  },
+  {
+    value: "user",
+    label: "User",
+  },
 ];
 
-const ITEM_HEIGHT = 50;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-    },
-  },
-};
+const AddNewPages = ({ open, handleClose }) => {
+  const getAllPages = useCallback(async () => {
+    let response = await getAllPagesApi();
+    if (response.status === "success") {
+      setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
+    }
+  }, []);
 
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+  const [id, setId] = useState(null);
+  const {
+    alertOpen,
+    setAlertOpen,
+    values,
+    setValues,
+    errors,
+    update,
+    setUpdate,
+    handleInputChange,
+    handleSubmit,
+    resetForm,
+    responseMessage,
+    setResponseMessage,
+  } = useForm(id);
+  const { form, buttonWrap } = GlobalStyles();
+
+  const tableHead = [
+    { title: "Section Name", align: "left" },
+    { title: "Order", align: "left" },
+    { title: "Canonical", align: "left" },
+  ];
+
+  const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
   };
-}
 
-const AddNewPage = ({ open, handleClose }) => {
-  const { form, multipleInput, chips, chip, buttonWrap } =
-    ModeratePagesStyles();
-  const theme = useTheme();
-  const [personName, setPersonName] = useState([]);
+  useEffect(() => {
+    getAllPages();
+  }, [getAllPages]);
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value);
+  const handleDelete = async (id) => {
+    await deletePagesApi(id)
+      .then((response) => {
+        console.log("response", response);
+        if (response.status === "success") {
+          getAllPages();
+        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
+        console.error(error);
+      });
+  };
+
+  const handleUpdate = async (id) => {
+    setUpdate(true);
+    setId(id);
+    await getOnePagesApi(id)
+      .then((response) => {
+        if (response.status === "success") {
+          setValues({
+            firstName: response.data.result.firstName,
+            lastName: response.data.result.lastName,
+            email: response.data.result.email,
+            role: response.data.result.role,
+            id: id,
+          });
+        }
+        if (response.status === "fail") {
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  };
+
+  const valueskeys = {
+    _id: "section",
+    title: "name",
   };
 
   return (
-    <FullPageDialog open={open} handleClose={handleClose}>
-      <Grid container>
-        <Grid container item xs={12}>
-          <form className={form}>
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-title">Title</InputLabel>
-              <TextField
-                labelId="input-title"
-                id="input-title"
-                variant="outlined"
-                placeholder="Careers | The Magnit"
-                size="medium"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-canonical">Canonical</InputLabel>
-              <TextField
-                labelId="input-canonical"
-                id="input-canonical"
-                variant="outlined"
-                placeholder="/careers"
-                size="medium"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-discription">Discription</InputLabel>
-              <TextField
-                labelId="input-discription"
-                id="input-discription"
-                variant="outlined"
-                placeholder="/careers"
-                size="medium"
-                fullWidth
-                multiline
-                rows={3}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-keywords">Keywords</InputLabel>
-              <TextField
-                labelId="input-keywords"
-                id="input-keywords"
-                variant="outlined"
-                placeholder="magnit, careers, job"
-                size="medium"
-                fullWidth
-                multiline
-                rows={3}
-                required
-              />
-            </Grid>
-            <Grid item xs={10} md={6}>
-              <InputLabel id="input-sections">Sections</InputLabel>
-              <Select
-                className={multipleInput}
-                labelId="input-sections"
-                id="input-sections"
-                variant="outlined"
-                multiple
-                value={personName}
-                onChange={handleChange}
-                input={<Input id="input-sections" />}
-                renderValue={(selected) => (
-                  <div className={chips}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} className={chip} />
-                    ))}
-                  </div>
-                )}
-                MenuProps={MenuProps}
-              >
-                {names.map((name) => (
-                  <MenuItem
-                    key={name}
-                    value={name}
-                    style={getStyles(name, personName, theme)}
-                  >
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-query">Query</InputLabel>
-              <TextField
-                labelId="input-query"
-                id="input-quer"
-                variant="outlined"
-                placeholder="query e.g blogs=latest"
-                size="medium"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid className={buttonWrap} item xs={12} md={6}>
-              <Button
-                style={{ maxWidth: "100px" }}
-                variant="contained"
-                color="secondary"
-              >
-                Delete
-              </Button>
-            </Grid>
-          </form>
-        </Grid>
+    <Grid container justify="center">
+      <Grid container item xs={12}>
+        <form className={form} onSubmit={handleSubmit}>
+          <Grid item xs={12} md={6}>
+            <InputLabel id="input-title">Title</InputLabel>
+            <TextField
+              name={fieldNames.title}
+              id="input-title"
+              variant="outlined"
+              placeholder="e.g Web Development"
+              value={values.title}
+              {...(errors && { error: true, helperText: errors.title })}
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <InputLabel id="input-canonical">Canonical</InputLabel>
+            <TextField
+              name={fieldNames.canonical}
+              id="input-canonical"
+              variant="outlined"
+              placeholder="/services"
+              value={values.canonical}
+              {...(errors && {
+                error: true,
+                helperText: errors.canonical,
+              })}
+              onChange={handleInputChange}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <InputLabel id="input-description">Discription</InputLabel>
+            <TextField
+              name={fieldNames.description}
+              id="input-description"
+              variant="outlined"
+              placeholder="lorem ipsum...."
+              value={values.description}
+              {...(errors && {
+                error: true,
+                helperText: errors.description,
+              })}
+              onChange={handleInputChange}
+              fullWidth
+              multiline
+              rows={3}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <InputLabel id="input-keywords">Keywords</InputLabel>
+            <TextField
+              name={fieldNames.keywords}
+              id="input-keywords"
+              variant="outlined"
+              placeholder="services, careers, solutions etc"
+              value={values.keywords}
+              {...(errors && {
+                error: true,
+                helperText: errors.keywords,
+              })}
+              onChange={handleInputChange}
+              fullWidth
+              multiline
+              rows={3}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <InputLabel id="input-sections">Sections</InputLabel>
+            <TextField
+              name={fieldNames.sections}
+              select
+              id="input-sections"
+              variant="outlined"
+              placeholder=""
+              value={values.sections}
+              {...(errors && { error: true, helperText: errors.sections })}
+              onChange={handleInputChange}
+              fullWidth
+            >
+              {sections.map((section) => (
+                <MenuItem key={section.value} value={section.value}>
+                  {section.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <InputLabel id="input-query">Query</InputLabel>
+            <TextField
+              name={fieldNames.query}
+              id="input-query"
+              variant="outlined"
+              placeholder="query e.g query"
+              value={values.query}
+              {...(errors && {
+                error: true,
+                helperText: errors.query,
+              })}
+              onChange={handleInputChange}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <InputLabel id="input-order">Order</InputLabel>
+            <TextField
+              type="number"
+              name={fieldNames.order}
+              id="input-order"
+              variant="outlined"
+              placeholder="e.g 3"
+              value={values.order}
+              {...(errors && {
+                error: true,
+                helperText: errors.order,
+              })}
+              onChange={handleInputChange}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid className={buttonWrap} item xs={12} md={6}>
+            <Button
+              type="submit"
+              style={{
+                margin: "0 10px",
+                minWidth: "120px",
+                maxHeight: "50px",
+              }}
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              {update ? "Update" : "Add"} Item
+            </Button>
+            <Button
+              style={{
+                margin: "0 10px",
+                minWidth: "120px",
+                maxHeight: "50px",
+              }}
+              variant="outlined"
+              color="secondary"
+              size="large"
+              onClick={resetForm}
+            >
+              Reset
+            </Button>
+          </Grid>
+        </form>
       </Grid>
-    </FullPageDialog>
+      <Grid item xs={10}>
+        <DataTable
+          tableHead={tableHead}
+          rows={rows}
+          handleDelete={handleDelete}
+          handleUpdate={handleUpdate}
+          valueskeys={valueskeys}
+        />
+      </Grid>
+      {responseMessage && (
+        <Toast
+          open={alertOpen}
+          onClose={handleAlertClose}
+          severity={responseMessage.status}
+          message={responseMessage.message}
+        />
+      )}
+    </Grid>
   );
 };
 
-FullPageDialog.propTypes = {
+AddNewPages.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 
-export default AddNewPage;
+export default AddNewPages;
