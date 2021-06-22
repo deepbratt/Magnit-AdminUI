@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
-  addHiringOptionsApi,
-  updateHiringOptionsApi,
-} from "../../Utils/hiringOptionsApi";
+  addAppSolutionsApi,
+  updateAppSolutionsApi,
+} from "../../Utils/appSolutionsApi";
 
 const initialValues = {
-  heading: "",
-  text: "",
-  buttonLabel: "",
-  buttonLink: "",
-  items: [],
+  image: null,
+  dataArray: [],
   id: null,
 };
 
@@ -18,30 +15,39 @@ export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [item, setItem] = useState("");
-  const [items, setItems] = useState([values.items]);
-
+  const [items, setItems] = useState([]);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedIcon, setSelectedIcon] = useState(null);
+  const [responseMessage, setResponseMessage] = useState({
+    status: "",
+    message: "",
+  });
 
-  const [responseMessage, setResponseMessage] = useState("");
+  const [item, setItem] = useState({
+    title: "",
+    description: "",
+    icon: selectedIcon,
+  });
+
+  const handleCapture = ({ target }) => {
+    setSelectedFile(target.files[0]);
+  };
+
+  const handleIconCapture = ({ target }) => {
+    setSelectedIcon(target.files[0]);
+  };
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
 
-    if (fieldNames.heading in fieldValues) {
-      temp.heading =
-        fieldValues.heading.trim() === "" ? messages.isRequired : "";
+    if (fieldNames.title in fieldValues) {
+      temp.title = fieldValues.title.trim() === "" ? messages.isRequired : "";
     }
-    if (fieldNames.text in fieldValues) {
-      temp.text = fieldValues.text.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLabel in fieldValues) {
-      temp.buttonLabel =
-        fieldValues.buttonLabel.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLink in fieldValues) {
-      temp.buttonLink =
-        fieldValues.buttonLink.trim() === "" ? messages.isRequired : "";
+    if (fieldNames.description in fieldValues) {
+      temp.description =
+        fieldValues.description.trim() === "" ? messages.isRequired : "";
     }
 
     setErrors({
@@ -52,61 +58,102 @@ export const useForm = (validateOnChange = false, id) => {
       return Object.values(temp).every((x) => x === "");
   };
 
+  const addItem = () => {
+    if (validate()) {
+      setItem({
+        title: item.title,
+        description: item.description,
+        icon: selectedIcon,
+      });
+    }
+    // let temp = items;
+    // temp.push(item);
+    // setItems(temp);
+    // setValues({ image: selectedFile, dataArray: items });
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setValues({
-      ...values,
+    setItem({
+      ...item,
       [name]: value,
     });
     if (validateOnChange) validate({ [name]: value });
   };
 
+  const test = () => {
+    let temp = items;
+    temp.push(item);
+    setItems(temp);
+    setValues({ image: selectedFile, dataArray: items });
+  };
+
   const resetForm = () => {
     setValues(initialValues);
+    setSelectedFile(null);
+    setSelectedIcon(null);
     setErrors({});
     setUpdate(false);
     setItems([]);
-    setItem("");
+    setItem({});
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validate()) {
-      setIsLoading(true);
-      let requestBody = {
-        heading: values.heading,
-        text: values.text,
-        buttonLabel: values.buttonLabel,
-        buttonLink: values.buttonLink,
-        items: items,
-      };
-      console.log("request", requestBody);
-      if (!update) {
-        await addHiringOptionsApi(requestBody)
-          .then((response) => {
-            setIsLoading(false);
+    console.log("item", item);
+
+    console.log("items", values);
+
+    setIsLoading(true);
+    let formData = new FormData();
+    formData.append("image", values.image);
+    formData.append("dataArray", values.dataArray);
+    console.log("request", formData);
+    if (!update) {
+      await addAppSolutionsApi(formData)
+        .then((response) => {
+          setIsLoading(false);
+          resetForm();
+          if (response.status === "success") {
+            setResponseMessage({
+              status: response.status,
+              message: "Item Added Successfully",
+            });
+            setAlertOpen(true);
             resetForm();
-          })
-          .catch((error) => {
-            setResponseMessage(error.message);
+          } else {
+            setResponseMessage({
+              status: response.status,
+              message: response.message,
+            });
+            setAlertOpen(true);
+          }
+        })
+        .catch((error) => {
+          setResponseMessage({
+            status: error.status,
+            message: error.message,
           });
-      } else {
-        console.log("id", id);
-        await updateHiringOptionsApi(values.id, requestBody)
-          .then((response) => {
-            setIsLoading(false);
-            resetForm();
-          })
-          .catch((error) => {
-            setResponseMessage(error.message);
-          });
-      }
+          setAlertOpen(true);
+        });
+    } else {
+      console.log("id", id);
+      await updateAppSolutionsApi(values.id, formData)
+        .then((response) => {
+          setIsLoading(false);
+          resetForm();
+        })
+        .catch((error) => {
+          setResponseMessage(error.message);
+        });
     }
   };
 
   return {
+    alertOpen,
+    setAlertOpen,
     item,
     setItem,
     items,
@@ -123,5 +170,14 @@ export const useForm = (validateOnChange = false, id) => {
     handleSubmit,
     isLoading,
     responseMessage,
+    setResponseMessage,
+    selectedFile,
+    setSelectedFile,
+    handleCapture,
+    handleIconCapture,
+    selectedIcon,
+    setSelectedIcon,
+    addItem,
+    test,
   };
 };

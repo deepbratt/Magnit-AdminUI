@@ -5,6 +5,8 @@ import {
   Grid,
   InputLabel,
   TextField,
+  Card,
+  Tooltip,
   ListItemSecondaryAction,
 } from "@material-ui/core";
 import GlobalStyles from "../../globalStyles";
@@ -22,6 +24,8 @@ import { ListItem } from "@material-ui/core";
 import { ListItemText } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { PhotoCamera } from "@material-ui/icons";
+import Toast from "../../components/Toast";
 
 const AddAppSolutions = ({ open, handleClose }) => {
   const getAllAppSolutions = useCallback(async () => {
@@ -33,6 +37,8 @@ const AddAppSolutions = ({ open, handleClose }) => {
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     item,
     setItem,
     items,
@@ -45,10 +51,28 @@ const AddAppSolutions = ({ open, handleClose }) => {
     handleInputChange,
     handleSubmit,
     resetForm,
+    selectedFile,
+    handleCapture,
+    setSelectedFile,
+    responseMessage,
+    setResponseMessage,
+    handleIconCapture,
+    selectedIcon,
+    setSelectedIcon,
+    addItem,
+    test,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
   const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     getAllAppSolutions();
@@ -85,13 +109,10 @@ const AddAppSolutions = ({ open, handleClose }) => {
         console.log("res", response);
         if (response.status === "success") {
           setValues({
-            heading: response.data.result.heading,
-            text: response.data.result.text,
-            buttonLabel: response.data.result.buttonLabel,
-            buttonLink: response.data.result.buttonLink,
             id: id,
           });
-          setItems(response.data.result.items);
+          setItems(response.data.result.dataArray);
+          setSelectedFile(response.data.result.image);
         }
         if (response.status === "fail") {
           console.log(response);
@@ -116,97 +137,163 @@ const AddAppSolutions = ({ open, handleClose }) => {
       <Grid container justify="center">
         <Grid container item xs={12}>
           <form className={form} onSubmit={handleSubmit}>
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-heading">Heading</InputLabel>
-              <TextField
-                name={fieldNames.heading}
-                id="input-heading"
-                variant="outlined"
-                placeholder="e.g Web Development"
-                value={values.heading}
-                {...(errors && { error: true, helperText: errors.heading })}
-                onChange={handleInputChange}
-                fullWidth
-                required
+            <Grid className={buttonWrap} item xs={12} md={6}>
+              <input
+                accept="image/png"
+                name={fieldNames.image}
+                style={{ display: "none" }}
+                id="input-image"
+                type="file"
+                onChange={handleCapture}
               />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-text">Text</InputLabel>
-              <TextField
-                name={fieldNames.text}
-                id="input-text"
-                variant="outlined"
-                placeholder="lorem ipsum...."
-                value={values.text}
-                {...(errors && { error: true, helperText: errors.text })}
-                onChange={handleInputChange}
-                fullWidth
-                multiline
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-button-label">Button Label</InputLabel>
-              <TextField
-                name={fieldNames.buttonLabel}
-                id="input-button-label"
-                variant="outlined"
-                placeholder="e.g Learn More"
-                value={values.buttonLabel}
-                {...(errors && { error: true, helperText: errors.buttonLabel })}
-                onChange={handleInputChange}
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-button-link">Button Link</InputLabel>
-              <TextField
-                name={fieldNames.buttonLink}
-                id="input-button-link"
-                variant="outlined"
-                placeholder="/services/web-development"
-                value={values.buttonLink}
-                {...(errors && { error: true, helperText: errors.buttonLink })}
-                onChange={handleInputChange}
-                fullWidth
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-items">Items</InputLabel>
-              <TextField
-                name={fieldNames.items}
-                id="input-items"
-                variant="outlined"
-                placeholder="lorem ipsum...."
-                value={item}
-                {...(errors && { error: true, helperText: errors.text })}
-                onChange={(e) => setItem(e.target.value)}
-                fullWidth
-                multiline
-              />
-              <Button
+              <Tooltip title="Select Image">
+                <label htmlFor="input-image">
+                  <IconButton
+                    color="primary"
+                    aria-label="upload picture"
+                    component="span"
+                  >
+                    <PhotoCamera fontSize="large" />
+                  </IconButton>
+                </label>
+              </Tooltip>
+              <label>
+                {selectedFile ? selectedFile.name : "Select Featured Image"}
+              </label>
+              <Card
                 style={{
-                  minWidth: "120px",
-                  maxHeight: "50px",
-                }}
-                variant="outlined"
-                color="success"
-                size="large"
-                onClick={() => {
-                  setItems([...items, item]);
+                  backgroundColor: "#eee",
+                  padding: "20px",
+                  margin: "0 50px",
+                  minHeight: "180px",
+                  maxHeight: "180px",
+                  minWidth: "180px",
                 }}
               >
-                Add Items
-              </Button>
+                {typeof selectedFile === "string" ? (
+                  <img
+                    src={selectedFile}
+                    height="80px"
+                    width="auto"
+                    alt=""
+                    srcset=""
+                  />
+                ) : selectedFile && typeof selectedFile !== "string" ? (
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    height="80px"
+                    width="auto"
+                    alt=""
+                    srcset=""
+                  />
+                ) : null}
+              </Card>
+            </Grid>
+            <Grid item container xs={12} md={6}>
+              <Grid item xs={12}>
+                <InputLabel id="input-title">Title</InputLabel>
+                <TextField
+                  name={fieldNames.title}
+                  id="input-title"
+                  variant="outlined"
+                  placeholder="e.g Web Development"
+                  value={item.title}
+                  {...(errors && { error: true, helperText: errors.title })}
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <InputLabel id="input-description">Description</InputLabel>
+                <TextField
+                  name={fieldNames.description}
+                  id="input-description"
+                  variant="outlined"
+                  placeholder="lorem ipsum...."
+                  value={item.description}
+                  {...(errors && {
+                    error: true,
+                    helperText: errors.description,
+                  })}
+                  onChange={handleInputChange}
+                  fullWidth
+                  multiline
+                  rows={3}
+                />
+              </Grid>
+
+              <Grid className={buttonWrap} item xs={12}>
+                <input
+                  accept="image/png"
+                  name={fieldNames.icon}
+                  style={{ display: "none" }}
+                  id="input-icon"
+                  type="file"
+                  onChange={handleIconCapture}
+                />
+                <Tooltip title="Select Image">
+                  <label htmlFor="input-icon">
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      component="span"
+                    >
+                      <PhotoCamera fontSize="large" />
+                    </IconButton>
+                  </label>
+                </Tooltip>
+                <label>
+                  {selectedIcon ? selectedIcon.name : "Select Icon Image"}
+                </label>
+                <Card
+                  style={{
+                    backgroundColor: "#eee",
+                    padding: "20px",
+                    margin: "0 50px",
+                    minHeight: "120px",
+                    maxHeight: "120px",
+                    minWidth: "120px",
+                  }}
+                >
+                  {typeof selectedIcon === "string" ? (
+                    <img
+                      src={selectedIcon}
+                      height="80px"
+                      width="auto"
+                      alt=""
+                      srcset=""
+                    />
+                  ) : selectedIcon && typeof selectedIcon !== "string" ? (
+                    <img
+                      src={URL.createObjectURL(selectedIcon)}
+                      height="80px"
+                      width="auto"
+                      alt=""
+                      srcset=""
+                    />
+                  ) : null}
+                </Card>
+                <Button
+                  style={{
+                    minWidth: "120px",
+                    maxHeight: "50px",
+                  }}
+                  variant="outlined"
+                  color="success"
+                  size="large"
+                  onClick={addItem}
+                >
+                  Add Items
+                </Button>
+              </Grid>
+
               <List>
                 {items &&
                   items.map((item, index) => (
                     <ListItem key={index}>
-                      <ListItemText>{item}</ListItemText>
+                      <ListItemText>{item.title}</ListItemText>
                       <ListItemSecondaryAction>
                         <IconButton
                           color="warning"
@@ -247,6 +334,7 @@ const AddAppSolutions = ({ open, handleClose }) => {
               >
                 Reset
               </Button>
+              <Button onClick={test}>Test</Button>
             </Grid>
           </form>
         </Grid>
@@ -259,6 +347,14 @@ const AddAppSolutions = ({ open, handleClose }) => {
           />
         </Grid>
       </Grid>
+      {responseMessage && (
+        <Toast
+          open={alertOpen}
+          onClose={handleAlertClose}
+          severity={responseMessage.status}
+          message={responseMessage.message}
+        />
+      )}
     </FullPageDialog>
   );
 };
