@@ -90,7 +90,7 @@ const SocialMediaField = ({
           <p style={{ color: "red" }}>{errors.linkTitle}</p>
         : null}
       </Grid>
-      {!edit ? (
+ 
         <>
           <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Facebook Icon</InputLabel>
@@ -158,9 +158,6 @@ const SocialMediaField = ({
             </form>
           </Grid>
         </>
-      ) : (
-        null
-      )}
        <ListItems
             arr={linkArray}
             handleAddList={addLink}
@@ -174,7 +171,6 @@ const SocialMediaField = ({
             firstName="title"
             secondName="link"
             setfbFile={setFile}
-            edit={edit}
             file={file}
             setEditing={setEditing}
             submitImg={submitImg}

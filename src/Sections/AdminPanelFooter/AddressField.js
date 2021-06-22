@@ -67,11 +67,10 @@ const AddressField = ({
           <p style={{ color: "red" }}>{errors.addressTitle}</p>
         : null}
       </Grid>
-      {!edit ? (
+
         <>
           <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Office Type</InputLabel>
-            <form id={id}>
               <TextField
                 type="text"
                 name="officeType"
@@ -82,11 +81,9 @@ const AddressField = ({
                 onChange={(e) => setChange(e)}
                 style={{ width: "100%" }}
               />
-            </form>
           </Grid>
           <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Address</InputLabel>
-            <form id={id}>
               <TextField
                 placeholder="2317 Jewel Corner Apt. 197"
                 type="text"
@@ -98,12 +95,8 @@ const AddressField = ({
                 onChange={(e) => setChange(e)}
                 style={{ width: "100%" }}
               />
-            </form>
           </Grid>
         </>
-      ) : (
-       null
-      )}
       <ListItems
             arr={addressArray}
             handleAddList={addAddress}

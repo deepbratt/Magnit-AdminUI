@@ -63,7 +63,6 @@ const ContactField = ({
         />
         {!edit ? <p style={{ color: "red" }}>{errors.numberTitle}</p> : null}
       </Grid>
-      {!edit ? (
         <>
           <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Add State/Country</InputLabel>
@@ -94,7 +93,6 @@ const ContactField = ({
             />
           </Grid>
         </>
-      ) : null}
       <ListItems
         arr={array}
         handleAddList={add}
@@ -107,7 +105,6 @@ const ContactField = ({
         secondField={currentTodo.number}
         firstName="country"
         secondName="number"
-        edit={edit}
         setEditing={setEditing}
       />
       <Grid item xs={12} style={{marginBottom: "30px"}}>

@@ -38,7 +38,6 @@ const ListItems = ({
 
   return (
     <>
-      {!edit ? (
         <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
           <Button
             style={{ marginTop: "40px" }}
@@ -49,7 +48,6 @@ const ListItems = ({
             Add List
           </Button>
         </Grid>
-      ) : null}
       <Grid className={common} item lg={7} md={5} sm={10} xs={12}>
         <List className={listItem}>
           {arr.map(
