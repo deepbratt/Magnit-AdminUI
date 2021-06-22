@@ -187,7 +187,8 @@ const handleSubmit = () => {
             onClose={handleToastClose}
           />
         )}
-           {!isPending ?   <Alert severity="success">Status: Added successfully!</Alert> : null}
+           {!isPending ?   <Alert severity="success">Status: Added successfully!</Alert>
+           :  <Alert severity="info">Status: pending</Alert>}
       </Grid>
     </>
   );

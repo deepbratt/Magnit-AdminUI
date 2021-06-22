@@ -109,7 +109,7 @@ const AddData = () => {
         )}
         {!isPending ? (
           <Alert severity="success">Status: Added successfully!</Alert>
-        ) : null}
+        ) :  <Alert severity="info">Status: pending</Alert>}
       </Grid>
     </>
   );

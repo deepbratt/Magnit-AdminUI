@@ -12,8 +12,7 @@ const useApi = (url) => {
   const [isPending, setIsPending] = useState(true);
   const [errorResponse, setError] = useState({ errorMessage: "" });
   const [success, setSuccess] = useState({ successMessage: "" });
-  const [isMounted, setIsMounted] = useState(true);
-  const [toastType, setToastType] = useState('error')
+  const [toastType, setToastType] = useState("error");
   const [open, setOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [responseAlert, setResponseAlert] = useState({
@@ -21,24 +20,28 @@ const useApi = (url) => {
     message: "",
   });
 
+  useEffect(() => {
+    setLoader(true);
+    return () => {};
+  }, []);
 
-  useEffect(() => {    
-    setLoader(true); 
-    const getData = async () => {  
-      await axios.get(`${url}`, { headers })  
-      .then(res => {  
+  useEffect(() => {
+    getData();
+    return () => {};
+  }, [data]);
+
+  const getData = async () => {
+    await axios
+      .get(`${url}`, { headers })
+      .then((res) => {
         setSuccess({ successMessage: res.status });
         setData(res.data.data.result);
-        setIsMounted(true);
-        
-      }).then(() => setLoader(false))
-      .catch(error => {  
+      })
+      .then(() => setLoader(false))
+      .catch((error) => {
         setError({ errorMessage: error.status });
-      });  
-    }  
-    getData()  
-  }, [data])
-
+      });
+  };
 
   const addData = async (formData) => {
     try {
@@ -52,7 +55,6 @@ const useApi = (url) => {
         });
       }
       setIsPending(false);
-      setIsMounted(false);
     } catch (error) {
       console.error("There was an error!", error);
       setIsPending(true);
@@ -61,7 +63,7 @@ const useApi = (url) => {
         message: error.message,
       });
       setOpen(true);
-      setToastType('error')
+      setToastType("error");
     }
   };
 
@@ -75,40 +77,42 @@ const useApi = (url) => {
           status: data.status,
           message: "Updated Successfully",
         });
-        setToastType('success')
+        setToastType("success");
         setOpen(true);
         setData((prev) => {
           return [...prev, data.data.result];
         });
       }
-      setIsMounted(false);
     } catch (error) {
       setResponseAlert({
         status: error.status,
         message: error.message,
       });
       setOpen(true);
-      setToastType('error')
+      setToastType("error");
     }
   };
 
   const handlePutMethod = async (Id, items) => {
     try {
-      const { status, data, result } = await axios.patch(`${url}/${Id}`, items, {
-        headers,
-      });
+      const { status, data, result } = await axios.patch(
+        `${url}/${Id}`,
+        items,
+        {
+          headers,
+        }
+      );
       if (status === 200) {
         setResponseAlert({
           status: data.status,
           message: "Updated Successfully",
         });
         setOpen(true);
-        setToastType('success')
+        setToastType("success");
         setData((prev) => {
           return [...prev, data.data.result];
         });
       }
-      setIsMounted(false);
     } catch (error) {
       if (500) {
         setResponseAlert({
@@ -118,7 +122,7 @@ const useApi = (url) => {
         console.log(error);
       }
       setOpen(true);
-      setToastType('error')
+      setToastType("error");
     }
   };
 
@@ -164,7 +168,7 @@ const useApi = (url) => {
           message: error.message,
         });
         setOpen(true);
-        setToastType('error')
+        setToastType("error");
       }
     }
   };
@@ -192,7 +196,7 @@ const useApi = (url) => {
           message: "Updated Successfully",
         });
         setOpen(true);
-        setToastType('success')
+        setToastType("success");
       }
     } catch (error) {
       if (error) {
@@ -202,7 +206,7 @@ const useApi = (url) => {
           message: error.message,
         });
         setOpen(true);
-        setToastType('error')
+        setToastType("error");
       }
     }
   };

@@ -23,13 +23,13 @@ const DisplayData = () => {
           <Grid item lg={12}>
             <AddData />
           </Grid>
-            <Loader open={loader} />
-            <Table
-              rows={data}
-              handleDelete={deleteItem}
-              handleUpdate={setId}
-              edit={setEdit}
-            />
+          <Loader open={loader} />
+          <Table
+            rows={data}
+            handleDelete={deleteItem}
+            handleUpdate={setId}
+            edit={setEdit}
+          />
         </Grid>
       ) : (
         <Grid justify="center" container>
