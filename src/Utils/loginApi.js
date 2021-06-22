@@ -215,7 +215,7 @@ export const deleteFAQs = async(itemId)=>{
 }
 export const updateFAQs = async(itemId, dataBody)=>{
   try{
-      const response = await axiosFormInstance.patch(apiEndpoints.FAQs+"/"+itemId, dataBody)
+      const response = await axiosInstance.patch(apiEndpoints.FAQs+"/"+itemId, dataBody)
       console.log(response)
       return  response
   }catch(error){
@@ -225,7 +225,7 @@ export const updateFAQs = async(itemId, dataBody)=>{
 }
 export const createFAQs = async(dataBody)=>{
     try{
-        const response = await axiosFormInstance.post(apiEndpoints.FAQs+"/", dataBody)
+        const response = await axiosInstance.post(apiEndpoints.FAQs+"/", dataBody)
         console.log(response)
         return  response
     }catch(error){

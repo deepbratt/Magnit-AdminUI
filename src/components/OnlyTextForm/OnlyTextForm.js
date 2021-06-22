@@ -1,3 +1,13 @@
+/*
+itemId, =====> itemid sent as a prop when editing
+  clearItemId, ====> clearing itemId on HOC
+  createApi, =======> create api func sent from HOC
+  updateApi, =======> update api func sent from HOC
+  getItemApi, =======> get single item for editing api func sent from HOC
+  updateDataArray, =====> update state (set state func) to update the data array after editing
+  dataArray, ====> array of data (state) that needs to be updated
+  apiFieldNames,  =====> json keys/fieldnames used in apis to send and recieve json data
+*/
 import React from "react";
 import { Button, Grid, TextField } from "@material-ui/core";
 import useOnlyTextForm from "./useOnlyTextForm";
@@ -35,7 +45,7 @@ const OnlyTextForm = ({
             type="text"
             variant="outlined"
             onChange={handleChange}
-            value={formData.title}
+            value={formData[apiFieldNames.title] || ""}
             style={{ width: "100%" }}
           />
         </Grid>
@@ -46,7 +56,7 @@ const OnlyTextForm = ({
             type="text"
             variant="outlined"
             onChange={handleChange}
-            value={formData.text}
+            value={formData[apiFieldNames.text] || ""}
             style={{ width: "100%" }}
           />
         </Grid>

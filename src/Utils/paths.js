@@ -13,6 +13,7 @@ const AdminPanelSlider = lazy(() => import("../pages/AdminPanelSlider/Container"
 const AdminPanelAwards = lazy(() => import("../pages/AdminPanelAwards/Container"));
 const CaseStudies = lazy(() => import("../Sections/CaseStudies/index"));
 const HowItWorks = lazy(() => import("../Sections/HowItWorks/index"));
+const FAQs = lazy(() => import("../Sections/FAQs/index"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -30,6 +31,7 @@ export const paths = {
   resetPassword: "reset-password",
   caseStudies:"case-studies",
   howItWorks:"how-it-works",
+  howItWorks:"faqs",
 };
 
 export const routes = {
@@ -45,6 +47,7 @@ export const routes = {
   resetPassword: "/reset-password/:token",
   caseStudies:"/moderate-sections/case-studies",
   howItWorks:"/moderate-sections/how-it-works",
+  faqs:"/moderate-sections/faqs",
 };
 
 export const pagesRoutes = {
@@ -97,6 +100,11 @@ export const pagesRoutes = {
     name: "Section/howItWorks",
     path: routes.howItWorks,
     component: HowItWorks,
+  },
+  [paths.howItWorks]: {
+    name: "Section/faqs",
+    path: routes.faqs,
+    component: FAQs,
   },
 };
 
