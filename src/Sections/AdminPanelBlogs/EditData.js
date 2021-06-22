@@ -30,6 +30,7 @@ export default function EditData({ id, edit }) {
     const result = await axios.get(`http://3.138.190.235/v1/blogs/${id}`);
     setData(result.data.data.result);
     setFile(result.data.data.result.image)
+    setDate(result.data.data.result.date)
   };
 
   const formData = new FormData()
@@ -39,7 +40,7 @@ export default function EditData({ id, edit }) {
   formData.append("text", text)
   formData.append("link", link)
   formData.append("buttonLabel", buttonLabel)
- 
+  formData.append("date", date)
     
   const handleToastClose = (event, reason) => {
     if (reason === "clickaway") {

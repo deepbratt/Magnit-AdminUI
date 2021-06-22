@@ -27,6 +27,7 @@ const AddData = () => {
 
   const formData = new FormData()
   formData.append("views", views)
+  formData.append("date", date)
   formData.append("image", file)
   formData.append("title", title)
   formData.append("text", text)
