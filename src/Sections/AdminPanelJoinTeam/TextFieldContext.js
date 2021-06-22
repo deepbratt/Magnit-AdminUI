@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField, InputLabel, Grid } from "@material-ui/core";
 import useStyles from "../AdminPanelSliderSections/useStyles";
-const TextFieldContext = ({ link, text, buttonLabel, inputChange,errors }) => {
+const TextFieldContext = ({ link, text, buttonLabel, inputChange,errors,edit }) => {
   const { labels, common } = useStyles();
   return (
     <>
@@ -18,9 +18,9 @@ const TextFieldContext = ({ link, text, buttonLabel, inputChange,errors }) => {
             onChange={(e) => inputChange(e)}
             style={{ width: "100%" }}
           />
-            {errors.text && (
+            {!edit ?
           <p style={{ color: "red" }}>{errors.text}</p>
-        )}
+        : null}
         </Grid>
         <Grid className={common} item lg={6} md={5} sm={10} xs={12}>
           <InputLabel className={labels}>Link</InputLabel>
@@ -32,9 +32,9 @@ const TextFieldContext = ({ link, text, buttonLabel, inputChange,errors }) => {
             onChange={(e) => inputChange(e)}
             style={{ width: "100%" }}
           />
-            {errors.link && (
+            {!edit ?
           <p style={{ color: "red" }}>{errors.link}</p>
-        )}
+        : null}
         </Grid>
         <Grid className={common} item lg={6} md={5} sm={10} xs={12}>
           <InputLabel className={labels}>Button Label</InputLabel>
@@ -46,9 +46,9 @@ const TextFieldContext = ({ link, text, buttonLabel, inputChange,errors }) => {
             onChange={(e) => inputChange(e)}
             style={{ width: "100%" }}
           />
-            {errors.buttonLabel && (
+            {!edit ?
           <p style={{ color: "red" }}>{errors.buttonLabel}</p>
-        )}
+        : null}
         </Grid>
       </Grid>
     </>

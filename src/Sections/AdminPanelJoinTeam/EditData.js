@@ -5,7 +5,7 @@ import Toast from "../../components/Toast";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 export default function EditData({ id, edit }) {
-  const { handleEdit,responseAlert,open,setOpen} = useApi();
+  const { handleEdit,responseAlert,open,setOpen,toastType} = useApi();
 
   const [data, setData] = useState({
     text: "",
@@ -53,6 +53,7 @@ export default function EditData({ id, edit }) {
             buttonLabel={buttonLabel}
             text={text}
             inputChange={inputChange}
+            edit={edit}
           />
           <Grid item lg={12} style={{display: "flex",justifyContent: "center", marginTop: "20px"}}>
             <Button
@@ -90,7 +91,7 @@ export default function EditData({ id, edit }) {
           {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

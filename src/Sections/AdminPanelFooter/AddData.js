@@ -7,16 +7,19 @@ import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import Toast from "../../components/Toast";
 import useStates from "./useStates";
+import validate from "./useValidate";
 const AddData = () => {
   const [isPending, setIsPending] = useState(true);
   const [open, setOpen] = useState(false);
+  const [toastType, setToastType] = useState('error');
   const [responseAlert, setResponseAlert] = useState({
     status: "",
     message: "",
   });
 
   const { grid, btn } = useStyles();
-  let id = "form";
+
+
   const {
     numberTitle,
     addressTitle,
@@ -47,12 +50,13 @@ const AddData = () => {
     file
   } = useStates();
 
-  
+  const {} = validate(addressTitle,numberTitle,linkTitle);
+  const [errors, setErrors] = useState({}); 
+
   const handleToastClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
@@ -94,8 +98,20 @@ const AddData = () => {
           message: error.message,
         });
         setOpen(true);
+        setToastType('error')
       }
     }
+};
+
+const handleSubmit = () => {
+  const validationErrors = validate(addressTitle,numberTitle,linkTitle);
+  const noErrors = Object.keys(validationErrors).length === 0;
+  setErrors(validationErrors);
+  if (noErrors) {
+    handleAddData()
+  } else {
+    return <p>errors try again</p>;
+  }
 };
 
   return (
@@ -110,7 +126,7 @@ const AddData = () => {
           addAddress={addAddress}
           addressArray={addressArray}
           setAddressArray={setAddressArray}
-          id={id}
+          errors={errors}
         />
         <ContactField
           number={number}
@@ -122,7 +138,7 @@ const AddData = () => {
           add={add}
           array={array}
           setArray={setArray}
-          id={id}
+          errors={errors}
         />
         <SocialMediaField
           setFile={fileChange}
@@ -134,8 +150,8 @@ const AddData = () => {
           linkArray={linkArray}
           setLinkArray={setLinkArray}
           addLink={addLink}
-          id={id}
           file={file}
+          errors={errors}
         />
       </Grid>
       <Grid
@@ -148,10 +164,7 @@ const AddData = () => {
         }}
       >
         <Button
-          onClick={() => {
-            handleAddData()
-     
-          }}
+          onClick={() => handleSubmit()}
           variant="contained"
           className={btn}
         >
@@ -161,8 +174,6 @@ const AddData = () => {
           variant="contained"
           color="secondary"
           style={{marginLeft: "15px"}}
-
-          
         >
          Clear Field
         </Button>
@@ -171,7 +182,7 @@ const AddData = () => {
       {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

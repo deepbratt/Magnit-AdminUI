@@ -5,7 +5,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { updateData, responseAlert,open,setOpen } = useApi("http://3.138.190.235/v1/blogs");
+  const { updateData, responseAlert,open,setOpen,toastType } = useApi("http://3.138.190.235/v1/blogs");
 
   const [date, setDate] = useState(new Date());
   const [file, setFile] = useState(null);
@@ -74,6 +74,7 @@ export default function EditData({ id, edit }) {
             setFile={setFile}
             setDate={setDate}
             date={date}
+            edit={edit}
           />
           <Grid item>
             <Button
@@ -111,7 +112,7 @@ export default function EditData({ id, edit }) {
          {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

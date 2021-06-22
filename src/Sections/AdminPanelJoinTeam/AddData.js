@@ -7,7 +7,7 @@ import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 import validate from "./useValidate";
 const AddData = () => {
-  const { handleAddData, isPending, responseAlert, open, setOpen } = useApi();
+  const { handleAddData, isPending, responseAlert, open, setOpen,toastType } = useApi();
   const { grid, btn } = useStyles();
   const [data, setData] = useState({
     text: "",
@@ -88,7 +88,7 @@ const AddData = () => {
       {responseAlert && (
         <Toast
           open={open}
-          severity={responseAlert.status}
+          severity={toastType}
           message={responseAlert.message}
           onClose={handleToastClose}
         />

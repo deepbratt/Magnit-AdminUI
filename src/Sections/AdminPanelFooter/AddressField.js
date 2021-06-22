@@ -13,6 +13,7 @@ const AddressField = ({
   addressArray,
   setAddressArray,
   edit,
+  errors
 }) => {
   const { labels, common } = useStyles();
 
@@ -56,10 +57,12 @@ const AddressField = ({
           onChange={(e) => setInput(e)}
           style={{ width: "100%" }}
         />
+         {!edit ?
+          <p style={{ color: "red" }}>{errors.addressTitle}</p>
+        : null}
       </Grid>
       {!edit ? (
         <>
-          {" "}
           <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Office Type</InputLabel>
             <form id={id}>

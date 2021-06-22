@@ -8,7 +8,7 @@ import Toast from "../../components/Toast";
 import validate from "./useValidate";
 
 const AddData = () => {
-  const { addData, isPending, responseAlert, open, setOpen } = useApi(
+  const { addData, isPending, responseAlert, open, setOpen , toastType} = useApi(
     "http://3.138.190.235/v1/awards"
   );
   const { grid, btn } = useStyles();
@@ -102,7 +102,7 @@ const AddData = () => {
         {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

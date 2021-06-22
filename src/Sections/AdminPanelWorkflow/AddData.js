@@ -5,7 +5,7 @@ import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 const AddData = () => {
-  const { addData, isPending ,responseAlert,open,setOpen} = useApi("http://3.138.190.235/v1/workflows");
+  const { addData, isPending ,responseAlert,open,setOpen,toastType} = useApi("http://3.138.190.235/v1/workflows");
   const { grid, btn,common,labels } = useStyles();
   const [file, setFile] = useState(null);
   
@@ -59,7 +59,7 @@ const AddData = () => {
       {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

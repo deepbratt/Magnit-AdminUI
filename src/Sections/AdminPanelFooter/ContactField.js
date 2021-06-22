@@ -9,11 +9,11 @@ const ContactField = ({
   country,
   number,
   inputContact,
-  id,
   array,
   add,
   setArray,
   edit,
+  errors,
 }) => {
   const { labels, common } = useStyles();
   const [editing, setEditing] = useState(null);
@@ -56,60 +56,55 @@ const ContactField = ({
           onChange={(e) => setInput(e)}
           style={{ width: "100%" }}
         />
+        {!edit ? <p style={{ color: "red" }}>{errors.numberTitle}</p> : null}
       </Grid>
       {!edit ? (
         <>
           <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Add State/Country</InputLabel>
-            <form id={id}>
-              <TextField
-                placeholder="USA:"
-                type="text"
-                name="country"
-                value={country}
-                variant="outlined"
-                autoComplete="off"
-                required
-                onChange={(e) => countryInput(e)}
-                style={{ width: "100%" }}
-              />
-            </form>
+            <TextField
+              placeholder="USA:"
+              type="text"
+              name="country"
+              value={country}
+              variant="outlined"
+              autoComplete="off"
+              required
+              onChange={(e) => countryInput(e)}
+              style={{ width: "100%" }}
+            />
           </Grid>
           <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Add Number</InputLabel>
-            <form id={id}>
-              <TextField
-                placeholder="+9560446593023"
-                type="text"
-                name="number"
-                value={number}
-                variant="outlined"
-                autoComplete="off"
-                required
-                onChange={(e) => inputContact(e)}
-                style={{ width: "100%" }}
-              />
-            </form>
+            <TextField
+              placeholder="+9560446593023"
+              type="text"
+              name="number"
+              value={number}
+              variant="outlined"
+              autoComplete="off"
+              required
+              onChange={(e) => inputContact(e)}
+              style={{ width: "100%" }}
+            />
           </Grid>
         </>
-      ) : (
-        null
-      )}
-        <ListItems
-            arr={array}
-            handleAddList={add}
-            setArr={setArray}
-            submitEdits={submitEdits}
-            handleEditInputChange={handleEditInputChange}
-            handleEditClick={handleEditClick}
-            editing={editing}
-            firstField={currentTodo.country}
-            secondField={currentTodo.number}
-            firstName="country"
-            secondName="number"
-            edit={edit}
-            setEditing={setEditing}
-          />
+      ) : null}
+      <ListItems
+        arr={array}
+        handleAddList={add}
+        setArr={setArray}
+        submitEdits={submitEdits}
+        handleEditInputChange={handleEditInputChange}
+        handleEditClick={handleEditClick}
+        editing={editing}
+        firstField={currentTodo.country}
+        secondField={currentTodo.number}
+        firstName="country"
+        secondName="number"
+        edit={edit}
+        setEditing={setEditing}
+      />
     </>
   );
 };

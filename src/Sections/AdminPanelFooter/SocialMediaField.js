@@ -15,6 +15,7 @@ const SocialMediaField = ({
   addLink,
   edit,
   file,
+  errors
 }) => {
   const { labels, common } = useStyles();
   const [editing, setEditing] = useState(null);
@@ -80,6 +81,9 @@ const SocialMediaField = ({
           onChange={(e) => setInput(e)}
           style={{ width: "100%" }}
         />
+        {!edit ?
+          <p style={{ color: "red" }}>{errors.linkTitle}</p>
+        : null}
       </Grid>
       {!edit ? (
         <>
@@ -121,7 +125,6 @@ const SocialMediaField = ({
           </Grid>
           <Grid className={common} item lg={2} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Add Title</InputLabel>
-            <form id={id}>
               <TextField
                 placeholder="FaceBook"
                 type="text"
@@ -133,7 +136,6 @@ const SocialMediaField = ({
                 onChange={(e) => setinput(e)}
                 style={{ width: "100%" }}
               />
-            </form>
           </Grid>
           <Grid className={common} item lg={2} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Social Media Links</InputLabel>

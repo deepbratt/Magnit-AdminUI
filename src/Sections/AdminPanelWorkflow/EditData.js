@@ -5,7 +5,7 @@ import useApi from "../../Utils/useApi";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { updateData, responseAlert,open,setOpen } = useApi("");
+  const { updateData, responseAlert,open,setOpen,toastType } = useApi("http://3.138.190.235/v1/workflows");
   const { common, labels } = useStyles();
   const [file, setFile] = useState(null);
 
@@ -97,7 +97,7 @@ export default function EditData({ id, edit }) {
           {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

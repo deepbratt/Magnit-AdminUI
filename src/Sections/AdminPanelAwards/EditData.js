@@ -5,7 +5,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { updateData,responseAlert,open,setOpen} = useApi("http://3.138.190.235/v1/awards");
+  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://3.138.190.235/v1/awards");
 
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
@@ -60,6 +60,7 @@ export default function EditData({ id, edit }) {
             link={link}
             inputChange={inputChange}
             setFile={setFile}
+            edit={edit}
           />
           <Grid
             item
@@ -108,7 +109,7 @@ export default function EditData({ id, edit }) {
             {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

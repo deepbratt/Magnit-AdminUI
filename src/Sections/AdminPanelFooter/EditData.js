@@ -10,6 +10,7 @@ import Toast from "../../components/Toast";
 const EditData = ({ id, edit }) => {
   const { grid} = useStyles();
   const [isPending, setIsPending] = useState(true);
+  const [toastType, setToastType] = useState('error');
   const [open, setOpen] = useState(false);
   const [responseAlert, setResponseAlert] = useState({
     status: "",
@@ -105,6 +106,7 @@ const EditData = ({ id, edit }) => {
         message: "Updated Successfully",
       });
       setOpen(true);
+      setToastType('success')
     }
     }
     catch(error){
@@ -115,6 +117,7 @@ const EditData = ({ id, edit }) => {
           message: error.message,
         });
         setOpen(true);
+        setToastType('error')
       }
     }
 };
@@ -188,7 +191,7 @@ const EditData = ({ id, edit }) => {
       {responseAlert && (
           <Toast
             open={open}
-            severity={responseAlert.status}
+            severity={toastType}
             message={responseAlert.message}
             onClose={handleToastClose}
           />

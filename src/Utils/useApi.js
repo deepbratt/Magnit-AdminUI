@@ -13,13 +13,16 @@ const useApi = (url) => {
   const [errorResponse, setError] = useState({ errorMessage: "" });
   const [success, setSuccess] = useState({ successMessage: "" });
   const [isMounted, setIsMounted] = useState(true);
+  const [toastType, setToastType] = useState('error')
   const [open, setOpen] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [responseAlert, setResponseAlert] = useState({
     status: "",
     message: "",
   });
 
   useEffect(() => {
+    setLoader(true);
     if (isMounted) {
       loadData();
     } else {
@@ -31,8 +34,9 @@ const useApi = (url) => {
     try {
       const { data, status } = await axios.get(`${url}`, { headers });
       setSuccess({ successMessage: status });
-      setData(data.data.result);
-      setIsMounted(true);
+        setData(data.data.result);
+        setIsMounted(true);
+        setLoader(false);
     } catch (error) {
       setError({ errorMessage: error.message });
     }
@@ -59,12 +63,13 @@ const useApi = (url) => {
         message: error.message,
       });
       setOpen(true);
+      setToastType('error')
     }
   };
 
   const updateData = async (Id, items) => {
     try {
-      const { status, data } = await axios.patch(`${url}/${Id}`, items, {
+      const { status, data } = await axios.put(`${url}/${Id}`, items, {
         headers,
       });
       if (status === 200) {
@@ -72,6 +77,7 @@ const useApi = (url) => {
           status: data.status,
           message: "Updated Successfully",
         });
+        setToastType('success')
         setOpen(true);
         setData((prev) => {
           return [...prev, data.data.result];
@@ -84,12 +90,13 @@ const useApi = (url) => {
         message: error.message,
       });
       setOpen(true);
+      setToastType('error')
     }
   };
 
   const handlePutMethod = async (Id, items) => {
     try {
-      const { status, data,result } = await axios.put(`${url}/${Id}`, items, {
+      const { status, data, result } = await axios.put(`${url}/${Id}`, items, {
         headers,
       });
       if (status === 200) {
@@ -98,20 +105,22 @@ const useApi = (url) => {
           message: "Updated Successfully",
         });
         setOpen(true);
+        setToastType('success')
         setData((prev) => {
           return [...prev, data.data.result];
         });
       }
       setIsMounted(false);
-    } catch (error ) {
-      if(500){
+    } catch (error) {
+      if (500) {
         setResponseAlert({
           status: error.status,
           message: error.message,
         });
-        console.log(error)
+        console.log(error);
       }
       setOpen(true);
+      setToastType('error')
     }
   };
 
@@ -157,6 +166,7 @@ const useApi = (url) => {
           message: error.message,
         });
         setOpen(true);
+        setToastType('error')
       }
     }
   };
@@ -184,6 +194,7 @@ const useApi = (url) => {
           message: "Updated Successfully",
         });
         setOpen(true);
+        setToastType('success')
       }
     } catch (error) {
       if (error) {
@@ -193,6 +204,7 @@ const useApi = (url) => {
           message: error.message,
         });
         setOpen(true);
+        setToastType('error')
       }
     }
   };
@@ -209,7 +221,9 @@ const useApi = (url) => {
     responseAlert,
     open,
     setOpen,
-    handlePutMethod
+    handlePutMethod,
+    loader,
+    toastType,
   };
 };
 

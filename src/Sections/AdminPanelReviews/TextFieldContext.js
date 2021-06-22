@@ -9,7 +9,8 @@ const TextFieldContext = ({
   rating,
   inputChange,
   setFile,
-  errors
+  errors,
+  edit
 }) => {
   const { labels, common } = useStyles();
   return (
@@ -24,8 +25,8 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
-         {errors.clientName && (
-          <p style={{ color: "red" }}>{errors.clientName}</p>)}
+         {!edit?
+          <p style={{ color: "red" }}>{errors.clientName}</p>: null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Project Name</InputLabel>
@@ -37,8 +38,8 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
-           {errors.projectName && (
-          <p style={{ color: "red" }}>{errors.projectName}</p>)}
+           {!edit ?
+          <p style={{ color: "red" }}>{errors.projectName}</p> : null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Project Type</InputLabel>
@@ -67,8 +68,8 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
-           {errors.review && (
-          <p style={{ color: "red" }}>{errors.review}</p>)}
+           {!edit ?
+          <p style={{ color: "red" }}>{errors.review}</p>: null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Rating</InputLabel>
