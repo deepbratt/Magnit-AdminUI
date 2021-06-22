@@ -38,9 +38,13 @@ const useOnlyTextForm = (
   };
 
   const handleSubmit = () => {
-    var fd = new FormData();
-    fd.append(apiFieldNames.title, formData[apiFieldNames.title]);
-    fd.append(apiFieldNames.text, formData[apiFieldNames.text]);
+    // var fd = new FormData();
+    // fd.append(apiFieldNames.title, formData[apiFieldNames.title]);
+    // fd.append(apiFieldNames.text, formData[apiFieldNames.text]);
+    let fd = {
+      [apiFieldNames.title]:formData[apiFieldNames.title],
+      [apiFieldNames.text]:formData[apiFieldNames.text],
+    }
     let temp = dataArray
     setIsLoading(true)
     if (itemId) {

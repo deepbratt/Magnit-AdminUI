@@ -22,6 +22,10 @@ const ModerateSections = () => {
       link: "/moderate-sections/how-it-works",
       name: "How It Works",
     },
+    {
+      link: "/moderate-sections/faqs",
+      name: "FAQs",
+    },
   ];
   const history = useHistory()
 

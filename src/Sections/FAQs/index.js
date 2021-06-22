@@ -9,6 +9,7 @@ import Toast from "../../components/Toast";
 import {createFAQs, updateFAQs, getOneFAQs} from "../../Utils/loginApi";
 import { apiFieldNames } from "../../Utils/Text";
 import OnlyTextForm from "../../components/OnlyTextForm/OnlyTextForm";
+import DataTable from "../../components/Table.js/index"
 
 const FAQs = () => {
   const {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem, openToast, setOpenToast, toastType, responseMessage} = useFAQs()
@@ -29,11 +30,17 @@ const FAQs = () => {
         />
       </Grid>
       <Grid item xs={12}>
-        <ContentTable
+        {/* <ContentTable
           dataArray={dataArray}
           updateItem={setItemId}
           removeItem={deleteItem}
-        />
+        /> */}
+        <DataTable
+            rows={dataArray}
+            handleDelete={deleteItem}
+            handleUpdate={setItemId}
+            valueskeys={{title:apiFieldNames.faq.title,_id:"_id"}}
+          />
       </Grid>
       <Toast
           open={openToast}
