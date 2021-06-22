@@ -21,26 +21,29 @@ const useApi = (url) => {
     message: "",
   });
 
-  useEffect(() => {
-    setLoader(true);
-    if (isMounted) {
-      loadData();
-    } else {
-      return () => {};
-    }
-  }, [data]);
 
-  const loadData = async () => {
-    try {
-      const { data, status } = await axios.get(`${url}`, { headers });
-      setSuccess({ successMessage: status });
-        setData(data.data.result);
+  useEffect(() => {    
+    setLoader(true); 
+    const getData = async () => {  
+      await axios.get(`${url}`, { headers })  
+      .then(res => {  
+        setSuccess({ successMessage: res.status });
+        setData(res.data.data.result);
         setIsMounted(true);
-        setLoader(false);
-    } catch (error) {
-      setError({ errorMessage: error.message });
-    }
-  };
+        
+      }).then(() => setLoader(false))
+      .catch(error => {  
+        setResponseAlert({
+          status: error.status,
+          message: error.message,
+        });
+        setOpen(true);
+        setToastType('error') 
+      });  
+    }  
+    getData()  
+  }, [data])
+
 
   const addData = async (formData) => {
     try {
@@ -69,7 +72,7 @@ const useApi = (url) => {
 
   const updateData = async (Id, items) => {
     try {
-      const { status, data } = await axios.put(`${url}/${Id}`, items, {
+      const { status, data } = await axios.patch(`${url}/${Id}`, items, {
         headers,
       });
       if (status === 200) {
@@ -96,7 +99,7 @@ const useApi = (url) => {
 
   const handlePutMethod = async (Id, items) => {
     try {
-      const { status, data, result } = await axios.put(`${url}/${Id}`, items, {
+      const { status, data, result } = await axios.patch(`${url}/${Id}`, items, {
         headers,
       });
       if (status === 200) {

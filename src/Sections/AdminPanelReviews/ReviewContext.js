@@ -29,16 +29,14 @@ const DisplayData = () => {
         <Grid item lg={12}>
           <AddData /> 
         </Grid>
-        {loader ? (
-            <Loader open={loader} />
-          ) : (
+        <Loader open={loader} />
         <Table
             rows={data}
             handleDelete={deleteItem}
             handleUpdate={setId}
             edit={setEdit}
             valueskeys={valueskeys}
-          />)}
+          />
       </Grid>
       :  <Grid justify="center" container>
       <Grid className={heading} item lg={12} xs={12}>

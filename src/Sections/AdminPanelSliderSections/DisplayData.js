@@ -24,15 +24,13 @@ const DisplayData = () => {
             <AddData />
           </Grid>
           <Grid item xs={12}>
-          {loader ? (
-            <Loader open={loader} />
-          ) : (
+          <Loader open={loader} />
           <Table
             rows={data}
             handleDelete={deleteItem}
             handleUpdate={setId}
             edit={setEdit}
-          />)}
+          />
           </Grid>
         </Grid>
       ) : (

@@ -29,13 +29,14 @@ const valueskeys = {
         <Grid item lg={12}>
           <AddData /> 
         </Grid>
-        {loader ? <Loader open={loader}/> : <Table
+        <Loader open={loader}/> 
+         <Table
             rows={data}
             handleDelete={deleteItem}
             handleUpdate={setId}
             edit={setEdit}
             valueskeys={valueskeys}
-          />}
+          />
         
       </Grid>
       :  <Grid justify="center" container>
