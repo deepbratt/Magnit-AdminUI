@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { TextField, InputLabel, Grid } from "@material-ui/core";
+import { TextField, InputLabel, Grid , Divider} from "@material-ui/core";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import ListItems from "./ListItems";
+import { Typography } from "@material-ui/core";
 const AddressField = ({
   title,
   setInput,
@@ -46,6 +47,11 @@ const AddressField = ({
   }
   return (
     <>
+    <Grid container justify="center" style={{margin: "30px 0px 10px 0px"}} lg={12} xs={12} >
+      <Typography variant="h6">
+        Address Data
+      </Typography>
+    </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Address Title</InputLabel>
         <TextField
@@ -113,6 +119,9 @@ const AddressField = ({
             edit={edit}
             setEditing={setEditing}
           />
+          <Grid item xs={12} style={{marginBottom: "30px"}}>
+          <Divider />
+          </Grid>
     </>
   );
 };

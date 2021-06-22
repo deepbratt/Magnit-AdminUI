@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, InputLabel, Grid } from "@material-ui/core";
+import { TextField, InputLabel, Grid,Typography,Divider } from "@material-ui/core";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import ListItems from "./ListItems";
 const SocialMediaField = ({
@@ -71,6 +71,11 @@ const SocialMediaField = ({
   }
   return (
     <>
+      <Grid container justify="center" style={{margin: "10px 0px 10px 0px"}} lg={12} xs={12} >
+      <Typography variant="h6">
+        Social Media Data
+      </Typography>
+    </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Link Title</InputLabel>
         <TextField

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useStyles from "../AdminPanelSliderSections/useStyles";
-import { TextField, InputLabel, Grid } from "@material-ui/core";
+import { TextField, InputLabel, Grid,Typography,Divider } from "@material-ui/core";
 import ListItems from "./ListItems";
 const ContactField = ({
   title,
@@ -45,6 +45,11 @@ const ContactField = ({
   }
   return (
     <>
+      <Grid container justify="center" style={{margin: "10px 0px 10px 0px"}} lg={12} xs={12} >
+      <Typography variant="h6">
+        Contact Us Data
+      </Typography>
+    </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Number Title</InputLabel>
         <TextField
@@ -105,6 +110,9 @@ const ContactField = ({
         edit={edit}
         setEditing={setEditing}
       />
+      <Grid item xs={12} style={{marginBottom: "30px"}}>
+          <Divider />
+          </Grid>
     </>
   );
 };
