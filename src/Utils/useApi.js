@@ -129,7 +129,8 @@ const useApi = (url) => {
   const deleteItem = async (id) => {
     try {
       await axios.delete(`${url}/${id}`);
-      window.location.reload();
+      let filteredArray = data.filter((item) => item._id !== id);
+      setData(filteredArray)
     } catch (error) {
       console.error("There was an error!", error);
       if (error.response) {
