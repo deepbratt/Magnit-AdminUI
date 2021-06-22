@@ -40,5 +40,9 @@ export const apiFieldNames = {
         image:"icon",
         title:"title",
         text:"text",
+    },
+    faq:{
+        title:"questions",
+        text:"answers"
     }
 }
