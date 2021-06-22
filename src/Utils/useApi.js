@@ -33,12 +33,7 @@ const useApi = (url) => {
         
       }).then(() => setLoader(false))
       .catch(error => {  
-        setResponseAlert({
-          status: error.status,
-          message: error.message,
-        });
-        setOpen(true);
-        setToastType('error') 
+        setError({ errorMessage: error.status });
       });  
     }  
     getData()  
