@@ -7,6 +7,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import useCaseStudies from "./useCaseStudies";
 import Toast from "../../components/Toast";
 import {createCaseStudies, updateCaseStudies, getOneCaseStudies} from "../../Utils/loginApi";
+import { apiFieldNames } from "../../Utils/Text";
 
 const CaseStudies = () => {
   const {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem, openToast, setOpenToast, toastType, responseMessage} = useCaseStudies()
@@ -23,6 +24,7 @@ const CaseStudies = () => {
           createApi={createCaseStudies}
           updateApi={updateCaseStudies}
           getItemApi={getOneCaseStudies}
+          apiFieldNames={apiFieldNames.caseStudies}
         />
       </Grid>
       <Grid item xs={12}>

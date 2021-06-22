@@ -21,7 +21,8 @@ const useSimpleForm = (
   updateApi,
   getItemApi,
   updateDataArray,
-  dataArray
+  dataArray,
+  apiFieldNames
 ) => {
   const [formData, setFormData] = useReducer(formReducer, initialFieldValues);
   const [isLoading, setIsLoading] = useState(false)
@@ -42,9 +43,9 @@ const useSimpleForm = (
 
   const handleSubmit = () => {
     var fd = new FormData();
-    fd.append("title", formData.title);
-    fd.append("text", formData.text);
-    fd.append("image", formData.image);
+    fd.append(apiFieldNames.title, formData.title);
+    fd.append(apiFieldNames.text, formData.text);
+    fd.append(apiFieldNames.image, formData.image);
     let temp = dataArray
     setIsLoading(true)
     if (itemId) {
@@ -90,7 +91,7 @@ const useSimpleForm = (
         if(isResponseSuccess(response)){
           setFormData({ name: "title", value: response.data.data.result.title });
           setFormData({ name: "text", value: response.data.data.result.text });
-          setFormData({ name: "image", value: response.data.data.result.image });
+          setFormData({ name: "image", value: response.data.data.result[apiFieldNames.image] });
         }
       }).then(()=>setIsLoading(false));
     }

@@ -11,7 +11,8 @@ const SimpleForm = ({
   updateApi,
   getItemApi,
   updateDataArray,
-  dataArray
+  dataArray,
+  apiFieldNames,
 }) => {
   const { handleChange, handleSubmit, formData, clearFields, isLoading, openToast, setOpenToast, toastType, responseMessage } = useSimpleForm(
     itemId,
@@ -20,7 +21,8 @@ const SimpleForm = ({
     updateApi,
     getItemApi,
     updateDataArray,
-    dataArray
+    dataArray,
+    apiFieldNames
   );
   return (
     <form onSubmit={handleSubmit}>

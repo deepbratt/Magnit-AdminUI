@@ -7,6 +7,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import useHowItWorks from "./useHowItWorks";
 import Toast from "../../components/Toast";
 import {createHowItWorks, updateHowItWorks, getOneHowItWorks} from "../../Utils/loginApi";
+import {apiFieldNames} from '../../Utils/Text'
 
 const HowItWorks = () => {
   const {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem, openToast, setOpenToast, toastType, responseMessage} = useHowItWorks()
@@ -23,6 +24,7 @@ const HowItWorks = () => {
           createApi={createHowItWorks}
           updateApi={updateHowItWorks}
           getItemApi={getOneHowItWorks}
+          apiFieldNames={apiFieldNames.howItWorks}
         />
       </Grid>
       <Grid item xs={12}>
