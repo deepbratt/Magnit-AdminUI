@@ -24,6 +24,11 @@ const USERS = {
   RESETPASS: `users/resetPassword`,
 };
 
+const apiEndpoints={
+  howItWorks:"howitworks",
+  caseStudies:"casestudies"
+}
+
 export const userLoginApi = async (data) => {
   try {
     let result = await axiosInstance.post(`${USERS.LOGIN}`, data);
@@ -65,9 +70,10 @@ export const resetPasswordApi = async (token, data) => {
   }
 };
 
+// how it works
 export const getAllHowItWorks = async()=>{
   try{
-      const response = await axiosInstance.get("howitworks")
+      const response = await axiosInstance.get(apiEndpoints.howItWorks)
       console.log(response)
       return response
   }catch(error){
@@ -78,7 +84,7 @@ export const getAllHowItWorks = async()=>{
 
 export const getOneHowItWorks = async(itemId)=>{
   try{
-      const response = await axiosInstance.get("howitworks/"+itemId)
+      const response = await axiosInstance.get(apiEndpoints.howItWorks+"/"+itemId)
       console.log(response)
       return response
   }catch(error){
@@ -88,7 +94,7 @@ export const getOneHowItWorks = async(itemId)=>{
 }
 export const deleteHowItWorks = async(itemId)=>{
   try{
-      const response = await axiosInstance.delete("howitworks/"+itemId)
+      const response = await axiosInstance.delete(apiEndpoints.howItWorks+"/"+itemId)
       console.log(response)
       return  response
   }catch(error){
@@ -98,7 +104,7 @@ export const deleteHowItWorks = async(itemId)=>{
 }
 export const updateHowItWorks = async(itemId, dataBody)=>{
   try{
-      const response = await axiosFormInstance.patch("howitworks/"+itemId, dataBody)
+      const response = await axiosFormInstance.patch(apiEndpoints.howItWorks+"/"+itemId, dataBody)
       console.log(response)
       return  response
   }catch(error){
@@ -108,7 +114,62 @@ export const updateHowItWorks = async(itemId, dataBody)=>{
 }
 export const createHowItWorks = async(dataBody)=>{
     try{
-        const response = await axiosFormInstance.post("howitworks/", dataBody)
+        const response = await axiosFormInstance.post(apiEndpoints.howItWorks+"/", dataBody)
+        console.log(response)
+        return  response
+    }catch(error){
+        console.log('error: ',error)
+        return  error
+    }
+}
+
+
+// Case Studies
+
+export const getAllCaseStudies = async()=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.caseStudies)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+
+export const getOneCaseStudies = async(itemId)=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.caseStudies+"/"+itemId)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+export const deleteCaseStudies = async(itemId)=>{
+  try{
+      const response = await axiosInstance.delete(apiEndpoints.caseStudies+"/"+itemId)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const updateCaseStudies = async(itemId, dataBody)=>{
+  try{
+      const response = await axiosFormInstance.patch(apiEndpoints.caseStudies+"/"+itemId, dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const createCaseStudies = async(dataBody)=>{
+    try{
+        const response = await axiosFormInstance.post(apiEndpoints.caseStudies+"/", dataBody)
         console.log(response)
         return  response
     }catch(error){

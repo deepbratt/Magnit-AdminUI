@@ -21,7 +21,8 @@ const useSimpleForm = (
   updateApi,
   getItemApi,
   updateDataArray,
-  dataArray
+  dataArray,
+  apiFieldNames
 ) => {
   const [formData, setFormData] = useReducer(formReducer, initialFieldValues);
   const [isLoading, setIsLoading] = useState(false)
@@ -42,16 +43,16 @@ const useSimpleForm = (
 
   const handleSubmit = () => {
     var fd = new FormData();
-    fd.append("title", formData.title);
-    fd.append("text", formData.text);
-    fd.append("image", formData.image);
+    fd.append(apiFieldNames.title, formData.title);
+    fd.append(apiFieldNames.text, formData.text);
+    fd.append(apiFieldNames.image, formData.image);
     let temp = dataArray
     setIsLoading(true)
     if (itemId) {
       updateApi(itemId, fd).then((response) => {
         if(isResponseSuccess(response)){
           temp = temp.filter(item=>item._id!==itemId)
-          updateDataArray(oldArray => [...temp, response.data.data.howItWork])
+          updateDataArray(oldArray => [...temp, response.data.data.result])
           setResponseMessage(updateSuccess)
           setToastType('success')
         }else{
@@ -63,7 +64,7 @@ const useSimpleForm = (
     }else{
       createApi(fd).then((response) => {
         if(isResponseSuccess(response)){
-          updateDataArray(oldArray => [...oldArray, response.data.data.newHowItWork])
+          updateDataArray(oldArray => [...oldArray, response.data.data.result])
           setResponseMessage(response.data.message)
           setToastType('success')
         }else{
@@ -88,9 +89,9 @@ const useSimpleForm = (
       setIsLoading(true)
       getItemApi(itemId).then((response) => {
         if(isResponseSuccess(response)){
-          setFormData({ name: "title", value: response.data.data.howItWork.title });
-          setFormData({ name: "text", value: response.data.data.howItWork.text });
-          setFormData({ name: "image", value: response.data.data.howItWork.image });
+          setFormData({ name: "title", value: response.data.data.result.title });
+          setFormData({ name: "text", value: response.data.data.result.text });
+          setFormData({ name: "image", value: response.data.data.result[apiFieldNames.image] });
         }
       }).then(()=>setIsLoading(false));
     }

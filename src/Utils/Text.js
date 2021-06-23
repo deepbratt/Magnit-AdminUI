@@ -29,3 +29,16 @@ export const BoxData = [{
 },
 
 ]
+
+export const apiFieldNames = {
+    howItWorks:{
+        image:"image",
+        title:"title",
+        text:"text",
+    },
+    caseStudies:{
+        image:"icon",
+        title:"title",
+        text:"text",
+    }
+}

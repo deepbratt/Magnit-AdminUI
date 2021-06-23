@@ -97,14 +97,14 @@ const ContentTable = ({ dataArray, updateItem, removeItem, edit }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleEdit(item.id)}
+              onClick={() => handleEdit(item._id)}
             >
               <CreateIcon />
             </Button>
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => deleteItem(item.id)}
+              onClick={() => deleteItem(item._id)}
             >
               <DeleteIcon />
             </Button>
