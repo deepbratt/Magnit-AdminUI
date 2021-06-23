@@ -51,6 +51,15 @@ const sections = [
     value: "howitWorks",
     label: "How It Works",
   },
+  {
+    value: "benefits",
+    label: "Benifits",
+  },
+  {
+    value: "ourObjectives",
+    label: "Our Objective",
+  },
+
 ];
 
 const AddNewPages = ({ open, handleClose }) => {

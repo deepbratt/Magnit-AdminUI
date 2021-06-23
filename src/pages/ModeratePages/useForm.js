@@ -34,7 +34,7 @@ export const useForm = (validateOnChange = false, id) => {
     let newSection = {
       heading: values.heading,
       subHeading: values.subHeading,
-      queryParams: JSON.parse(values.query),
+      queryParams: values.query.length > 0 ? JSON.parse(values.query) : {},
       order: values.order,
     };
     let newValues = values;

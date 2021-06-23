@@ -11,6 +11,7 @@ import {
 import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
+import ColorPicker from "material-ui-color-picker";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
 import FactsAboutUsTable from "../Table.js/index";
@@ -38,9 +39,10 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
 
   const [id, setId] = useState(null);
   const {
+    color,
+    setColor,
     alertOpen,
     setAlertOpen,
-
     values,
     setValues,
     errors,
@@ -104,7 +106,7 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
             description: response.data.result.text,
             id: id,
           });
-
+          setColor(response.data.result.color);
           setSelectedFile(response.data.result.icon);
         }
         if (response.status === "fail") {
@@ -189,12 +191,12 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
                 </label>
                 <Card
                   style={{
-                    backgroundColor: "#eee",
+                    backgroundColor: color,
                     padding: "20px",
                     margin: "0 50px",
                     minHeight: "120px",
                     maxHeight: "120px",
-                    minWidth: "120px",
+                    minWidth: "100px",
                   }}
                 >
                   {typeof selectedFile === "string" ? (
@@ -215,6 +217,14 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
                     />
                   ) : null}
                 </Card>
+
+                <ColorPicker
+                  variant="outlined"
+                  label="Pick a Color"
+                  name={fieldNames.color}
+                  value={color}
+                  onChange={(color) => setColor(color.toString())}
+                />
               </Grid>
 
               <Grid className={buttonWrap} item xs={12} md={6}>

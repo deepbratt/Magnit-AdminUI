@@ -9,6 +9,7 @@ const initialValues = {
   title: "",
   description: "",
   image: null,
+  color: "",
   id: null,
 };
 
@@ -18,6 +19,7 @@ export const useForm = (validateOnChange = false, id) => {
   const [update, setUpdate] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [color, setColor] = useState(values.color);
   const [responseMessage, setResponseMessage] = useState({
     status: "",
     message: "",
@@ -63,6 +65,7 @@ export const useForm = (validateOnChange = false, id) => {
     setErrors({});
     setUpdate(false);
     setSelectedFile(null);
+    setColor("");
   };
 
   const handleSubmit = async (e) => {
@@ -74,7 +77,8 @@ export const useForm = (validateOnChange = false, id) => {
       formData.append("title", values.title);
       formData.append("text", values.description);
       formData.append("icon", selectedFile);
-      console.log(formData, values.title);
+      formData.append("color", color);
+
       if (!update) {
         await addFactsAboutUsApi(formData)
           .then((response) => {
@@ -133,6 +137,8 @@ export const useForm = (validateOnChange = false, id) => {
   };
 
   return {
+    color,
+    setColor,
     alertOpen,
     setAlertOpen,
     values,
