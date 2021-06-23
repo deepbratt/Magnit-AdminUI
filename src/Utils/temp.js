@@ -1,64 +1,54 @@
-export const getAllCaseStudies = async () => {
-  try {
-    const response = await axiosInstance.get(caseStudiesaseStudies);
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.log("error: ", error);
-    return error;
+export const getAllFAQs = async()=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.FAQs)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
   }
-};
+}
 
-export const getOneCaseStudies = async (itemId) => {
-  try {
-    const response = await axiosInstance.get(
-      caseStudiesaseStudies + "/" + itemId
-    );
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.log("error: ", error);
-    return error;
+export const getOneFAQs = async(itemId)=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.FAQs+"/"+itemId)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
   }
-};
-export const deleteCaseStudies = async (itemId) => {
-  try {
-    const response = await axiosInstance.delete(
-      caseStudiesaseStudies + "/" + itemId
-    );
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.log("error: ", error);
-    return error;
+}
+export const deleteFAQs = async(itemId)=>{
+  try{
+      const response = await axiosInstance.delete(apiEndpoints.FAQs+"/"+itemId)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
   }
-};
-export const updateCaseStudies = async (itemId, dataBody) => {
-  try {
-    const response = await axiosFormInstance.patch(
-      caseStudiesaseStudies + "/" + itemId,
-      dataBody
-    );
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.log("error: ", error);
-    return error;
+}
+export const updateFAQs = async(itemId, dataBody)=>{
+  try{
+      const response = await axiosFormInstance.patch(apiEndpoints.FAQs+"/"+itemId, dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
   }
-};
-export const createCaseStudies = async (dataBody) => {
-  try {
-    const response = await axiosFormInstance.post(
-      caseStudiesaseStudies + "/",
-      dataBody
-    );
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.log("error: ", error);
-    return error;
-  }
-};
+}
+export const createFAQs = async(dataBody)=>{
+    try{
+        const response = await axiosFormInstance.post(apiEndpoints.FAQs+"/", dataBody)
+        console.log(response)
+        return  response
+    }catch(error){
+        console.log('error: ',error)
+        return  error
+    }
+}
 
 const data = {
   image: [file],

@@ -26,7 +26,8 @@ const USERS = {
 
 const apiEndpoints={
   howItWorks:"howitworks",
-  caseStudies:"casestudies"
+  caseStudies:"casestudies",
+  FAQs:"faqs"
 }
 
 export const userLoginApi = async (data) => {
@@ -170,6 +171,61 @@ export const updateCaseStudies = async(itemId, dataBody)=>{
 export const createCaseStudies = async(dataBody)=>{
     try{
         const response = await axiosFormInstance.post(apiEndpoints.caseStudies+"/", dataBody)
+        console.log(response)
+        return  response
+    }catch(error){
+        console.log('error: ',error)
+        return  error
+    }
+}
+
+
+// FAQs
+
+export const getAllFAQs = async()=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.FAQs)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+
+export const getOneFAQs = async(itemId)=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.FAQs+"/"+itemId)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+export const deleteFAQs = async(itemId)=>{
+  try{
+      const response = await axiosInstance.delete(apiEndpoints.FAQs+"/"+itemId)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const updateFAQs = async(itemId, dataBody)=>{
+  try{
+      const response = await axiosInstance.patch(apiEndpoints.FAQs+"/"+itemId, dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+export const createFAQs = async(dataBody)=>{
+    try{
+        const response = await axiosInstance.post(apiEndpoints.FAQs+"/", dataBody)
         console.log(response)
         return  response
     }catch(error){
