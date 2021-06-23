@@ -72,7 +72,8 @@ const AddData = () => {
          'Accept': 'application/json',
          'Content-Type': 'application/json'
        },
-       body: JSON.stringify({   
+       body: JSON.stringify({ 
+        heading: heading,  
         locations:{
           heading: addressTitle,
           dataArray: addressArray

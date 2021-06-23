@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Grid } from "@material-ui/core";
 import EditList from "./EditList";
+import ListItems from "./ListItems";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
@@ -10,6 +11,8 @@ export default function EditData({ id,edit}) {
 
   const [file, setFile] = useState(null);
   const [array, setArray] = useState([]);
+  let Id = "form";
+  const [list, setList] = useState("");
   const [data, setData] = useState({
     title: "",
     buttonLabel: "",
@@ -18,6 +21,10 @@ export default function EditData({ id,edit}) {
   const { title, buttonLabel, buttonLink } = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const InputChange = (e) => {
+    setList(e.target.value);
   };
 
   const handleToastClose = (event, reason) => {
@@ -35,6 +42,13 @@ export default function EditData({ id,edit}) {
   formData.append("items", array);
   formData.append("buttonLabel", buttonLabel);
   formData.append("buttonLink", buttonLink);
+
+  const add = () => {
+    setArray((prevData) => {
+      return [...prevData, list];
+    });
+    document.getElementById("form").reset();
+  };
 
   useEffect(() => {
     loadSelectedData();
@@ -69,14 +83,21 @@ export default function EditData({ id,edit}) {
               file={file}
               edit={edit}
             />
-            <EditList arr={array} setArr={setArray} />
+            <ListItems
+          handleAddList={add}
+          value={list}
+          arr={array}
+          input={InputChange}
+          setArr={setArray}
+          id={Id}
+        />
             <Grid item>
               <Button
                 type="submit"
                 onClick={() => {
                   updateData(id, formData);
                   setTimeout(() => {
-                    edit(true)
+                    edit(false)
                   }, 2000);
                 }}
                 variant="contained"

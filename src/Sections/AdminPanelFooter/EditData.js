@@ -70,6 +70,7 @@ const EditData = ({ id, edit }) => {
     setAddressArray(data.data.result.locations.dataArray);
     setArray(data.data.result.contactUs.dataArray);
     setLinkArray(data.data.result.socialMedia.dataArray);
+    console.log(data)
   };
 
   const handleEdit = async () => {

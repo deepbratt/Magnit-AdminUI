@@ -153,6 +153,8 @@ const ListItems = ({
                             margin: "10px 0px 10px 0px",
                             display: "flex",
                             justifyContent: "space-evenly",
+                            border: "solid 2px lightGrey",
+                            background: "transparent"
                           }}
                           key={index}
                         >
