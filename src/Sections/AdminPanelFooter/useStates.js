@@ -1,7 +1,10 @@
 import { useState } from "react";
 
 const useStates = () => {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState({
+    file: null,
+    base64URL: ""
+  });
 
   const [contact, setContact] = useState({
     country: "",
@@ -27,6 +30,42 @@ const useStates = () => {
   const { officeType, address } = location;
   const { link, title } = links;
 
+
+  const getBase64 = file => {
+    return new Promise(resolve => {
+      let baseURL = "";
+      let reader = new FileReader();
+
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        baseURL = reader.result;
+        resolve(baseURL);
+      };
+    });
+  };
+
+  const fileChange = e => {
+
+   const  file = e.target.files[0];
+
+    getBase64(file)
+      .then(result => {
+        file["base64"] = result;
+        setFile({
+          base64URL: result,
+          file
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    setFile({
+      file: e.target.files[0]
+    });
+  };
+
   const numberChange = (e) => {
     setNumberTitle(e.target.value);
   };
@@ -35,9 +74,6 @@ const useStates = () => {
     setHeading(e.target.value);
   };
 
-  const fileChange = (e) => {
-    setFile(e.target.files[0])
-  };
 
   const linkTitleChange = (e) => {
     setLinkTitle(e.target.value);
@@ -66,6 +102,7 @@ const useStates = () => {
   const inputAddress = (e) => {
     setLocation({ ...location, [e.target.name]: e.target.value });
   };
+
 
   const add = () => {
     setArray((prevItems) => [
@@ -102,7 +139,7 @@ const useStates = () => {
       {
         title: title,
         link: link,
-        icon: file,
+        icon: file.base64URL,
       },
     ]);
 

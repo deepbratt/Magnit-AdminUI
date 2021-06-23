@@ -167,7 +167,7 @@ const ListItems = ({
                           <p>
                             {officeType} {address}
                           </p>
-                          {icon ? <p>{icon.name}</p> : null}
+                          {icon ? <p>icon</p> : null}
                           <Button
                             style={{
                               background: "green",
