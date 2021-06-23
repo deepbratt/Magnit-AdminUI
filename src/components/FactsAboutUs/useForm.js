@@ -1,28 +1,21 @@
 import { useState } from "react";
-import { addPagesApi, updatePagesApi } from "../../Utils/pagesApi";
 import { fieldNames, messages } from "../../Utils/formConstants";
+import {
+  addFactsAboutUsApi,
+  updateFactsAboutUsApi,
+} from "../../Utils/factsAboutUsApi";
 
 const initialValues = {
   title: "",
   description: "",
-  keywords: "",
-  canonicals: "",
-  heading: "",
-  subHeading: "",
-  metaData: {},
-  sections: {},
-  sectionName: "banner",
-  query: "",
-  order: 0,
-  id: "",
+  image: null,
+  id: null,
 };
 
 export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [sectionKeys, setSectionKeys] = useState(Object.keys(values.sections));
-
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState({
@@ -30,18 +23,10 @@ export const useForm = (validateOnChange = false, id) => {
     message: "",
   });
 
-  const addSection = () => {
-    let newSection = {
-      heading: values.heading,
-      subHeading: values.subHeading,
-      queryParams: JSON.parse(values.query),
-      order: values.order,
-    };
-    let newValues = values;
-    values.sections[values.sectionName] = newSection;
-    console.log("newValues", newValues);
-    setValues(newValues);
-    setSectionKeys(Object.keys(values.sections));
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleCapture = ({ target }) => {
+    setSelectedFile(target.files[0]);
   };
 
   const validate = (fieldValues = values) => {
@@ -77,28 +62,21 @@ export const useForm = (validateOnChange = false, id) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
+    setSelectedFile(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Section name", values.sectionName);
-    console.log("Section", values.sections);
-    console.log("values", values);
 
     if (validate()) {
       setIsLoading(true);
-      let requestBody = {
-        metaData: {
-          title: values.title,
-          description: values.description,
-          canonical: values.canonical,
-          keywords: values.keywords,
-        },
-        sections: values.sections,
-      };
-      console.log("request", requestBody);
+      var formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("text", values.description);
+      formData.append("icon", selectedFile);
+      console.log(formData, values.title);
       if (!update) {
-        await addPagesApi(requestBody)
+        await addFactsAboutUsApi(formData)
           .then((response) => {
             setIsLoading(false);
             resetForm();
@@ -125,8 +103,8 @@ export const useForm = (validateOnChange = false, id) => {
             setAlertOpen(true);
           });
       } else {
-        console.log("id", values.id);
-        await updatePagesApi(values.id, requestBody)
+        console.log("id", id);
+        await updateFactsAboutUsApi(values.id, formData)
           .then((response) => {
             if (response.status === "success") {
               setResponseMessage({
@@ -155,7 +133,6 @@ export const useForm = (validateOnChange = false, id) => {
   };
 
   return {
-    addSection,
     alertOpen,
     setAlertOpen,
     values,
@@ -170,8 +147,9 @@ export const useForm = (validateOnChange = false, id) => {
     handleSubmit,
     isLoading,
     responseMessage,
+    selectedFile,
+    setSelectedFile,
+    handleCapture,
     setResponseMessage,
-    sectionKeys,
-    setSectionKeys,
   };
 };

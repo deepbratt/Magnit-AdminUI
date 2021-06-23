@@ -12,19 +12,14 @@ import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 
 function Row(props) {
-  const { row, handleDelete, handleUpdate, valueskeys } = props;
+  const { row, handleDelete, handleUpdate } = props;
 
   return (
     <React.Fragment>
       <TableRow>
-        {row[valueskeys._id] && <TableCell>{row[valueskeys._id]}</TableCell>}
-        {row[valueskeys.title] && (
-          <TableCell>{row[valueskeys.title]}</TableCell>
-        )}
-        {valueskeys.roles && <TableCell>{row[valueskeys.roles]}</TableCell>}
-        {row.dataArray && row.dataArray[0].title && (
-          <TableCell>{row.dataArray[0].title}</TableCell>
-        )}
+        <TableCell>{row._id}</TableCell>
+        <TableCell>{row.metaData.title}</TableCell>
+        <TableCell>{row.metaData.canonical}</TableCell>
         <TableCell align="right">
           <IconButton onClick={() => handleDelete(row._id)}>
             <DeleteRoundedIcon color="error" />
@@ -40,30 +35,13 @@ function Row(props) {
   );
 }
 
-Row.defaultProps = {
-  valueskeys: {
-    _id: "_id",
-    title: "title",
-  },
-};
-
 Row.propTypes = {
-  row: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-  }).isRequired,
+  row: PropTypes.object.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
-  valueskeys: PropTypes.object,
 };
 
-const tableHead = [
-  { title: "ID", align: "left" },
-  { title: "Title", align: "left" },
-];
-
-export default function DataTable({
-  tableHead,
+export default function PagesTable({
   rows,
   handleDelete,
   handleUpdate,
@@ -71,14 +49,12 @@ export default function DataTable({
 }) {
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="services-added-table">
+      <Table aria-label="pages-added-table">
         <TableHead>
           <TableRow>
-            {tableHead.map((col, index) => (
-              <TableCell key={index} align={col.align}>
-                {col.title}
-              </TableCell>
-            ))}
+            <TableCell align="left">Id</TableCell>
+            <TableCell align="left">Page Title</TableCell>
+            <TableCell align="left">Canonical</TableCell>
             <TableCell align="right">Delete</TableCell>
             <TableCell align="right">Update</TableCell>
           </TableRow>
@@ -100,12 +76,7 @@ export default function DataTable({
   );
 }
 
-DataTable.defaultProps = {
-  tableHead: tableHead,
-};
-
-DataTable.propTypes = {
-  tableHead: PropTypes.array.isRequired,
+PagesTable.propTypes = {
   tableData: PropTypes.array.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,

@@ -142,7 +142,6 @@ const AddAppSolutions = ({ open, handleClose }) => {
 
   const valueskeys = {
     _id: "_id",
-    title: "dataArray[0].title",
   };
 
   return (

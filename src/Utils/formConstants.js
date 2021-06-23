@@ -9,6 +9,7 @@ export const messages = {
 };
 
 export const fieldNames = {
+  sectionName: "sectionName",
   firstName: "firstName",
   lastName: "lastName",
   email: "email",
