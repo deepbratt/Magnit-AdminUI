@@ -47,7 +47,6 @@ const TextFieldContext = ({
           variant="outlined"
           type="text"
           name="projectType"
-          placeholder="Please enter text greater than 3"
           value={projectType}
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
@@ -62,7 +61,6 @@ const TextFieldContext = ({
           multiline
           rows={3}
           variant="outlined"
-          placeholder="Please enter text greater than 12"
           value={review}
           name="review"
           onChange={(e) => inputChange(e)}

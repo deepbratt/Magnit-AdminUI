@@ -16,6 +16,7 @@ const useStates = () => {
     link: "",
   });
   const [numberTitle, setNumberTitle] = useState("");
+  const [heading, setHeading] = useState("Footer");
   const [linkTitle, setLinkTitle] = useState("");
   const [addressTitle, setAddressTitle] = useState("");
   const [array, setArray] = useState([]);
@@ -28,6 +29,10 @@ const useStates = () => {
 
   const numberChange = (e) => {
     setNumberTitle(e.target.value);
+  };
+
+  const headingChange = (e) => {
+    setHeading(e.target.value);
   };
 
   const fileChange = (e) => {
@@ -154,6 +159,8 @@ const useStates = () => {
     setNumberTitle,
     setAddressTitle,
     setLinkTitle,
+    heading,
+    headingChange
   };
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Button} from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import axios from "axios";
 import AddressField from "./AddressField";
 import ContactField from "./ContactField";
@@ -8,9 +8,9 @@ import useStyles from "../AdminPanelSliderSections/useStyles";
 import useStates from "./useStates";
 import Toast from "../../components/Toast";
 const EditData = ({ id, edit }) => {
-  const { grid} = useStyles();
+  const { grid } = useStyles();
   const [isPending, setIsPending] = useState(true);
-  const [toastType, setToastType] = useState('error');
+  const [toastType, setToastType] = useState("error");
   const [open, setOpen] = useState(false);
   const [responseAlert, setResponseAlert] = useState({
     status: "",
@@ -24,7 +24,6 @@ const EditData = ({ id, edit }) => {
     setOpen(false);
   };
 
-  
   const {
     numberTitle,
     addressTitle,
@@ -54,7 +53,9 @@ const EditData = ({ id, edit }) => {
     setArray,
     setNumberTitle,
     setAddressTitle,
-    setLinkTitle
+    setLinkTitle,
+    heading,
+    headingChange,
   } = useStates();
 
   useEffect(() => {
@@ -62,54 +63,52 @@ const EditData = ({ id, edit }) => {
   }, []);
 
   const loadSelectedData = async () => {
-    const {data} = await axios.get(`http://3.138.190.235/v1/companies/${id}`);
-    setNumberTitle(data.data.result.contactUs.heading)
-    setAddressTitle(data.data.result.locations.heading)
-    setLinkTitle(data.data.result.socialMedia.heading)
+    const { data } = await axios.get(`http://3.138.190.235/v1/companies/${id}`);
+    setNumberTitle(data.data.result.contactUs.heading);
+    setAddressTitle(data.data.result.locations.heading);
+    setLinkTitle(data.data.result.socialMedia.heading);
     setAddressArray(data.data.result.locations.dataArray);
     setArray(data.data.result.contactUs.dataArray);
     setLinkArray(data.data.result.socialMedia.dataArray);
-    console.log(data)
-
-  
   };
 
   const handleEdit = async () => {
-  
-    try{
-     const rawResponse = await fetch(`http://3.138.190.235/v1/companies/${id}`, {
-       method: 'PUT',
-       headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
-       },
-       body: JSON.stringify({   
-        locations:{
-          heading: addressTitle,
-          dataArray: addressArray
-        },
-        contactUs:{
-          heading: numberTitle,
-          dataArray: array
-        },
-        socialMedia:{
-          heading: linkTitle,
-          dataArray: linkArray
+    try {
+      const rawResponse = await fetch(
+        `http://3.138.190.235/v1/companies/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            locations: {
+              heading: addressTitle,
+              dataArray: addressArray,
+            },
+            contactUs: {
+              heading: numberTitle,
+              dataArray: array,
+            },
+            socialMedia: {
+              heading: linkTitle,
+              dataArray: linkArray,
+            },
+          }),
         }
-        })
-     });
-     const {data,status} = await rawResponse.json();
-     if (status === "success") {
-      setIsPending(false);
-      setResponseAlert({
-        status: data.status,
-        message: "Updated Successfully",
-      });
-      setOpen(true);
-      setToastType('success')
-    }
-    }
-    catch(error){
+      );
+      const { data, status } = await rawResponse.json();
+      if (status === "success") {
+        setIsPending(false);
+        setResponseAlert({
+          status: data.status,
+          message: "Updated Successfully",
+        });
+        setOpen(true);
+        setToastType("success");
+      }
+    } catch (error) {
       if (error) {
         setIsPending(true);
         setResponseAlert({
@@ -117,10 +116,10 @@ const EditData = ({ id, edit }) => {
           message: error.message,
         });
         setOpen(true);
-        setToastType('error')
+        setToastType("error");
       }
     }
-};
+  };
   return (
     <>
       <Grid className={grid} lg={12} item xs={12}>
@@ -133,8 +132,10 @@ const EditData = ({ id, edit }) => {
           addAddress={addAddress}
           addressArray={addressArray}
           setAddressArray={setAddressArray}
-          id={id}
           edit={edit}
+          headingChange={headingChange}
+          bool={false}
+          heading={heading}
         />
         <ContactField
           number={number}
@@ -146,7 +147,6 @@ const EditData = ({ id, edit }) => {
           add={add}
           array={array}
           setArray={setArray}
-          id={id}
           edit={edit}
         />
         <SocialMediaField
@@ -159,7 +159,6 @@ const EditData = ({ id, edit }) => {
           linkArray={linkArray}
           setLinkArray={setLinkArray}
           addLink={addLink}
-          id={id}
           edit={edit}
         />
       </Grid>
@@ -167,7 +166,7 @@ const EditData = ({ id, edit }) => {
         <Button
           type="submit"
           onClick={() => {
-            handleEdit()
+            handleEdit();
             setTimeout(() => {
               edit(false);
             }, 5000);
@@ -187,8 +186,8 @@ const EditData = ({ id, edit }) => {
           Cancel Edit
         </Button>
       </Grid>
-      <Grid item style={{marginTop: "20px"}} >
-      {responseAlert && (
+      <Grid item style={{ marginTop: "20px" }}>
+        {responseAlert && (
           <Toast
             open={open}
             severity={toastType}

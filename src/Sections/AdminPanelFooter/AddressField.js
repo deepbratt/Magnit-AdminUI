@@ -6,7 +6,7 @@ import { Typography } from "@material-ui/core";
 const AddressField = ({
   title,
   setInput,
-  id,
+  heading,
   setChange,
   office,
   Address,
@@ -14,7 +14,9 @@ const AddressField = ({
   addressArray,
   setAddressArray,
   edit,
-  errors
+  errors,
+  headingChange,
+  bool
 }) => {
   const { labels, common } = useStyles();
 
@@ -52,6 +54,19 @@ const AddressField = ({
         Address Data
       </Typography>
     </Grid>
+    <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
+        <InputLabel className={labels}>Heading</InputLabel>
+        <TextField
+          variant="outlined"
+          type="text"
+          name="heading"
+          disabled={bool}
+          value={heading}
+          required
+          onChange={(e) => headingChange(e)}
+          style={{ width: "100%" }}
+        />
+      </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Address Title</InputLabel>
         <TextField
@@ -69,7 +84,7 @@ const AddressField = ({
       </Grid>
 
         <>
-          <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
+          <Grid className={common} item lg={2} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Office Type</InputLabel>
               <TextField
                 type="text"
@@ -82,7 +97,7 @@ const AddressField = ({
                 style={{ width: "100%" }}
               />
           </Grid>
-          <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
+          <Grid className={common} item lg={2} md={5} sm={10} xs={12}>
             <InputLabel className={labels}>Address</InputLabel>
               <TextField
                 placeholder="2317 Jewel Corner Apt. 197"

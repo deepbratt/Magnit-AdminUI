@@ -46,7 +46,6 @@ export default function EditData({ id, edit }) {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   }; 
 
@@ -84,7 +83,7 @@ export default function EditData({ id, edit }) {
                 updateData(id, formData);
                 setTimeout(() => {
                   edit(false);
-                }, 2000);
+                }, 3000);
               }}
               variant="contained"
               color="primary"

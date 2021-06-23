@@ -47,7 +47,9 @@ const AddData = () => {
     add,
     array,
     setArray,
-    file
+    file,
+    heading,
+    headingChange
   } = useStates();
 
   const {} = validate(addressTitle,numberTitle,linkTitle);
@@ -127,6 +129,9 @@ const handleSubmit = () => {
           addressArray={addressArray}
           setAddressArray={setAddressArray}
           errors={errors}
+          heading={heading}
+          headingChange={headingChange}
+          bool={true}
         />
         <ContactField
           number={number}
