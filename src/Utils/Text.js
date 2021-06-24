@@ -11,6 +11,7 @@ export const HomeSlider = [
 
 // routes
 
+
 export const payload = [
     {
       path: "/home-slider",
@@ -49,3 +50,21 @@ export const payload = [
       text: "Review",
     }
   ]
+
+export const apiFieldNames = {
+    howItWorks:{
+        image:"image",
+        title:"title",
+        text:"text",
+    },
+    caseStudies:{
+        image:"icon",
+        title:"title",
+        text:"text",
+    },
+    faq:{
+        title:"questions",
+        text:"answers"
+    }
+}
+

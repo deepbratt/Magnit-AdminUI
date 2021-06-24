@@ -14,7 +14,7 @@ const initialFieldValues = {
   text: "",
   image: "",
 };
-const useSimpleForm = (
+const useOnlyTextForm = (
   itemId,
   clearItemId,
   createApi,
@@ -33,19 +33,18 @@ const useSimpleForm = (
   const handleChange = (event) => {
     setFormData({
       name: event.target.name,
-      value:
-        event.target.name === "image"
-          ? event.target.files[0]
-          : event.target.value,
+      value: event.target.value,
     });
-    event.target.value = event.target.name === "image" && null
   };
 
   const handleSubmit = () => {
-    var fd = new FormData();
-    fd.append(apiFieldNames.title, formData.title);
-    fd.append(apiFieldNames.text, formData.text);
-    fd.append(apiFieldNames.image, formData.image);
+    // var fd = new FormData();
+    // fd.append(apiFieldNames.title, formData[apiFieldNames.title]);
+    // fd.append(apiFieldNames.text, formData[apiFieldNames.text]);
+    let fd = {
+      [apiFieldNames.title]:formData[apiFieldNames.title],
+      [apiFieldNames.text]:formData[apiFieldNames.text],
+    }
     let temp = dataArray
     setIsLoading(true)
     if (itemId) {
@@ -77,9 +76,8 @@ const useSimpleForm = (
   };
 
   const clearFields = () => {
-    setFormData({ name: "title", value: "" });
-    setFormData({ name: "text", value: "" });
-    setFormData({ name: "image", value: "" });
+    setFormData({ name: apiFieldNames.title, value: "" });
+    setFormData({ name: apiFieldNames.text, value: "" });
     clearItemId();
   };
 
@@ -89,9 +87,8 @@ const useSimpleForm = (
       setIsLoading(true)
       getItemApi(itemId).then((response) => {
         if(isResponseSuccess(response)){
-          setFormData({ name: "title", value: response.data.data.result.title });
-          setFormData({ name: "text", value: response.data.data.result.text });
-          setFormData({ name: "image", value: response.data.data.result[apiFieldNames.image] });
+          setFormData({ name: apiFieldNames.title, value: response.data.data.result[apiFieldNames.title] });
+          setFormData({ name: apiFieldNames.text, value: response.data.data.result[apiFieldNames.text] });
         }
       }).then(()=>setIsLoading(false));
     }
@@ -109,4 +106,4 @@ const useSimpleForm = (
   };
 };
 
-export default useSimpleForm;
+export default useOnlyTextForm;

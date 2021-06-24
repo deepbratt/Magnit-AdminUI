@@ -18,6 +18,11 @@ const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/
 const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
 const AdminPanelApp = lazy(() => import("../Sections/AdminPanelApp/AppContext"));
 const AdminPanelReview = lazy(() => import("../Sections/AdminPanelReviews/ReviewContext"));
+const AdminPanelSlider = lazy(() => import("../pages/AdminPanelSlider/Container"));
+const AdminPanelAwards = lazy(() => import("../pages/AdminPanelAwards/Container"));
+const CaseStudies = lazy(() => import("../Sections/CaseStudies/index"));
+const HowItWorks = lazy(() => import("../Sections/HowItWorks/index"));
+const FAQs = lazy(() => import("../Sections/FAQs/index"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -40,6 +45,9 @@ export const paths = {
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
+  caseStudies:"case-studies",
+  howItWorks:"how-it-works",
+  howItWorks:"faqs",
 };
 
 export const routes = {
@@ -60,6 +68,9 @@ export const routes = {
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
+  caseStudies:"/moderate-sections/case-studies",
+  howItWorks:"/moderate-sections/how-it-works",
+  faqs:"/moderate-sections/faqs",
 };
 
 
@@ -133,6 +144,20 @@ export const pagesRoutes = {
   [paths.review]: {
     path: routes.review,
     component: AdminPanelReview,
+  [paths.caseStudies]: {
+    name: "Section/caseStudies",
+    path: routes.caseStudies,
+    component: CaseStudies,
+  },
+  [paths.howItWorks]: {
+    name: "Section/howItWorks",
+    path: routes.howItWorks,
+    component: HowItWorks,
+  },
+  [paths.howItWorks]: {
+    name: "Section/faqs",
+    path: routes.faqs,
+    component: FAQs,
   },
 };
 

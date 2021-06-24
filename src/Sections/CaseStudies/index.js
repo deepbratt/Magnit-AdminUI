@@ -4,13 +4,13 @@ import { withRouter } from "react-router";
 import ContentTable from "../../components/Table";
 import SimpleForm from "../../components/SimpleForm/SimpleForm";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import useHowItWorks from "./useHowItWorks";
+import useCaseStudies from "./useCaseStudies";
 import Toast from "../../components/Toast";
-import {createHowItWorks, updateHowItWorks, getOneHowItWorks} from "../../Utils/loginApi";
-import {apiFieldNames} from '../../Utils/Text'
+import {createCaseStudies, updateCaseStudies, getOneCaseStudies} from "../../Utils/loginApi";
+import { apiFieldNames } from "../../Utils/Text";
 
-const HowItWorks = () => {
-  const {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem, openToast, setOpenToast, toastType, responseMessage} = useHowItWorks()
+const CaseStudies = () => {
+  const {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem, openToast, setOpenToast, toastType, responseMessage} = useCaseStudies()
 
   return (
     <Grid container spacing={2}>
@@ -21,10 +21,10 @@ const HowItWorks = () => {
           clearItemId={() => setItemId("")}
           dataArray={dataArray}
           updateDataArray={setDataArray}
-          createApi={createHowItWorks}
-          updateApi={updateHowItWorks}
-          getItemApi={getOneHowItWorks}
-          apiFieldNames={apiFieldNames.howItWorks}
+          createApi={createCaseStudies}
+          updateApi={updateCaseStudies}
+          getItemApi={getOneCaseStudies}
+          apiFieldNames={apiFieldNames.caseStudies}
         />
       </Grid>
       <Grid item xs={12}>
@@ -44,4 +44,4 @@ const HowItWorks = () => {
   );
 };
 
-export default withRouter(HowItWorks);
+export default withRouter(CaseStudies);
