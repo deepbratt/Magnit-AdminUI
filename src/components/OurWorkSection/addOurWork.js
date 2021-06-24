@@ -1,3 +1,4 @@
+import { useForm } from "./useForm";
 import {
   Button,
   Grid,
@@ -5,39 +6,26 @@ import {
   Tooltip,
   TextField,
   Card,
+  Typography,
 } from "@material-ui/core";
-import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
-import { useForm } from "./useForm";
-import { fieldNames } from "../../Utils/formConstants";
 import ServicesTable from "../../components/Table.js/index";
-import { useEffect, useState, useCallback } from "react";
+import Toast from "../../components/Toast";
+import GlobalStyles from "../../globalStyles";
+import { fieldNames } from "../../Utils/formConstants";
 import {
-  getAllOurWorkApi,
   getOneOurWorkApi,
   deleteOurWorkApi,
 } from "../../Utils/ourWorkSectionApi";
-import Toast from "../../components/Toast";
 
-const AddOurWork = () => {
-  const getAllOurWork = useCallback(async () => {
-    let response = await getAllOurWorkApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddOurWork = ({ header }) => {
   const {
+    rows,
+    getAllOurWork,
     alertOpen,
     setAlertOpen,
+    isLoading,
     values,
     setValues,
     errors,
@@ -51,10 +39,8 @@ const AddOurWork = () => {
     responseMessage,
     setResponseMessage,
     resetForm,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -64,36 +50,37 @@ const AddOurWork = () => {
     setAlertOpen(false);
   };
 
-  useEffect(() => {
-    getAllOurWork();
-  }, [getAllOurWork]);
-
   const handleDelete = async (id) => {
     await deleteOurWorkApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
           getAllOurWork();
+
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
     await getOneOurWorkApi(id)
       .then((response) => {
         if (response.status === "success") {
@@ -105,14 +92,17 @@ const AddOurWork = () => {
           });
 
           setSelectedFile(response.data.result.image);
-        }
-        if (response.status === "fail") {
-          console.log(response);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
@@ -123,6 +113,11 @@ const AddOurWork = () => {
     <>
       <Grid container justify="center">
         <Grid container item xs={12}>
+          <Grid item xs="12">
+            <Typography align="center" variant="h4" gutterBottom>
+              {header}
+            </Typography>
+          </Grid>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-title">Title</InputLabel>
@@ -135,7 +130,6 @@ const AddOurWork = () => {
                 {...(errors && { error: true, helperText: errors.title })}
                 onChange={handleInputChange}
                 fullWidth
-                required
               />
             </Grid>
 
@@ -253,6 +247,7 @@ const AddOurWork = () => {
         <Grid item xs={10}>
           <ServicesTable
             rows={rows}
+            loading={isLoading}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
           />

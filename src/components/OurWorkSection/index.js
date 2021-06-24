@@ -5,7 +5,7 @@ const OurWorkSection = () => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <AddOurWork />
+        <AddOurWork header="Manage Our Works Section"/>
       </Grid>
     </Grid>
   );

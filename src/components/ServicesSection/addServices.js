@@ -11,12 +11,11 @@ import {
 } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
+import Toast from "../../components/Toast";
 import ColorPicker from "material-ui-color-picker";
 import ServicesTable from "../../components/Table.js/index";
 import GlobalStyles from "../../globalStyles";
 import { fieldNames } from "../../Utils/formConstants";
-
-import Toast from "../../components/Toast";
 
 const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
   const {
@@ -225,7 +224,7 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
                   margin: "0 50px",
                   minHeight: "120px",
                   maxHeight: "120px",
-                  minWidth: "100px",
+                  minWidth: "120px",
                 }}
               >
                 {typeof selectedFile === "string" ? (
