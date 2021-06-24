@@ -9,15 +9,35 @@ const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
 const Users = lazy(() => import("../pages/users"));
 const Settings = lazy(() => import("../pages/settings"));
-const AdminPanelSlider = lazy(() => import("../Sections/AdminPanelSliderSections/DisplayData"));
-const AdminPanelAwards = lazy(() => import("../Sections/AdminPanelAwards/AwardsContext"));
-const AdminPanelBlogs = lazy(() => import("../Sections/AdminPanelBlogs/BlogsContext"));
-const AdminPanelFooter = lazy(() => import("../Sections/AdminPanelFooter/FooterContext"));
-const AdminPanelWorkflow = lazy(() => import("../Sections/AdminPanelWorkflow/WorkFlowContext"));
-const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/JoinTeamContext"));
-const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
-const AdminPanelApp = lazy(() => import("../Sections/AdminPanelApp/AppContext"));
-const AdminPanelReview = lazy(() => import("../Sections/AdminPanelReviews/ReviewContext"));
+const AdminPanelSlider = lazy(() =>
+  import("../Sections/AdminPanelSliderSections/DisplayData")
+);
+const AdminPanelAwards = lazy(() =>
+  import("../Sections/AdminPanelAwards/AwardsContext")
+);
+const AdminPanelBlogs = lazy(() =>
+  import("../Sections/AdminPanelBlogs/BlogsContext")
+);
+const AdminPanelFooter = lazy(() =>
+  import("../Sections/AdminPanelFooter/FooterContext")
+);
+const AdminPanelWorkflow = lazy(() =>
+  import("../Sections/AdminPanelWorkflow/WorkFlowContext")
+);
+const AdminPanelJoinOurTeam = lazy(() =>
+  import("../Sections/AdminPanelJoinTeam/JoinTeamContext")
+);
+const AdminPanelOurObjective = lazy(() =>
+  import("../Sections/AdminPanelOurObjective/OurObjectiveContext")
+);
+const AdminPanelApp = lazy(() =>
+  import("../Sections/AdminPanelApp/AppContext")
+);
+const AdminPanelReview = lazy(() =>
+  import("../Sections/AdminPanelReviews/ReviewContext")
+);
+const AddServices = lazy(() => import("../components/ServicesSection"));
+const OurWorkSection = lazy(() => import("../components/OurWorkSection"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -37,6 +57,16 @@ export const paths = {
   ourObjective: "ourObjective",
   review: "review",
   app: "app",
+  services: "services",
+  ourWork: "ourWork",
+  banner: "banner",
+  hiringOptions: "hiringOptions",
+  opportunties: "opportunties",
+  trainingAndCertification: "trainingAndCertification",
+  appSolutions: "appSolutions",
+  benifits: "benifits",
+  jobBenifits: "jobBenifits",
+  factsAboutUs: "factsAboutUs",
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
@@ -57,11 +87,20 @@ export const routes = {
   ourObjective: "/our-objective",
   review: "/review",
   app: "/admin-panel",
+  services: "/services",
+  ourWork: "/ourWork",
+  banner: "/banner",
+  hiringOptions: "/hiringOptions",
+  opportunties: "/opportunties",
+  trainingAndCertification: "/trainingAndCertification",
+  appSolutions: "/appSolutions",
+  benifits: "/benifits",
+  jobBenifits: "/jobBenifits",
+  factsAboutUs: "/factsAboutUs",
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
 };
-
 
 export const pagesRoutes = {
   [paths.dashboard]: {
@@ -126,12 +165,48 @@ export const pagesRoutes = {
     path: routes.app,
     component: AdminPanelApp,
   },
-  [paths.app]: {
-    path: routes.app,
-    component: AdminPanelApp,
-  },
   [paths.review]: {
     path: routes.review,
+    component: AdminPanelReview,
+  },
+  [paths.services]: {
+    path: routes.services,
+    component: AddServices,
+  },
+  [paths.ourWork]: {
+    path: routes.ourWork,
+    component: OurWorkSection,
+  },
+  [paths.banner]: {
+    path: routes.banner,
+    component: AdminPanelReview,
+  },
+  [paths.hiringOptions]: {
+    path: routes.hiringOptions,
+    component: AdminPanelReview,
+  },
+  [paths.opportunties]: {
+    path: routes.opportunties,
+    component: AdminPanelReview,
+  },
+  [paths.trainingAndCertification]: {
+    path: routes.trainingAndCertification,
+    component: AdminPanelReview,
+  },
+  [paths.appSolutions]: {
+    path: routes.review,
+    component: AdminPanelReview,
+  },
+  [paths.benifits]: {
+    path: routes.benifits,
+    component: AdminPanelReview,
+  },
+  [paths.factsAboutUs]: {
+    path: routes.factsAboutUs,
+    component: AdminPanelReview,
+  },
+  [paths.jobBenifits]: {
+    path: routes.jobBenifits,
     component: AdminPanelReview,
   },
 };
@@ -153,5 +228,3 @@ export const publicRoutes = {
     component: ResetPassword,
   },
 };
-
-

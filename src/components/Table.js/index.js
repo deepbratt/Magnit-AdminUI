@@ -10,6 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 function Row(props) {
   const { row, handleDelete, handleUpdate, valueskeys, edit } = props;
@@ -76,6 +77,7 @@ export default function DataTable({
   handleUpdate,
   valueskeys,
   edit,
+  loading,
 }) {
   return (
     <TableContainer component={Paper}>
@@ -92,7 +94,22 @@ export default function DataTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows &&
+          {loading ? (
+            <TableRow>
+              {tableHead.map((col, index) => (
+                <TableCell key={index} align={col.align}>
+                  <Skeleton animation="wave" variant="rect" height={20} />
+                </TableCell>
+              ))}
+              <TableCell align="right">
+                <Skeleton animation="wave" variant="rect" height={20} />
+              </TableCell>
+              <TableCell align="right">
+                <Skeleton animation="wave" variant="rect" height={20} />
+              </TableCell>
+            </TableRow>
+          ) : (
+            rows &&
             rows.map((row) => (
               <Row
                 edit={edit}
@@ -102,7 +119,8 @@ export default function DataTable({
                 handleUpdate={handleUpdate}
                 valueskeys={valueskeys}
               />
-            ))}
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>
@@ -111,6 +129,7 @@ export default function DataTable({
 
 DataTable.defaultProps = {
   tableHead: tableHead,
+  loading: false,
 };
 
 DataTable.propTypes = {
@@ -118,4 +137,5 @@ DataTable.propTypes = {
   tableData: PropTypes.array.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };

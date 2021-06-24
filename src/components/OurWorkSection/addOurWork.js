@@ -1,5 +1,3 @@
-import PropTypes from "prop-types";
-import FullPageDialog from "../../components/FullPageDialog";
 import {
   Button,
   Grid,
@@ -22,7 +20,7 @@ import {
 } from "../../Utils/ourWorkSectionApi";
 import Toast from "../../components/Toast";
 
-const AddOurWork = ({ open, handleClose }) => {
+const AddOurWork = () => {
   const getAllOurWork = useCallback(async () => {
     let response = await getAllOurWorkApi();
     if (response.status === "success") {
@@ -122,11 +120,7 @@ const AddOurWork = ({ open, handleClose }) => {
   };
 
   return (
-    <FullPageDialog
-      header="Manage Our Work Section"
-      open={open}
-      handleClose={handleClose}
-    >
+    <>
       <Grid container justify="center">
         <Grid container item xs={12}>
           <form className={form} onSubmit={handleSubmit}>
@@ -272,13 +266,10 @@ const AddOurWork = ({ open, handleClose }) => {
           message={responseMessage.message}
         />
       )}
-    </FullPageDialog>
+    </>
   );
 };
 
-AddOurWork.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-};
+AddOurWork.propTypes = {};
 
 export default AddOurWork;

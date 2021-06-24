@@ -39,5 +39,13 @@ export const payload = [
     {
       path: "/review",
       text: "Review",
-    }
+    },
+    {
+      path: "/services",
+      text: "Services",
+    },
+    {
+      path: "/ourWork",
+      text: "Our Work",
+    },
   ]
