@@ -18,8 +18,6 @@ const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/
 const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
 const AdminPanelApp = lazy(() => import("../Sections/AdminPanelApp/AppContext"));
 const AdminPanelReview = lazy(() => import("../Sections/AdminPanelReviews/ReviewContext"));
-const AdminPanelSlider = lazy(() => import("../pages/AdminPanelSlider/Container"));
-const AdminPanelAwards = lazy(() => import("../pages/AdminPanelAwards/Container"));
 const CaseStudies = lazy(() => import("../Sections/CaseStudies/index"));
 const HowItWorks = lazy(() => import("../Sections/HowItWorks/index"));
 const FAQs = lazy(() => import("../Sections/FAQs/index"));
@@ -159,7 +157,7 @@ export const pagesRoutes = {
     path: routes.faqs,
     component: FAQs,
   },
-};
+}}
 
 export const publicRoutes = {
   [paths.login]: {
