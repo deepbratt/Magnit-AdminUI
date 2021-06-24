@@ -1,3 +1,4 @@
+import { useForm } from "./useForm";
 import {
   Button,
   Grid,
@@ -6,14 +7,14 @@ import {
   TextField,
   Card,
   MenuItem,
+  Typography,
 } from "@material-ui/core";
-import ColorPicker from "material-ui-color-picker";
-import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
-import { useForm } from "./useForm";
-import { fieldNames } from "../../Utils/formConstants";
+import ColorPicker from "material-ui-color-picker";
 import ServicesTable from "../../components/Table.js/index";
+import GlobalStyles from "../../globalStyles";
+import { fieldNames } from "../../Utils/formConstants";
 
 import Toast from "../../components/Toast";
 
@@ -124,6 +125,11 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
     <>
       <Grid container justify="center">
         <Grid container item xs={12}>
+          <Grid item xs="12">
+            <Typography align="center" variant="h4" gutterBottom>
+              {header}
+            </Typography>
+          </Grid>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-title">Title</InputLabel>
@@ -136,7 +142,6 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
                 {...(errors && { error: true, helperText: errors.title })}
                 onChange={handleInputChange}
                 fullWidth
-                required
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -153,7 +158,6 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
                 })}
                 onChange={handleInputChange}
                 fullWidth
-                required
               />
             </Grid>
 
