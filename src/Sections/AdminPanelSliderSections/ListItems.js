@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import useStyles from "./useStyles";
 import useFunctions from "./useFunctions";
-const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
+const ListItems = ({ handleAddList, arr, list, input, setArr, id}) => {
   const [editing, setEditing] = useState(null);
   const [editingText, setEditingText] = useState("");
   const {
@@ -17,9 +17,10 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
     handleDeleteClick,
     handleEditClick,
     handleEditInputChange,
+    handleCancelClick
   } = useFunctions(setArr, setEditing, setEditingText, editingText, arr);
 
-  const { labels, common, listItem } = useStyles();
+  const { labels, common, listItem , box} = useStyles();
   return (
     <>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
@@ -51,7 +52,10 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
       <Grid className={common} item lg={10} md={5} sm={10} xs={12}>
         <List className={listItem}>
           {arr.map((data, index) => {
+             
             return (
+              <Grid className={common} item lg={12} md={5} sm={10} xs={12}>
+             <div className={box} key={index}>
               <>
                 {index === editing ? (
                   <>
@@ -89,6 +93,17 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                       >
                         Submit
                       </Button>
+                      <Button
+                    color="secondary"
+                    variant="contained"
+                    style={{
+                      margin: "18px 0px 0px 10px",
+                    }}
+                    size="small"
+                    onClick={() => handleCancelClick(data)}
+                  >
+                    Cancel
+                  </Button>
                     </Grid>
                   </>
                 ) : (
@@ -98,6 +113,8 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                       margin: "10px 0px 10px 0px",
                       display: "flex",
                       justifyContent: "space-evenly",
+                      border: "solid 2px lightGrey",
+                      background: "transparent"
                     }}
                     key={index}
                   >
@@ -105,6 +122,7 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                     <Button
                       style={{
                         background: "green",
+
                       }}
                       size="small"
                       variant="contained"
@@ -127,6 +145,8 @@ const ListItems = ({ handleAddList, arr, list, input, setArr, id }) => {
                   </ListItem>
                 )}
               </>
+              </div>
+            </Grid>
             );
           })}
         </List>

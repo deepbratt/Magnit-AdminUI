@@ -9,8 +9,15 @@ const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
 const Users = lazy(() => import("../pages/users"));
 const Settings = lazy(() => import("../pages/settings"));
-const AdminPanelSlider = lazy(() => import("../pages/AdminPanelSlider/Container"));
-const AdminPanelAwards = lazy(() => import("../pages/AdminPanelAwards/Container"));
+const AdminPanelSlider = lazy(() => import("../Sections/AdminPanelSliderSections/DisplayData"));
+const AdminPanelAwards = lazy(() => import("../Sections/AdminPanelAwards/AwardsContext"));
+const AdminPanelBlogs = lazy(() => import("../Sections/AdminPanelBlogs/BlogsContext"));
+const AdminPanelFooter = lazy(() => import("../Sections/AdminPanelFooter/FooterContext"));
+const AdminPanelWorkflow = lazy(() => import("../Sections/AdminPanelWorkflow/WorkFlowContext"));
+const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/JoinTeamContext"));
+const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
+const AdminPanelApp = lazy(() => import("../Sections/AdminPanelApp/AppContext"));
+const AdminPanelReview = lazy(() => import("../Sections/AdminPanelReviews/ReviewContext"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -23,6 +30,13 @@ export const paths = {
   setting: "setting",
   homeSlider: "home-slider",
   awards: "awards",
+  blogs: "blogs",
+  footer: "footer",
+  workflow: "workflow",
+  joinOurTeam: "joinOurTeam",
+  ourObjective: "ourObjective",
+  review: "review",
+  app: "app",
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
@@ -36,10 +50,18 @@ export const routes = {
   settings: "/account-settings",
   homeSlider: "/home-slider",
   awards: "/awards",
+  blogs: "/blogs",
+  footer: "/footer",
+  workflow: "/workflow",
+  joinOurTeam: "/join-our-team",
+  ourObjective: "/our-objective",
+  review: "/review",
+  app: "/admin-panel",
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
 };
+
 
 export const pagesRoutes = {
   [paths.dashboard]: {
@@ -73,15 +95,45 @@ export const pagesRoutes = {
     icon: <AccountCircleIcon />,
   },
   [paths.homeSlider]: {
-    name: "Section/HomeSlider",
     path: routes.homeSlider,
     component: AdminPanelSlider,
   },
   [paths.awards]: {
-    name: "Section/Awards",
     path: routes.awards,
     component: AdminPanelAwards,
-  }
+  },
+  [paths.blogs]: {
+    path: routes.blogs,
+    component: AdminPanelBlogs,
+  },
+  [paths.footer]: {
+    path: routes.footer,
+    component: AdminPanelFooter,
+  },
+  [paths.workflow]: {
+    path: routes.workflow,
+    component: AdminPanelWorkflow,
+  },
+  [paths.joinOurTeam]: {
+    path: routes.joinOurTeam,
+    component: AdminPanelJoinOurTeam,
+  },
+  [paths.ourObjective]: {
+    path: routes.ourObjective,
+    component: AdminPanelOurObjective,
+  },
+  [paths.app]: {
+    path: routes.app,
+    component: AdminPanelApp,
+  },
+  [paths.app]: {
+    path: routes.app,
+    component: AdminPanelApp,
+  },
+  [paths.review]: {
+    path: routes.review,
+    component: AdminPanelReview,
+  },
 };
 
 export const publicRoutes = {
@@ -101,3 +153,5 @@ export const publicRoutes = {
     component: ResetPassword,
   },
 };
+
+

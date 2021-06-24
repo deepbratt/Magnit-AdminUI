@@ -12,8 +12,15 @@ import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 
 function Row(props) {
-  const { row, handleDelete, handleUpdate, valueskeys } = props;
-
+  const { row, handleDelete, handleUpdate, valueskeys, edit } = props;
+  const handleEdit = (id) => {
+    handleUpdate(id);
+    if (edit) {
+      edit(true);
+    } else {
+      return null;
+    }
+  };
   return (
     <React.Fragment>
       <TableRow>
@@ -31,7 +38,7 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell align="right">
-          <IconButton onClick={() => handleUpdate(row._id)}>
+          <IconButton onClick={() => handleEdit(row._id)}>
             <EditRoundedIcon color="primary" />
           </IconButton>
         </TableCell>
@@ -68,6 +75,7 @@ export default function DataTable({
   handleDelete,
   handleUpdate,
   valueskeys,
+  edit,
 }) {
   return (
     <TableContainer component={Paper}>
@@ -87,6 +95,7 @@ export default function DataTable({
           {rows &&
             rows.map((row) => (
               <Row
+                edit={edit}
                 key={row._id}
                 row={row}
                 handleDelete={handleDelete}

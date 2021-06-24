@@ -5,7 +5,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import useContentTable from "./useContentTable";
 import { contentTableConstants } from "./constants";
 
-const ContentTable = ({ dataArray, updateItem, removeItem, edit }) => {
+const ContentTable = ({ dataArray, updateItem, removeItem, edit}) => {
   const { editItem, deleteItem } = useContentTable(updateItem, removeItem);
 
   if (dataArray.length < 1) {
@@ -97,14 +97,14 @@ const ContentTable = ({ dataArray, updateItem, removeItem, edit }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleEdit(item.id)}
+              onClick={() => handleEdit(item._id)}
             >
               <CreateIcon />
             </Button>
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => deleteItem(item.id)}
+              onClick={() => deleteItem(item._id)}
             >
               <DeleteIcon />
             </Button>

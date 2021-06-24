@@ -7,9 +7,10 @@ import Opportunities from "../../components/OpportunitiesSection";
 import TrainingAndCertification from "../../components/TrainingAndCertification";
 import AppSolutions from "../../components/AppSolutions";
 import ModerateBox from "../../components/ModerateContext/ModerateBox";
-import { BoxData } from "../../Utils/Text";
-import BenifitsSection from "../../components/BenifitsSection";
 import FactsAboutUsSection from "../../components/FactsAboutUs";
+import JobBenefitsSection from "../../components/JobBenefitsSection/index";
+import BenefitsSection from "../../components/BenifitsSection/index";
+import { payload } from "../../Utils/Text";
 
 const ModerateSections = () => {
   return (
@@ -48,7 +49,10 @@ const ModerateSections = () => {
           <AppSolutions />
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2}>
-          <BenifitsSection />
+          <JobBenefitsSection />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
+          <BenefitsSection />
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2}>
           <FactsAboutUsSection />
@@ -57,7 +61,7 @@ const ModerateSections = () => {
       <Typography variant="h4" style={{ textAlign: "center" }}>
         Manage Sections
       </Typography>
-      <ModerateBox payload={BoxData} />
+      <ModerateBox payload={payload} />
     </Grid>
   );
 };
