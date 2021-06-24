@@ -5,7 +5,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import useContentTable from "./useContentTable";
 import { contentTableConstants } from "./constants";
 
-const ContentTable = ({ dataArray, updateItem, removeItem, edit }) => {
+const ContentTable = ({ dataArray, updateItem, removeItem, edit}) => {
   const { editItem, deleteItem } = useContentTable(updateItem, removeItem);
 
   if (dataArray.length < 1) {

@@ -7,11 +7,11 @@ import Opportunities from "../../components/OpportunitiesSection";
 import TrainingAndCertification from "../../components/TrainingAndCertification";
 import AppSolutions from "../../components/AppSolutions";
 import ModerateBox from "../../components/ModerateContext/ModerateBox";
-import { BoxData } from "../../Utils/Text";
-import BenifitsSection from "../../components/BenifitsSection";
+import JobBenefitsSection from "../../components/JobBenefitsSection/index";
+import BenefitsSection from "../../components/BenifitsSection/index";
+import { payload } from "../../Utils/Text";
 import NewItemButton from "../../components/NewItemButton";
 import { useHistory } from "react-router-dom";
-
 const ModerateSections = () => {
   const sectionsRoutes = [
     {
@@ -65,7 +65,10 @@ const ModerateSections = () => {
           <AppSolutions />
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2}>
-          <BenifitsSection />
+          <JobBenefitsSection />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
+          <BenefitsSection />
         </Grid>
         {sectionsRoutes.map((section, index) => (
           <Grid key={index+"sections-routes"} item xs={12} sm={6} md={3} lg={2}>
@@ -76,7 +79,7 @@ const ModerateSections = () => {
       <Typography variant="h4" style={{ textAlign: "center" }}>
         Manage Sections
       </Typography>
-      <ModerateBox payload={BoxData} />
+      <ModerateBox payload={payload} />
     </Grid>
   );
 };

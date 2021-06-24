@@ -53,6 +53,13 @@ const useStyles = makeStyles(() => ({
         "&:hover":{
           background: "green"
         }
+      },
+      box:{
+        margin: "10px",
+        border: "solid 1px rgb(118, 118, 118)",
+        padding: "10px 20px",
+        borderRadius: "10px",
+        justifyContent: "center"
       }
   }));
 

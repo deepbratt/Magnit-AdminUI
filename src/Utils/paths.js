@@ -9,6 +9,15 @@ const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
 const Users = lazy(() => import("../pages/users"));
 const Settings = lazy(() => import("../pages/settings"));
+const AdminPanelSlider = lazy(() => import("../Sections/AdminPanelSliderSections/DisplayData"));
+const AdminPanelAwards = lazy(() => import("../Sections/AdminPanelAwards/AwardsContext"));
+const AdminPanelBlogs = lazy(() => import("../Sections/AdminPanelBlogs/BlogsContext"));
+const AdminPanelFooter = lazy(() => import("../Sections/AdminPanelFooter/FooterContext"));
+const AdminPanelWorkflow = lazy(() => import("../Sections/AdminPanelWorkflow/WorkFlowContext"));
+const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/JoinTeamContext"));
+const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
+const AdminPanelApp = lazy(() => import("../Sections/AdminPanelApp/AppContext"));
+const AdminPanelReview = lazy(() => import("../Sections/AdminPanelReviews/ReviewContext"));
 const AdminPanelSlider = lazy(() => import("../pages/AdminPanelSlider/Container"));
 const AdminPanelAwards = lazy(() => import("../pages/AdminPanelAwards/Container"));
 const CaseStudies = lazy(() => import("../Sections/CaseStudies/index"));
@@ -26,6 +35,13 @@ export const paths = {
   setting: "setting",
   homeSlider: "home-slider",
   awards: "awards",
+  blogs: "blogs",
+  footer: "footer",
+  workflow: "workflow",
+  joinOurTeam: "joinOurTeam",
+  ourObjective: "ourObjective",
+  review: "review",
+  app: "app",
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
@@ -42,6 +58,13 @@ export const routes = {
   settings: "/account-settings",
   homeSlider: "/home-slider",
   awards: "/awards",
+  blogs: "/blogs",
+  footer: "/footer",
+  workflow: "/workflow",
+  joinOurTeam: "/join-our-team",
+  ourObjective: "/our-objective",
+  review: "/review",
+  app: "/admin-panel",
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
@@ -49,6 +72,7 @@ export const routes = {
   howItWorks:"/moderate-sections/how-it-works",
   faqs:"/moderate-sections/faqs",
 };
+
 
 export const pagesRoutes = {
   [paths.dashboard]: {
@@ -82,15 +106,44 @@ export const pagesRoutes = {
     icon: <AccountCircleIcon />,
   },
   [paths.homeSlider]: {
-    name: "Section/HomeSlider",
     path: routes.homeSlider,
     component: AdminPanelSlider,
   },
   [paths.awards]: {
-    name: "Section/Awards",
     path: routes.awards,
     component: AdminPanelAwards,
   },
+  [paths.blogs]: {
+    path: routes.blogs,
+    component: AdminPanelBlogs,
+  },
+  [paths.footer]: {
+    path: routes.footer,
+    component: AdminPanelFooter,
+  },
+  [paths.workflow]: {
+    path: routes.workflow,
+    component: AdminPanelWorkflow,
+  },
+  [paths.joinOurTeam]: {
+    path: routes.joinOurTeam,
+    component: AdminPanelJoinOurTeam,
+  },
+  [paths.ourObjective]: {
+    path: routes.ourObjective,
+    component: AdminPanelOurObjective,
+  },
+  [paths.app]: {
+    path: routes.app,
+    component: AdminPanelApp,
+  },
+  [paths.app]: {
+    path: routes.app,
+    component: AdminPanelApp,
+  },
+  [paths.review]: {
+    path: routes.review,
+    component: AdminPanelReview,
   [paths.caseStudies]: {
     name: "Section/caseStudies",
     path: routes.caseStudies,
@@ -125,3 +178,5 @@ export const publicRoutes = {
     component: ResetPassword,
   },
 };
+
+

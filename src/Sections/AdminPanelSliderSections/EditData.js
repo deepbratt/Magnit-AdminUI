@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Grid } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import EditList from "./EditList";
+import ListItems from "./ListItems";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
+import Toast from "../../components/Toast";
 export default function EditData({ id,edit}) {
-  const { updateData, isPending } = useApi("http://3.138.190.235/v1/sliders");
+  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://3.138.190.235/v1/sliders");
 
   const [file, setFile] = useState(null);
   const [array, setArray] = useState([]);
+  let Id = "form";
+  const [list, setList] = useState("");
   const [data, setData] = useState({
     title: "",
     buttonLabel: "",
@@ -20,12 +23,32 @@ export default function EditData({ id,edit}) {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  const InputChange = (e) => {
+    setList(e.target.value);
+  };
+
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const formData = new FormData();
-  formData.append("backgroundImage", file);
+  
+  {file && formData.append("backgroundImage", file);}
   formData.append("title", title);
   formData.append("items", array);
   formData.append("buttonLabel", buttonLabel);
   formData.append("buttonLink", buttonLink);
+
+  const add = () => {
+    setArray((prevData) => {
+      return [...prevData, list];
+    });
+    document.getElementById("form").reset();
+  };
 
   useEffect(() => {
     loadSelectedData();
@@ -33,8 +56,9 @@ export default function EditData({ id,edit}) {
 
   const loadSelectedData = async () => {
     const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
-    setData(result.data.data.data);
-    setArray(result.data.data.data.items);
+    setData(result.data.data.result);
+    setArray(result.data.data.result.items);
+    setFile(result.data.data.result.backgroundImage)
   };
   return (
     <div>
@@ -57,8 +81,16 @@ export default function EditData({ id,edit}) {
               buttonLink={buttonLink}
               setFile={setFile}
               file={file}
+              edit={edit}
             />
-            <EditList arr={array} setArr={setArray} />
+            <ListItems
+          handleAddList={add}
+          value={list}
+          arr={array}
+          input={InputChange}
+          setArr={setArray}
+          id={Id}
+        />
             <Grid item>
               <Button
                 type="submit"
@@ -92,11 +124,14 @@ export default function EditData({ id,edit}) {
           xs={12}
           style={{ marginTop: "30px" }}
         >
-          {isPending ? (
-            <Alert severity="info">Status: pending!</Alert>
-          ) : (
-            <Alert severity="success">Status: updated successfully!</Alert>
-          )}
+         {responseAlert && (
+          <Toast
+            open={open}
+            severity={toastType}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
         </Grid>
       </Grid>
     </div>

@@ -8,6 +8,8 @@ const TextFieldContext = ({
   inputChange,
   buttonLink,
   setFile,
+  errors,
+  edit
 }) => {
   const { labels, common } = useStyles();
   return (
@@ -23,6 +25,9 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
+          {!edit ?
+          <p style={{ color: "red" }}>{errors.title}</p>
+        : null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Link</InputLabel>
@@ -34,6 +39,9 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
+          {!edit ?
+          <p style={{ color: "red" }}>{errors.link}</p>
+        : null}
       </Grid>
 
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
@@ -46,6 +54,9 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
+          {!edit ?
+          <p style={{ color: "red" }}>{errors.buttonLabel}</p>
+        : null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Image</InputLabel>
