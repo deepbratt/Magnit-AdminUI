@@ -17,6 +17,7 @@ import {
   getOneUsersApi,
 } from "../../Utils/usersApi";
 import DataTable from "../../components/Table.js";
+import Toast from "../../components/Toast";
 
 const roles = [
   {
@@ -33,13 +34,20 @@ const AddUsers = ({ open, handleClose }) => {
   const getAllUsers = useCallback(async () => {
     let response = await getAllUsersApi();
     if (response.status === "success") {
-      console.log(response.data.result);
       setRows(response.data.result);
+    } else {
+      setResponseMessage({
+        status: response.status,
+        message: response.message,
+      });
+      setAlertOpen(true);
     }
   }, []);
 
   const [id, setId] = useState(null);
   const {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -48,6 +56,8 @@ const AddUsers = ({ open, handleClose }) => {
     handleInputChange,
     handleSubmit,
     resetForm,
+    responseMessage,
+    setResponseMessage,
   } = useForm(id);
   const { form, buttonWrap } = GlobalStyles();
 
@@ -58,6 +68,14 @@ const AddUsers = ({ open, handleClose }) => {
   ];
 
   const [rows, setRows] = useState([]);
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     getAllUsers();
@@ -70,11 +88,18 @@ const AddUsers = ({ open, handleClose }) => {
         if (response.status === "success") {
           getAllUsers();
         }
-        if (response.status === "fail") {
-          console.log(response);
-        }
+        setResponseMessage({
+          status: response.status,
+          message: "Item Deleted Successfully",
+        });
+        setAlertOpen(true);
       })
       .catch((error) => {
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
         console.error(error);
       });
   };
@@ -98,14 +123,18 @@ const AddUsers = ({ open, handleClose }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setResponseMessage({
+          status: error.status,
+          message: error.message,
+        });
+        setAlertOpen(true);
       });
   };
 
   const valueskeys = {
     _id: "firstName",
     title: "email",
-    roles: "roles"
+    roles: "roles",
   };
 
   return (
@@ -252,6 +281,14 @@ const AddUsers = ({ open, handleClose }) => {
           valueskeys={valueskeys}
         />
       </Grid>
+      {responseMessage && (
+        <Toast
+          open={alertOpen}
+          onClose={handleAlertClose}
+          severity={responseMessage.status}
+          message={responseMessage.message}
+        />
+      )}
     </Grid>
   );
 };

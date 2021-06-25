@@ -9,15 +9,49 @@ const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
 const Users = lazy(() => import("../pages/users"));
 const Settings = lazy(() => import("../pages/settings"));
-const AdminPanelSlider = lazy(() => import("../Sections/AdminPanelSliderSections/DisplayData"));
-const AdminPanelAwards = lazy(() => import("../Sections/AdminPanelAwards/AwardsContext"));
-const AdminPanelBlogs = lazy(() => import("../Sections/AdminPanelBlogs/BlogsContext"));
-const AdminPanelFooter = lazy(() => import("../Sections/AdminPanelFooter/FooterContext"));
-const AdminPanelWorkflow = lazy(() => import("../Sections/AdminPanelWorkflow/WorkFlowContext"));
-const AdminPanelJoinOurTeam = lazy(() => import("../Sections/AdminPanelJoinTeam/JoinTeamContext"));
-const AdminPanelOurObjective = lazy(() => import("../Sections/AdminPanelOurObjective/OurObjectiveContext"));
-const AdminPanelApp = lazy(() => import("../Sections/AdminPanelApp/AppContext"));
-const AdminPanelReview = lazy(() => import("../Sections/AdminPanelReviews/ReviewContext"));
+const AdminPanelSlider = lazy(() =>
+  import("../Sections/AdminPanelSliderSections/DisplayData")
+);
+const AdminPanelAwards = lazy(() =>
+  import("../Sections/AdminPanelAwards/AwardsContext")
+);
+const AdminPanelBlogs = lazy(() =>
+  import("../Sections/AdminPanelBlogs/BlogsContext")
+);
+const AdminPanelFooter = lazy(() =>
+  import("../Sections/AdminPanelFooter/FooterContext")
+);
+const AdminPanelWorkflow = lazy(() =>
+  import("../Sections/AdminPanelWorkflow/WorkFlowContext")
+);
+const AdminPanelJoinOurTeam = lazy(() =>
+  import("../Sections/AdminPanelJoinTeam/JoinTeamContext")
+);
+const AdminPanelOurObjective = lazy(() =>
+  import("../Sections/AdminPanelOurObjective/OurObjectiveContext")
+);
+const AdminPanelApp = lazy(() =>
+  import("../Sections/AdminPanelApp/AppContext")
+);
+const AdminPanelReview = lazy(() =>
+  import("../Sections/AdminPanelReviews/ReviewContext")
+);
+const AddServices = lazy(() => import("../components/ServicesSection"));
+const OurWorkSection = lazy(() => import("../components/OurWorkSection"));
+const AppSolutions = lazy(() => import("../components/AppSolutions"));
+const BannersSection = lazy(() => import("../components/Banners"));
+const HiringOptions = lazy(() => import("../components/HiringOptions"));
+const JobBenefitsSection = lazy(() =>
+  import("../components/JobBenefitsSection")
+);
+const OpportunitiesSection = lazy(() =>
+  import("../components/OpportunitiesSection")
+);
+const TrainingAndCertification = lazy(() =>
+  import("../components/TrainingAndCertification")
+);
+const BenifitsSection = lazy(() => import("../components/BenifitsSection"));
+const FactsAboutUsSection = lazy(() => import("../components/FactsAboutUs"));
 const CaseStudies = lazy(() => import("../Sections/CaseStudies/index"));
 const HowItWorks = lazy(() => import("../Sections/HowItWorks/index"));
 const FAQs = lazy(() => import("../Sections/FAQs/index"));
@@ -40,12 +74,22 @@ export const paths = {
   ourObjective: "ourObjective",
   review: "review",
   app: "app",
+  services: "services",
+  ourWork: "ourWork",
+  banner: "banner",
+  hiringOptions: "hiringOptions",
+  opportunities: "opportunities",
+  trainingAndCertification: "trainingAndCertification",
+  appSolutions: "appSolutions",
+  benifits: "benifits",
+  jobBenifits: "jobBenifits",
+  factsAboutUs: "factsAboutUs",
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
-  caseStudies:"case-studies",
-  howItWorks:"how-it-works",
-  howItWorks:"faqs",
+  caseStudies: "case-studies",
+  howItWorks: "how-it-works",
+  faqs: "faqs",
 };
 
 export const routes = {
@@ -63,14 +107,23 @@ export const routes = {
   ourObjective: "/our-objective",
   review: "/review",
   app: "/admin-panel",
+  services: "/services",
+  ourWork: "/ourWork",
+  banner: "/banner",
+  hiringOptions: "/hiringOptions",
+  opportunities: "/opportunities",
+  trainingAndCertification: "/trainingAndCertification",
+  appSolutions: "/appSolutions",
+  benifits: "/benifits",
+  jobBenifits: "/jobBenifits",
+  factsAboutUs: "/factsAboutUs",
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
-  caseStudies:"/moderate-sections/case-studies",
-  howItWorks:"/moderate-sections/how-it-works",
-  faqs:"/moderate-sections/faqs",
+  caseStudies: "/moderate-sections/case-studies",
+  howItWorks: "/moderate-sections/how-it-works",
+  faqs: "/moderate-sections/faqs",
 };
-
 
 export const pagesRoutes = {
   [paths.dashboard]: {
@@ -135,13 +188,50 @@ export const pagesRoutes = {
     path: routes.app,
     component: AdminPanelApp,
   },
-  [paths.app]: {
-    path: routes.app,
-    component: AdminPanelApp,
-  },
   [paths.review]: {
     path: routes.review,
     component: AdminPanelReview,
+  },
+  [paths.services]: {
+    path: routes.services,
+    component: AddServices,
+  },
+  [paths.ourWork]: {
+    path: routes.ourWork,
+    component: OurWorkSection,
+  },
+  [paths.banner]: {
+    path: routes.banner,
+    component: BannersSection,
+  },
+  [paths.hiringOptions]: {
+    path: routes.hiringOptions,
+    component: HiringOptions,
+  },
+  [paths.opportunities]: {
+    path: routes.opportunities,
+    component: OpportunitiesSection,
+  },
+  [paths.trainingAndCertification]: {
+    path: routes.trainingAndCertification,
+    component: TrainingAndCertification,
+  },
+  [paths.appSolutions]: {
+    path: routes.appSolutions,
+    component: AppSolutions,
+  },
+  [paths.benifits]: {
+    path: routes.benifits,
+    component: BenifitsSection,
+  },
+  [paths.factsAboutUs]: {
+    path: routes.factsAboutUs,
+    component: FactsAboutUsSection,
+  },
+  [paths.jobBenifits]: {
+    path: routes.jobBenifits,
+    component: JobBenefitsSection,
+  },
   [paths.caseStudies]: {
     name: "Section/caseStudies",
     path: routes.caseStudies,
@@ -152,12 +242,12 @@ export const pagesRoutes = {
     path: routes.howItWorks,
     component: HowItWorks,
   },
-  [paths.howItWorks]: {
+  [paths.faqs]: {
     name: "Section/faqs",
     path: routes.faqs,
     component: FAQs,
   },
-}}
+};
 
 export const publicRoutes = {
   [paths.login]: {
@@ -176,5 +266,3 @@ export const publicRoutes = {
     component: ResetPassword,
   },
 };
-
-

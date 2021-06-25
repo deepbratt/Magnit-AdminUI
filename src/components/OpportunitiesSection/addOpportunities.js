@@ -1,34 +1,26 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../FullPageDialog";
-import { Button, Grid, InputLabel, TextField } from "@material-ui/core";
-import GlobalStyles from "../../globalStyles";
 import { useForm } from "./useForm";
-import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../Table.js/index";
-import { useEffect, useState, useCallback } from "react";
 import {
-  getAllOpportunitiesApi,
+  Button,
+  Grid,
+  InputLabel,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import Toast from "../../components/Toast";
+import DataTable from "../Table.js/index";
+import GlobalStyles from "../../globalStyles";
+import { fieldNames } from "../../Utils/formConstants";
+import {
   deleteOpportunitiesApi,
   getOneOpportunitiesApi,
 } from "../../Utils/opportunitiesApi";
-import Toast from "../../components/Toast";
 
-const AddOpportunities = ({ open, handleClose }) => {
-  const getAllOpportunities = useCallback(async () => {
-    let response = await getAllOpportunitiesApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddOpportunities = ({ header }) => {
   const {
+    rows,
+    getAllOpportunities,
+    isLoading,
     alertOpen,
     setAlertOpen,
     values,
@@ -41,10 +33,8 @@ const AddOpportunities = ({ open, handleClose }) => {
     resetForm,
     responseMessage,
     setResponseMessage,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -54,35 +44,36 @@ const AddOpportunities = ({ open, handleClose }) => {
     setAlertOpen(false);
   };
 
-  useEffect(() => {
-    getAllOpportunities();
-  }, [getAllOpportunities]);
-
   const handleDelete = async (id) => {
     await deleteOpportunitiesApi(id)
       .then((response) => {
         if (response.status === "success") {
           getAllOpportunities();
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
+
     await getOneOpportunitiesApi(id)
       .then((response) => {
         console.log("resp", response);
@@ -95,28 +86,31 @@ const AddOpportunities = ({ open, handleClose }) => {
             location: response.data.result.location,
             id: id,
           });
-        }
-        if (response.status === "fail") {
-          console.log(response);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
-        setAlertOpen(true);
       });
   };
 
   return (
-    <FullPageDialog
-      header="Manage Opportunities Section"
-      open={open}
-      handleClose={handleClose}
-    >
+    <>
       <Grid container justify="center">
         <Grid container item xs={12}>
+          <Grid item xs="12">
+            <Typography align="center" variant="h4" gutterBottom>
+              {header}
+            </Typography>
+          </Grid>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-title">Title</InputLabel>
@@ -223,8 +217,9 @@ const AddOpportunities = ({ open, handleClose }) => {
           </form>
         </Grid>
         <Grid item xs={10}>
-          <ServicesTable
+          <DataTable
             rows={rows}
+            loading={isLoading}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
           />
@@ -238,13 +233,12 @@ const AddOpportunities = ({ open, handleClose }) => {
           message={responseMessage.message}
         />
       )}
-    </FullPageDialog>
+    </>
   );
 };
 
 AddOpportunities.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 export default AddOpportunities;

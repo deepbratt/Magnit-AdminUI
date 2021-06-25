@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../../components/FullPageDialog";
+import { useForm } from "./useForm";
 import {
   Button,
   Grid,
@@ -8,39 +8,25 @@ import {
   TextField,
   ListItemSecondaryAction,
 } from "@material-ui/core";
-import GlobalStyles from "../../globalStyles";
-import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../../components/Table.js/index";
-import { useEffect, useState, useCallback } from "react";
-import {
-  deleteHiringOptionsApi,
-  getAllHiringOptionsApi,
-  getOneHiringOptionsApi,
-} from "../../Utils/hiringOptionsApi";
 import { List } from "@material-ui/core";
 import { ListItem } from "@material-ui/core";
 import { ListItemText } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
 import Toast from "../../components/Toast";
+import DataTable from "../../components/Table.js/index";
+import DeleteIcon from "@material-ui/icons/Delete";
+import GlobalStyles from "../../globalStyles";
+import {
+  getOneHiringOptionsApi,
+  deleteHiringOptionsApi,
+} from "../../Utils/hiringOptionsApi";
 
-const AddHiringOptions = ({ open, handleClose }) => {
-  const getAllHiringOptions = useCallback(async () => {
-    let response = await getAllHiringOptionsApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddHiringOptions = ({ header }) => {
   const {
+    rows,
+    getAllHiringOptions,
+    isLoading,
     alertOpen,
     setAlertOpen,
     item,
@@ -57,10 +43,8 @@ const AddHiringOptions = ({ open, handleClose }) => {
     resetForm,
     responseMessage,
     setResponseMessage,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -70,30 +54,32 @@ const AddHiringOptions = ({ open, handleClose }) => {
     setAlertOpen(false);
   };
 
-  useEffect(() => {
-    getAllHiringOptions();
-  }, [getAllHiringOptions]);
-
   const handleDelete = async (id) => {
     await deleteHiringOptionsApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
           getAllHiringOptions();
+
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
@@ -106,7 +92,7 @@ const AddHiringOptions = ({ open, handleClose }) => {
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
+
     await getOneHiringOptionsApi(id)
       .then((response) => {
         console.log("res", response);
@@ -119,14 +105,17 @@ const AddHiringOptions = ({ open, handleClose }) => {
             id: id,
           });
           setItems(response.data.result.items);
-        }
-        if (response.status === "fail") {
-          console.log(response);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
@@ -139,13 +128,12 @@ const AddHiringOptions = ({ open, handleClose }) => {
   };
 
   return (
-    <FullPageDialog
-      header="Manage Hiring Options Section"
-      open={open}
-      handleClose={handleClose}
-    >
+    <>
       <Grid container justify="center">
         <Grid container item xs={12}>
+          <Typography align="center" variant="h4" gutterBottom>
+            {header}
+          </Typography>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-heading">Heading</InputLabel>
@@ -280,8 +268,9 @@ const AddHiringOptions = ({ open, handleClose }) => {
           </form>
         </Grid>
         <Grid item xs={10}>
-          <ServicesTable
+          <DataTable
             rows={rows}
+            loading={isLoading}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
             valueskeys={valueskeys}
@@ -296,13 +285,12 @@ const AddHiringOptions = ({ open, handleClose }) => {
           message={responseMessage.message}
         />
       )}
-    </FullPageDialog>
+    </>
   );
 };
 
 AddHiringOptions.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 export default AddHiringOptions;

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
+  getAllOpportunitiesApi,
   addOpportunitiesApi,
   updateOpportunitiesApi,
 } from "../../Utils/opportunitiesApi";
@@ -14,8 +15,9 @@ const initialValues = {
   id: null,
 };
 
-export const useForm = (validateOnChange = false, id) => {
+export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
+  const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -24,6 +26,35 @@ export const useForm = (validateOnChange = false, id) => {
     status: "",
     message: "",
   });
+
+  const getAllOpportunities = useCallback(async () => {
+    setIsLoading(true);
+    await getAllOpportunitiesApi()
+      .then((response) => {
+        setIsLoading(false);
+        if (response.status === "success") {
+          setRows(response.data.result);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: "error",
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    getAllOpportunities();
+  }, [getAllOpportunities]);
+
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
 
@@ -83,7 +114,7 @@ export const useForm = (validateOnChange = false, id) => {
         buttonLabel: values.buttonLabel,
         link: values.buttonLink,
       };
-      console.log(requestBody);
+
       if (!update) {
         await addOpportunitiesApi(requestBody)
           .then((response) => {
@@ -98,7 +129,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -106,15 +137,15 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       } else {
-        console.log("id", id);
         await updateOpportunitiesApi(values.id, requestBody)
           .then((response) => {
+            setIsLoading(false);
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
@@ -124,7 +155,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -132,16 +163,19 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       }
     }
+    getAllOpportunities();
   };
 
   return {
+    rows,
+    getAllOpportunities,
     alertOpen,
     setAlertOpen,
     values,

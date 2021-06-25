@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useForm } from "./useForm";
+import FullPageDialog from "../FullPageDialog";
 import {
   Button,
   Grid,
@@ -9,24 +9,29 @@ import {
   Card,
   Typography,
 } from "@material-ui/core";
+import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
-import Toast from "../Toast";
-import GlobalStyles from "../../globalStyles";
-import BenifitsTable from "../Table.js/index";
+import ColorPicker from "material-ui-color-picker";
+import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
+import DataTable from "../Table.js/index";
+import { useEffect, useState, useCallback } from "react";
 import {
   deleteServiceApi,
-  getOneBenifitsApi,
-} from "../../Utils/benifitsSectionApi";
+  getOneFactsAboutUsApi,
+} from "../../Utils/factsAboutUsApi";
+import Toast from "../Toast";
 
-const AddBenifts = ({ header }) => {
+const AddFactsAboutUs = ({ header }) => {
   const {
     rows,
-    getAllBenifits,
+    isLoading,
+    getAllFactsAboutUs,
+    color,
+    setColor,
     alertOpen,
     setAlertOpen,
-    isLoading,
     values,
     setValues,
     errors,
@@ -55,7 +60,7 @@ const AddBenifts = ({ header }) => {
     await deleteServiceApi(id)
       .then((response) => {
         if (response.status === "success") {
-          getAllBenifits();
+          getAllFactsAboutUs();
 
           setResponseMessage({
             status: response.status,
@@ -81,17 +86,16 @@ const AddBenifts = ({ header }) => {
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-
-    await getOneBenifitsApi(id)
+    await getOneFactsAboutUsApi(id)
       .then((response) => {
         if (response.status === "success") {
           setValues({
             title: response.data.result.title,
-            description: response.data.result.description,
+            description: response.data.result.text,
             id: id,
           });
-
-          setSelectedFile(response.data.result.image);
+          setColor(response.data.result.color);
+          setSelectedFile(response.data.result.icon);
         } else {
           setResponseMessage({
             status: "error",
@@ -179,7 +183,7 @@ const AddBenifts = ({ header }) => {
                 </label>
                 <Card
                   style={{
-                    backgroundColor: "#eee",
+                    backgroundColor: color,
                     padding: "20px",
                     margin: "0 50px",
                     minHeight: "120px",
@@ -205,6 +209,14 @@ const AddBenifts = ({ header }) => {
                     />
                   ) : null}
                 </Card>
+
+                <ColorPicker
+                  variant="outlined"
+                  label="Pick a Color"
+                  name={fieldNames.color}
+                  value={color}
+                  onChange={(color) => setColor(color.toString())}
+                />
               </Grid>
 
               <Grid className={buttonWrap} item xs={12} md={6}>
@@ -238,7 +250,7 @@ const AddBenifts = ({ header }) => {
             </form>
           </Grid>
           <Grid item xs={10}>
-            <BenifitsTable
+            <DataTable
               rows={rows}
               loading={isLoading}
               handleDelete={handleDelete}
@@ -259,8 +271,9 @@ const AddBenifts = ({ header }) => {
   );
 };
 
-AddBenifts.propTypes = {
+AddFactsAboutUs.propTypes = {
   header: PropTypes.string.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
-export default AddBenifts;
+export default AddFactsAboutUs;

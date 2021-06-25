@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
+  getAllTrainingAndCertificationApi,
   addTrainingAndCertificationsApi,
   updateTrainingAndCertificationsApi,
 } from "../../Utils/trainingAndCertificationApi";
@@ -14,11 +15,11 @@ const initialValues = {
 
 export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
+  const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleCapture = ({ target }) => {
@@ -29,6 +30,34 @@ export const useForm = (validateOnChange = false, id) => {
     status: "",
     message: "",
   });
+
+  const getAllTrainingAndCertification = useCallback(async () => {
+    setIsLoading(true);
+    await getAllTrainingAndCertificationApi()
+      .then((response) => {
+        setIsLoading(false);
+        if (response.status === "success") {
+          setRows(response.data.result);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: "error",
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    getAllTrainingAndCertification();
+  }, [getAllTrainingAndCertification]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -89,7 +118,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -97,15 +126,15 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       } else {
-        console.log("id", id);
         await updateTrainingAndCertificationsApi(values.id, formData)
           .then((response) => {
+            setIsLoading(false);
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
@@ -115,7 +144,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -123,16 +152,20 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       }
     }
+    getAllTrainingAndCertification();
   };
 
   return {
+    rows,
+    setRows,
+    getAllTrainingAndCertification,
     alertOpen,
     setAlertOpen,
     values,

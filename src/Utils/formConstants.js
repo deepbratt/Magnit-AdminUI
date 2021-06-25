@@ -9,6 +9,7 @@ export const messages = {
 };
 
 export const fieldNames = {
+  sectionName: "sectionName",
   firstName: "firstName",
   lastName: "lastName",
   email: "email",
@@ -23,6 +24,11 @@ export const fieldNames = {
   buttonLink: "buttonLink",
   location: "location",
   jsonText: "jsonText",
+  canonical: "canonical",
+  keywords: "keywords",
+  sections: "sections",
+  query: "query",
+  order: "order",
   type: "type",
   role: "role",
   image: "image",

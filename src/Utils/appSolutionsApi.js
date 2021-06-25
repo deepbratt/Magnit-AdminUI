@@ -3,9 +3,10 @@ import axios from "axios";
 const BASE_URL = "http://3.138.190.235/v1/";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
+
   headers: {
-    Accept: "multipart/form-data",
-    "Content-Type": "multipart/form-data",
+    Accept: "application/json",
+    "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   },
 });
@@ -16,10 +17,7 @@ const APPSOLUTIONS = {
 
 export const addAppSolutionsApi = async (data) => {
   try {
-    let result = await axiosInstance.post(
-      `${APPSOLUTIONS.APPSOLUTIONS}`,
-      data
-    );
+    let result = await axiosInstance.post(`${APPSOLUTIONS.APPSOLUTIONS}`, data);
     return result.data;
   } catch (error) {
     console.log(error);
@@ -32,10 +30,7 @@ export const addAppSolutionsApi = async (data) => {
 
 export const getAllAppSolutionsApi = async (data) => {
   try {
-    let result = await axiosInstance.get(
-      `${APPSOLUTIONS.APPSOLUTIONS}`,
-      data
-    );
+    let result = await axiosInstance.get(`${APPSOLUTIONS.APPSOLUTIONS}`, data);
     console.log(result);
     return result.data;
   } catch (error) {
@@ -49,9 +44,7 @@ export const getAllAppSolutionsApi = async (data) => {
 
 export const getOneAppSolutionsApi = async (id) => {
   try {
-    let result = await axiosInstance.get(
-      `${APPSOLUTIONS.APPSOLUTIONS}/${id}`
-    );
+    let result = await axiosInstance.get(`${APPSOLUTIONS.APPSOLUTIONS}/${id}`);
     return result.data;
   } catch (error) {
     console.log(error);

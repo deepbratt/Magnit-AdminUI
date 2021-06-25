@@ -1,37 +1,40 @@
 import { useState, useEffect, useCallback } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
-  getAllHiringOptionsApi,
-  addHiringOptionsApi,
-  updateHiringOptionsApi,
-} from "../../Utils/hiringOptionsApi";
+  getAllFactsAboutUsApi,
+  addFactsAboutUsApi,
+  updateFactsAboutUsApi,
+} from "../../Utils/factsAboutUsApi";
 
 const initialValues = {
-  heading: "",
-  text: "",
-  buttonLabel: "",
-  buttonLink: "",
-  items: [],
+  title: "",
+  description: "",
+  image: null,
+  color: "",
   id: null,
 };
 
-export const useForm = (validateOnChange = false) => {
+export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [item, setItem] = useState("");
-  const [items, setItems] = useState(values.items);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [color, setColor] = useState(values.color);
   const [responseMessage, setResponseMessage] = useState({
     status: "",
     message: "",
   });
 
-  const getAllHiringOptions = useCallback(async () => {
+  const handleCapture = ({ target }) => {
+    setSelectedFile(target.files[0]);
+  };
+
+  const getAllFactsAboutUs = useCallback(async () => {
     setIsLoading(true);
-    await getAllHiringOptionsApi()
+    await getAllFactsAboutUsApi()
       .then((response) => {
         setIsLoading(false);
         if (response.status === "success") {
@@ -54,26 +57,18 @@ export const useForm = (validateOnChange = false) => {
   }, []);
 
   useEffect(() => {
-    getAllHiringOptions();
-  }, [getAllHiringOptions]);
+    getAllFactsAboutUs();
+  }, [getAllFactsAboutUs]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
 
-    if (fieldNames.heading in fieldValues) {
-      temp.heading =
-        fieldValues.heading.trim() === "" ? messages.isRequired : "";
+    if (fieldNames.title in fieldValues) {
+      temp.title = fieldValues.title.trim() === "" ? messages.isRequired : "";
     }
-    if (fieldNames.text in fieldValues) {
-      temp.text = fieldValues.text.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLabel in fieldValues) {
-      temp.buttonLabel =
-        fieldValues.buttonLabel.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLink in fieldValues) {
-      temp.buttonLink =
-        fieldValues.buttonLink.trim() === "" ? messages.isRequired : "";
+    if (fieldNames.description in fieldValues) {
+      temp.description =
+        fieldValues.description.trim() === "" ? messages.isRequired : "";
     }
 
     setErrors({
@@ -98,8 +93,8 @@ export const useForm = (validateOnChange = false) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-    setItems([]);
-    setItem("");
+    setSelectedFile(null);
+    setColor("");
   };
 
   const handleSubmit = async (e) => {
@@ -107,16 +102,13 @@ export const useForm = (validateOnChange = false) => {
 
     if (validate()) {
       setIsLoading(true);
-      let requestBody = {
-        heading: values.heading,
-        text: values.text,
-        buttonLabel: values.buttonLabel,
-        buttonLink: values.buttonLink,
-        items: items,
-      };
-
+      var formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("text", values.description);
+      formData.append("icon", selectedFile);
+      formData.append("color", color);
       if (!update) {
-        await addHiringOptionsApi(requestBody)
+        await addFactsAboutUsApi(formData)
           .then((response) => {
             setIsLoading(false);
             resetForm();
@@ -143,7 +135,8 @@ export const useForm = (validateOnChange = false) => {
             setAlertOpen(true);
           });
       } else {
-        await updateHiringOptionsApi(values.id, requestBody)
+        console.log("id", id);
+        await updateFactsAboutUsApi(values.id, formData)
           .then((response) => {
             setIsLoading(false);
             if (response.status === "success") {
@@ -170,19 +163,17 @@ export const useForm = (validateOnChange = false) => {
           });
       }
     }
-    getAllHiringOptions();
+    getAllFactsAboutUs();
   };
 
   return {
     rows,
     setRows,
-    getAllHiringOptions,
+    getAllFactsAboutUs,
+    color,
+    setColor,
     alertOpen,
     setAlertOpen,
-    item,
-    setItem,
-    items,
-    setItems,
     values,
     setValues,
     errors,
@@ -195,6 +186,9 @@ export const useForm = (validateOnChange = false) => {
     handleSubmit,
     isLoading,
     responseMessage,
+    selectedFile,
+    setSelectedFile,
+    handleCapture,
     setResponseMessage,
   };
 };

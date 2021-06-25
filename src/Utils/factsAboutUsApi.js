@@ -10,14 +10,14 @@ const axiosInstance = axios.create({
   },
 });
 
-const BENEFITS = {
-    BENEFITS: `jobBenifits`,
+const FACTSABOUTUS = {
+  FACTSABOUTUS: `factsAboutUs`,
 };
 
-export const addBenefitsApi = async (data) => {
+export const addFactsAboutUsApi = async (data) => {
   console.log("Data", data);
   try {
-    let result = await axiosInstance.post(`${BENEFITS.BENEFITS}`, data);
+    let result = await axiosInstance.post(`${FACTSABOUTUS.FACTSABOUTUS}`, data);
     return result.data;
   } catch (error) {
     console.log(error);
@@ -28,23 +28,9 @@ export const addBenefitsApi = async (data) => {
   }
 };
 
-export const getAllBenefitsApi = async () => {
+export const getAllFactsAboutUsApi = async () => {
   try {
-    let result = await axiosInstance.get(`${BENEFITS.BENEFITS}`);
-
-    return result.data;
-  } catch (error) {
-    console.log(error);
-    if (error.response === undefined) {
-      return { status: 403, message: "Something Went Wrong!" };
-    }
-    return error.response.data;
-  }
-};
-
-export const getOneBenefitsApi = async (id) => {
-  try {
-    let result = await axiosInstance.get(`${BENEFITS.BENEFITS}/${id}`);
+    let result = await axiosInstance.get(`${FACTSABOUTUS.FACTSABOUTUS}`);
 
     return result.data;
   } catch (error) {
@@ -56,9 +42,9 @@ export const getOneBenefitsApi = async (id) => {
   }
 };
 
-export const updateBenefitsApi = async (id, data) => {
+export const getOneFactsAboutUsApi = async (id) => {
   try {
-    let result = await axiosInstance.patch(`${BENEFITS.BENEFITS}/${id}`, data);
+    let result = await axiosInstance.get(`${FACTSABOUTUS.FACTSABOUTUS}/${id}`);
 
     return result.data;
   } catch (error) {
@@ -70,9 +56,28 @@ export const updateBenefitsApi = async (id, data) => {
   }
 };
 
-export const deleteBenefitsApi = async (id) => {
+export const updateFactsAboutUsApi = async (id, data) => {
   try {
-    let result = await axiosInstance.delete(`${BENEFITS.BENEFITS}/${id}`);
+    let result = await axiosInstance.patch(
+      `${FACTSABOUTUS.FACTSABOUTUS}/${id}`,
+      data
+    );
+
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    if (error.response === undefined) {
+      return { status: 403, message: "Something Went Wrong!" };
+    }
+    return error.response.data;
+  }
+};
+
+export const deleteServiceApi = async (id) => {
+  try {
+    let result = await axiosInstance.delete(
+      `${FACTSABOUTUS.FACTSABOUTUS}/${id}`
+    );
 
     return result.data;
   } catch (error) {

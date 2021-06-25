@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addBannerApi, updateBannerApi } from "../../Utils/bannersApi";
+import { addUsersApi, updateUsersApi } from "../../Utils/usersApi";
 import { fieldNames, isEmailValid, messages } from "../../Utils/formConstants";
 
 const initialValues = {
@@ -15,16 +15,12 @@ export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-
+  const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [responseMessage, setResponseMessage] = useState("");
-
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const handleCapture = ({ target }) => {
-    setSelectedFile(target.files[0]);
-  };
+  const [responseMessage, setResponseMessage] = useState({
+    status: "",
+    message: "",
+  });
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -84,7 +80,6 @@ export const useForm = (validateOnChange = false, id) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-    setSelectedFile(null);
   };
 
   const handleSubmit = async (e) => {
@@ -92,38 +87,75 @@ export const useForm = (validateOnChange = false, id) => {
 
     if (validate()) {
       setIsLoading(true);
-      var formData = new FormData();
-      formData.append("heading", values.heading);
-      formData.append("subHeading", values.subHeading);
-      formData.append("buttonLabel", values.buttonLabel);
-      formData.append("buttonLink", values.buttonLink);
-      formData.append("type", values.type);
-      formData.append("image", selectedFile);
-      console.log(formData, values.title);
+      let requestBody = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+        passwordConfirm: values.confirmPassword,
+        role: values.role,
+      };
+      console.log(requestBody, values.title);
       if (!update) {
-        await addBannerApi(formData)
+        await addUsersApi(requestBody)
           .then((response) => {
             setIsLoading(false);
             resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: "Item Added Successfully",
+              });
+              setAlertOpen(true);
+              resetForm();
+            } else {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+              setAlertOpen(true);
+            }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       } else {
         console.log("id", id);
-        await updateBannerApi(values.id, formData)
+        await updateUsersApi(values.id, requestBody)
           .then((response) => {
-            setIsLoading(false);
-            resetForm();
+            if (response.status === "success") {
+              setResponseMessage({
+                status: response.status,
+                message: "Item Updated Successfully",
+              });
+              setAlertOpen(true);
+              resetForm();
+            } else {
+              setResponseMessage({
+                status: response.status,
+                message: response.message,
+              });
+              setAlertOpen(true);
+            }
           })
           .catch((error) => {
-            setResponseMessage(error.message);
+            setResponseMessage({
+              status: error.status,
+              message: error.message,
+            });
+            setAlertOpen(true);
           });
       }
     }
   };
 
   return {
+    alertOpen,
+    setAlertOpen,
     values,
     setValues,
     errors,
@@ -136,8 +168,6 @@ export const useForm = (validateOnChange = false, id) => {
     handleSubmit,
     isLoading,
     responseMessage,
-    selectedFile,
-    setSelectedFile,
-    handleCapture,
+    setResponseMessage,
   };
 };

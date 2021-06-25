@@ -30,7 +30,7 @@ export const addTrainingAndCertificationsApi = async (data) => {
   }
 };
 
-export const getAllTrainingAndCertificationsApi = async (data) => {
+export const getAllTrainingAndCertificationApi = async (data) => {
   try {
     let result = await axiosInstance.get(
       `${TRAININGANDCERTIFICATIONS.TRAININGANDCERTIFICATIONS}`,
@@ -64,7 +64,7 @@ export const getOneTrainingAndCertificationsApi = async (id) => {
 
 export const updateTrainingAndCertificationsApi = async (id, data) => {
   try {
-    let result = await axiosInstance.put(
+    let result = await axiosInstance.patch(
       `${TRAININGANDCERTIFICATIONS.TRAININGANDCERTIFICATIONS}/${id}`,
       data
     );

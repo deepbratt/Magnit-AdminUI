@@ -1,27 +1,41 @@
 import { useState, useEffect, useCallback } from "react";
-import { fieldNames, messages } from "../../Utils/formConstants";
 import {
-  getAllHiringOptionsApi,
-  addHiringOptionsApi,
-  updateHiringOptionsApi,
-} from "../../Utils/hiringOptionsApi";
+  addPagesApi,
+  getAllPagesApi,
+  updatePagesApi,
+} from "../../Utils/pagesApi";
+import { fieldNames, messages } from "../../Utils/formConstants";
+import useStates from "../../Sections/AdminPanelFooter/useStates";
 
 const initialValues = {
+  title: "",
+  description: "",
+  keywords: "",
+  canonical: "",
   heading: "",
-  text: "",
-  buttonLabel: "",
-  buttonLink: "",
-  items: [],
-  id: null,
+  subHeading: "",
+  metaData: {},
+  sections: {},
+  sectionName: "banner",
+  query: "",
+  order: 0,
+  id: "",
 };
 
-export const useForm = (validateOnChange = false) => {
+export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
   const [rows, setRows] = useState([]);
+  const [editSection, setEditSection] = useState(false);
+  const [sectionValue, setSectionValue] = useState({
+    heading: "something",
+    subHeading: "something",
+    sectionName: "banner",
+    query: "",
+    order: 0,
+  });
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [item, setItem] = useState("");
-  const [items, setItems] = useState(values.items);
+  const [sectionKeys, setSectionKeys] = useState(Object.keys(values.sections));
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState({
@@ -29,9 +43,23 @@ export const useForm = (validateOnChange = false) => {
     message: "",
   });
 
-  const getAllHiringOptions = useCallback(async () => {
+  const addSection = () => {
+    let newSection = {
+      heading: values.heading,
+      subHeading: values.subHeading,
+      queryParams: values.query.length > 0 ? JSON.parse(values.query) : {},
+      order: values.order,
+    };
+    let newValues = values;
+    values.sections[values.sectionName] = newSection;
+    console.log("newValues", newValues);
+    setValues(newValues);
+    setSectionKeys(Object.keys(values.sections));
+  };
+
+  const getAllPages = useCallback(async () => {
     setIsLoading(true);
-    await getAllHiringOptionsApi()
+    await getAllPagesApi()
       .then((response) => {
         setIsLoading(false);
         if (response.status === "success") {
@@ -54,26 +82,18 @@ export const useForm = (validateOnChange = false) => {
   }, []);
 
   useEffect(() => {
-    getAllHiringOptions();
-  }, [getAllHiringOptions]);
+    getAllPages();
+  }, [getAllPages]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
 
-    if (fieldNames.heading in fieldValues) {
-      temp.heading =
-        fieldValues.heading.trim() === "" ? messages.isRequired : "";
+    if (fieldNames.title in fieldValues) {
+      temp.title = fieldValues.title.trim() === "" ? messages.isRequired : "";
     }
-    if (fieldNames.text in fieldValues) {
-      temp.text = fieldValues.text.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLabel in fieldValues) {
-      temp.buttonLabel =
-        fieldValues.buttonLabel.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLink in fieldValues) {
-      temp.buttonLink =
-        fieldValues.buttonLink.trim() === "" ? messages.isRequired : "";
+    if (fieldNames.description in fieldValues) {
+      temp.description =
+        fieldValues.description.trim() === "" ? messages.isRequired : "";
     }
 
     setErrors({
@@ -96,27 +116,31 @@ export const useForm = (validateOnChange = false) => {
 
   const resetForm = () => {
     setValues(initialValues);
+    setSectionKeys([]);
     setErrors({});
     setUpdate(false);
-    setItems([]);
-    setItem("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Section name", values.sectionName);
+    console.log("Section", values.sections);
+    console.log("values", values);
 
     if (validate()) {
       setIsLoading(true);
       let requestBody = {
-        heading: values.heading,
-        text: values.text,
-        buttonLabel: values.buttonLabel,
-        buttonLink: values.buttonLink,
-        items: items,
+        metaData: {
+          title: values.title,
+          description: values.description,
+          canonical: values.canonical,
+          keywords: values.keywords,
+        },
+        sections: values.sections,
       };
-
+      console.log("request", requestBody);
       if (!update) {
-        await addHiringOptionsApi(requestBody)
+        await addPagesApi(requestBody)
           .then((response) => {
             setIsLoading(false);
             resetForm();
@@ -129,7 +153,7 @@ export const useForm = (validateOnChange = false) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: "error",
+                status: response.status,
                 message: response.message,
               });
               setAlertOpen(true);
@@ -137,13 +161,14 @@ export const useForm = (validateOnChange = false) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: "error",
+              status: error.status,
               message: error.message,
             });
             setAlertOpen(true);
           });
       } else {
-        await updateHiringOptionsApi(values.id, requestBody)
+        console.log("id", values.id);
+        await updatePagesApi(values.id, requestBody)
           .then((response) => {
             setIsLoading(false);
             if (response.status === "success") {
@@ -155,7 +180,7 @@ export const useForm = (validateOnChange = false) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: "error",
+                status: response.status,
                 message: response.message,
               });
               setAlertOpen(true);
@@ -163,26 +188,27 @@ export const useForm = (validateOnChange = false) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: "error",
+              status: error.status,
               message: error.message,
             });
             setAlertOpen(true);
           });
       }
     }
-    getAllHiringOptions();
+    getAllPages();
   };
 
   return {
+    editSection,
+    setEditSection,
+    sectionValue,
+    setSectionValue,
     rows,
     setRows,
-    getAllHiringOptions,
+    getAllPages,
+    addSection,
     alertOpen,
     setAlertOpen,
-    item,
-    setItem,
-    items,
-    setItems,
     values,
     setValues,
     errors,
@@ -196,5 +222,7 @@ export const useForm = (validateOnChange = false) => {
     isLoading,
     responseMessage,
     setResponseMessage,
+    sectionKeys,
+    setSectionKeys,
   };
 };

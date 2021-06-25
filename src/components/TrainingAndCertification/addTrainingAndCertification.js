@@ -1,42 +1,29 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../FullPageDialog";
+import { useForm } from "./useForm";
 import {
   Button,
   Grid,
   InputLabel,
   TextField,
   Tooltip,
+  Typography,
 } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
+import Toast from "../../components/Toast";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import DataTable from "../Table.js/index";
 import GlobalStyles from "../../globalStyles";
-import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../Table.js/index";
-import { useEffect, useState, useCallback } from "react";
 import {
   deleteTrainingAndCertificationsApi,
-  getAllTrainingAndCertificationsApi,
   getOneTrainingAndCertificationsApi,
 } from "../../Utils/trainingAndCertificationApi";
-import Toast from "../../components/Toast";
 
-const AddTrainingAndCertification = ({ open, handleClose }) => {
-  const getAllTrainingAndCertification = useCallback(async () => {
-    let response = await getAllTrainingAndCertificationsApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddTrainingAndCertification = ({ header }) => {
   const {
+    rows,
+    isLoading,
+    getAllTrainingAndCertification,
     alertOpen,
     setAlertOpen,
     values,
@@ -52,14 +39,8 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
     handleCapture,
     responseMessage,
     setResponseMessage,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    getAllTrainingAndCertification();
-  }, [getAllTrainingAndCertification]);
 
   const handleDelete = async (id) => {
     await deleteTrainingAndCertificationsApi(id)
@@ -72,21 +53,26 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
             message: "Item Deleted Successfully",
           });
           setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
+
     await getOneTrainingAndCertificationsApi(id)
       .then((response) => {
         if (response.status === "success") {
@@ -96,14 +82,17 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
             id: id,
           });
           setSelectedFile(response.data.result.jsonFile);
-        }
-        if (response.status === "fail") {
-          console.log(response);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
@@ -119,13 +108,14 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
   };
 
   return (
-    <FullPageDialog
-      header="Manage Training And Certification Section"
-      open={open}
-      handleClose={handleClose}
-    >
+    <>
       <Grid container justify="center">
         <Grid container item xs={12}>
+          <Grid item xs="12">
+            <Typography align="center" variant="h4" gutterBottom>
+              {header}
+            </Typography>
+          </Grid>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-title">Title</InputLabel>
@@ -214,8 +204,9 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
           </form>
         </Grid>
         <Grid item xs={10}>
-          <ServicesTable
+          <DataTable
             rows={rows}
+            loading={isLoading}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
           />
@@ -229,13 +220,12 @@ const AddTrainingAndCertification = ({ open, handleClose }) => {
           />
         )}
       </Grid>
-    </FullPageDialog>
+    </>
   );
 };
 
 AddTrainingAndCertification.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 export default AddTrainingAndCertification;

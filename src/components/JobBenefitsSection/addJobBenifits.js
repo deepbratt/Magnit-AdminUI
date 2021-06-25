@@ -13,20 +13,22 @@ import {
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
 import Toast from "../../components/Toast";
-import ColorPicker from "material-ui-color-picker";
-import ServicesTable from "../../components/Table.js/index";
+import DataTable from "../../components/Table.js/index";
 import GlobalStyles from "../../globalStyles";
 import { fieldNames } from "../../Utils/formConstants";
+import {
+  deleteBenefitsApi,
+  getOneBenefitsApi,
+} from "../../Utils/jobBenefitsSectionApi";
 
-const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
+const AddJobBenifits = ({ header }) => {
   const {
     rows,
     alertOpen,
     isLoading,
-    getAllServices,
+    getAllJobBenifits,
     setAlertOpen,
-    color,
-    setColor,
+
     values,
     setValues,
     errors,
@@ -43,17 +45,6 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
   } = useForm();
   const { form, buttonWrap } = GlobalStyles();
 
-  const types = [
-    {
-      value: "Parent",
-      label: "parent",
-    },
-    {
-      value: "Child",
-      label: "child",
-    },
-  ];
-
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -63,10 +54,10 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
   };
 
   const handleDelete = async (id) => {
-    await deleteServiceApi(id)
+    await deleteBenefitsApi(id)
       .then((response) => {
         if (response.status === "success") {
-          getAllServices();
+          getAllJobBenifits();
           setResponseMessage({
             status: response.status,
             message: "Item Deleted Successfully",
@@ -91,19 +82,17 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    await getOneServicesApi(id)
+    await getOneBenefitsApi(id)
       .then((response) => {
         if (response.status === "success") {
           setValues({
             title: response.data.result.title,
-            description: response.data.result.description,
+            description: response.data.result.text,
             buttonLabel: response.data.result.buttonLabel,
-            buttonLink: response.data.result.buttonLink,
-            type: response.data.result.type,
+            buttonLink: response.data.result.link,
             id: response.data.result._id,
           });
-          setColor(response.data.result.color);
-          setSelectedFile(response.data.result.image);
+          setSelectedFile(response.data.result.icon);
         } else {
           setResponseMessage({
             status: "error",
@@ -167,7 +156,7 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
                 name={fieldNames.buttonLink}
                 id="input-button-link"
                 variant="outlined"
-                placeholder="/services/web-development"
+                placeholder="/JobBenifits/web-development"
                 value={values.buttonLink}
                 {...(errors && {
                   error: true,
@@ -220,7 +209,7 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
               <label>{selectedFile ? selectedFile.name : "Select Image"}</label>
               <Card
                 style={{
-                  backgroundColor: color,
+                  backgroundColor: "#eee",
                   padding: "20px",
                   margin: "0 50px",
                   minHeight: "120px",
@@ -246,38 +235,6 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
                   />
                 ) : null}
               </Card>
-
-              <ColorPicker
-                variant="outlined"
-                label="Pick a Color"
-                name={fieldNames.color}
-                value={color}
-                onChange={(color) => setColor(color.toString())}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-type">Type</InputLabel>
-              <TextField
-                name={fieldNames.type}
-                select
-                id="input-type"
-                variant="outlined"
-                placeholder="Web Development Services"
-                value={values.services}
-                {...(errors && {
-                  error: true,
-                  helperText: errors.services,
-                })}
-                onChange={handleInputChange}
-                fullWidth
-              >
-                {types.map((type) => (
-                  <MenuItem key={type.value} value={type.value}>
-                    {type.label}
-                  </MenuItem>
-                ))}
-              </TextField>
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>
@@ -311,7 +268,7 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
           </form>
         </Grid>
         <Grid item xs={10}>
-          <ServicesTable
+          <DataTable
             rows={rows}
             loading={isLoading}
             handleDelete={handleDelete}
@@ -331,8 +288,8 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
   );
 };
 
-AddServices.propTypes = {
+AddJobBenifits.propTypes = {
   header: PropTypes.string.isRequired,
 };
 
-export default AddServices;
+export default AddJobBenifits;
