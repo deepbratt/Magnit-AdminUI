@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
+  getAllBenifitsApi,
   addBenifitsApi,
   updateBenifitsApi,
 } from "../../Utils/benifitsSectionApi";
@@ -12,22 +13,50 @@ const initialValues = {
   id: null,
 };
 
-export const useForm = (validateOnChange = false, id) => {
+export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
+  const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [responseMessage, setResponseMessage] = useState({
     status: "",
     message: "",
   });
 
-  const [selectedFile, setSelectedFile] = useState(null);
-
   const handleCapture = ({ target }) => {
     setSelectedFile(target.files[0]);
   };
+
+  const getAllBenifits = useCallback(async () => {
+    setIsLoading(true);
+    await getAllBenifitsApi()
+      .then((response) => {
+        setIsLoading(false);
+        if (response.status === "success") {
+          setRows(response.data.result);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: "error",
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    getAllBenifits();
+  }, [getAllBenifits]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -62,7 +91,6 @@ export const useForm = (validateOnChange = false, id) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-
     setSelectedFile(null);
   };
 
@@ -75,7 +103,7 @@ export const useForm = (validateOnChange = false, id) => {
       formData.append("title", values.title);
       formData.append("description", values.description);
       formData.append("image", selectedFile);
-      console.log(formData, values.title);
+
       if (!update) {
         await addBenifitsApi(formData)
           .then((response) => {
@@ -90,7 +118,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -98,15 +126,15 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       } else {
-        console.log("id", id);
         await updateBenifitsApi(values.id, formData)
           .then((response) => {
+            setIsLoading(false);
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
@@ -116,7 +144,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -124,16 +152,20 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       }
     }
+    getAllBenifits();
   };
 
   return {
+    rows,
+    setRows,
+    getAllBenifits,
     alertOpen,
     setAlertOpen,
     values,

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../../components/FullPageDialog";
+import { useForm } from "./useForm";
 import {
   Button,
   Grid,
@@ -8,20 +8,15 @@ import {
   TextField,
   Card,
   MenuItem,
+  Typography,
 } from "@material-ui/core";
-import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
-import { useForm } from "./useForm";
-import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../../components/Table.js/index";
-import { useEffect, useState, useCallback } from "react";
-import {
-  deleteBannerApi,
-  getAllBannersApi,
-  getOneBannerApi,
-} from "../../Utils/bannersApi";
 import Toast from "../../components/Toast";
+import ServicesTable from "../../components/Table.js/index";
+import GlobalStyles from "../../globalStyles";
+import { fieldNames } from "../../Utils/formConstants";
+import { deleteBannerApi, getOneBannerApi } from "../../Utils/bannersApi";
 
 const types = [
   {
@@ -34,23 +29,12 @@ const types = [
   },
 ];
 
-const AddBanners = ({ open, handleClose }) => {
-  const getAllBanners = useCallback(async () => {
-    let response = await getAllBannersApi();
-    if (response.status === "success") {
-      console.log(response.data.result);
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddBanners = ({ header }) => {
   const {
+    rows,
+
+    getAllBanners,
+    isLoading,
     alertOpen,
     setAlertOpen,
     values,
@@ -66,10 +50,8 @@ const AddBanners = ({ open, handleClose }) => {
     resetForm,
     responseMessage,
     setResponseMessage,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -78,10 +60,6 @@ const AddBanners = ({ open, handleClose }) => {
 
     setAlertOpen(false);
   };
-
-  useEffect(() => {
-    getAllBanners();
-  }, [getAllBanners]);
 
   const handleDelete = async (id) => {
     await deleteBannerApi(id)
@@ -108,7 +86,7 @@ const AddBanners = ({ open, handleClose }) => {
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
+
     await getOneBannerApi(id)
       .then((response) => {
         if (response.status === "success") {
@@ -142,13 +120,12 @@ const AddBanners = ({ open, handleClose }) => {
   };
 
   return (
-    <FullPageDialog
-      header="Manage Banners Section"
-      open={open}
-      handleClose={handleClose}
-    >
+    <>
       <Grid container justify="center">
         <Grid container item xs={12}>
+          <Typography align="center" variant="h4" gutterBottom>
+            {header}
+          </Typography>
           <form className={form} onSubmit={handleSubmit}>
             <Grid item xs={12} md={6}>
               <InputLabel id="input-heading">Heading</InputLabel>
@@ -257,7 +234,7 @@ const AddBanners = ({ open, handleClose }) => {
                   margin: "0 50px",
                   minHeight: "120px",
                   maxHeight: "120px",
-                  minWidth: "100px",
+                  minWidth: "120px",
                 }}
               >
                 {typeof selectedFile === "string" ? (
@@ -313,6 +290,7 @@ const AddBanners = ({ open, handleClose }) => {
         <Grid item xs={10}>
           <ServicesTable
             rows={rows}
+            loading={isLoading}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
             valueskeys={valueskeys}
@@ -327,13 +305,12 @@ const AddBanners = ({ open, handleClose }) => {
           message={responseMessage.message}
         />
       )}
-    </FullPageDialog>
+    </>
   );
 };
 
 AddBanners.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 export default AddBanners;

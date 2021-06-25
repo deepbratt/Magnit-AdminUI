@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
+  getAllBenefitsApi,
   addBenefitsApi,
-  updateBenefitsApi
+  updateBenefitsApi,
 } from "../../Utils/jobBenefitsSectionApi";
 
 const initialValues = {
@@ -11,29 +12,53 @@ const initialValues = {
   buttonLabel: "",
   buttonLink: "",
   image: null,
-  color: "",
   id: null,
 };
 
-export const useForm = (validateOnChange = false, id) => {
+export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
+  const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [color, setColor] = useState(values.color);
   const [alertOpen, setAlertOpen] = useState(false);
-
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const [responseMessage, setResponseMessage] = useState({
     status: "",
     message: "",
   });
 
-  const [selectedFile, setSelectedFile] = useState(null);
-
   const handleCapture = ({ target }) => {
     setSelectedFile(target.files[0]);
   };
+
+  const getAllBenefits = useCallback(async () => {
+    setIsLoading(true);
+    await getAllBenefitsApi()
+      .then((response) => {
+        setIsLoading(false);
+        if (response.status === "success") {
+          setRows(response.data.result);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: "error",
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    getAllBenefits();
+  }, [getAllBenefits]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -76,7 +101,7 @@ export const useForm = (validateOnChange = false, id) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-    setColor("");
+
     setSelectedFile(null);
   };
 
@@ -87,11 +112,10 @@ export const useForm = (validateOnChange = false, id) => {
       setIsLoading(true);
       var formData = new FormData();
       formData.append("title", values.title);
-      formData.append("description", values.description);
+      formData.append("text", values.description);
       formData.append("buttonLabel", values.buttonLabel);
-      formData.append("buttonLink", values.buttonLink);
-      formData.append("color", color);
-      formData.append("image", selectedFile);
+      formData.append("link", values.buttonLink);
+      formData.append("icon", selectedFile);
       console.log(formData, values.title);
       if (!update) {
         await addBenefitsApi(formData)
@@ -104,9 +128,10 @@ export const useForm = (validateOnChange = false, id) => {
                 message: "Item Added Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -114,24 +139,25 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       } else {
-        console.log("id", id);
         await updateBenefitsApi(values.id, formData)
           .then((response) => {
+            setIsLoading(false);
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
                 message: "Item Updated Successfully",
               });
               setAlertOpen(true);
+              resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -139,20 +165,22 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       }
     }
+    getAllBenefits();
   };
 
   return {
+    rows,
+    getAllBenefits,
     alertOpen,
     setAlertOpen,
-    color,
-    setColor,
+
     values,
     setValues,
     errors,

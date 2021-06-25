@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../FullPageDialog";
+import { useForm } from "./useForm";
 import {
   Button,
   Grid,
@@ -7,40 +7,26 @@ import {
   Tooltip,
   TextField,
   Card,
+  Typography,
 } from "@material-ui/core";
-import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
-import { useForm } from "./useForm";
-import { fieldNames } from "../../Utils/formConstants";
+import Toast from "../Toast";
+import GlobalStyles from "../../globalStyles";
 import BenifitsTable from "../Table.js/index";
-import { useEffect, useState, useCallback } from "react";
+import { fieldNames } from "../../Utils/formConstants";
 import {
   deleteServiceApi,
-  getAllBenifitsApi,
   getOneBenifitsApi,
 } from "../../Utils/benifitsSectionApi";
-import Toast from "../Toast";
 
-const AddBenifts = ({ open, handleClose }) => {
-  const getAllBenifits = useCallback(async () => {
-    let response = await getAllBenifitsApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddBenifts = ({ header }) => {
   const {
+    rows,
+    getAllBenifits,
     alertOpen,
     setAlertOpen,
-
+    isLoading,
     values,
     setValues,
     errors,
@@ -54,10 +40,8 @@ const AddBenifts = ({ open, handleClose }) => {
     resetForm,
     responseMessage,
     setResponseMessage,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -67,35 +51,37 @@ const AddBenifts = ({ open, handleClose }) => {
     setAlertOpen(false);
   };
 
-  useEffect(() => {
-    getAllBenifits();
-  }, [getAllBenifits]);
-
   const handleDelete = async (id) => {
     await deleteServiceApi(id)
       .then((response) => {
         if (response.status === "success") {
           getAllBenifits();
+
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
+
     await getOneBenifitsApi(id)
       .then((response) => {
         if (response.status === "success") {
@@ -106,14 +92,17 @@ const AddBenifts = ({ open, handleClose }) => {
           });
 
           setSelectedFile(response.data.result.image);
-        }
-        if (response.status === "fail") {
-          console.log(response);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
@@ -122,13 +111,14 @@ const AddBenifts = ({ open, handleClose }) => {
 
   return (
     <>
-      <FullPageDialog
-        header="Manage Benifits Section"
-        open={open}
-        handleClose={handleClose}
-      >
+      <>
         <Grid container justify="center">
           <Grid container item xs={12}>
+            <Grid item xs="12">
+              <Typography align="center" variant="h4" gutterBottom>
+                {header}
+              </Typography>
+            </Grid>
             <form className={form} onSubmit={handleSubmit}>
               <Grid item xs={12} md={6}>
                 <InputLabel id="input-title">Title</InputLabel>
@@ -194,7 +184,7 @@ const AddBenifts = ({ open, handleClose }) => {
                     margin: "0 50px",
                     minHeight: "120px",
                     maxHeight: "120px",
-                    minWidth: "100px",
+                    minWidth: "120px",
                   }}
                 >
                   {typeof selectedFile === "string" ? (
@@ -250,6 +240,7 @@ const AddBenifts = ({ open, handleClose }) => {
           <Grid item xs={10}>
             <BenifitsTable
               rows={rows}
+              loading={isLoading}
               handleDelete={handleDelete}
               handleUpdate={handleUpdate}
             />
@@ -263,14 +254,13 @@ const AddBenifts = ({ open, handleClose }) => {
             message={responseMessage.message}
           />
         )}
-      </FullPageDialog>
+      </>
     </>
   );
 };
 
 AddBenifts.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 export default AddBenifts;

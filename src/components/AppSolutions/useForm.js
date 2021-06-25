@@ -1,21 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
   addAppSolutionsApi,
   updateAppSolutionsApi,
+  getAllAppSolutionsApi,
 } from "../../Utils/appSolutionsApi";
 
 const initialValues = {
+  title: "",
+  description: "",
+  icon: null,
   image: null,
   dataArray: [],
   id: null,
 };
 
-export const useForm = (validateOnChange = false, id) => {
+export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
+  const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [items, setItems] = useState([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -23,12 +27,6 @@ export const useForm = (validateOnChange = false, id) => {
   const [responseMessage, setResponseMessage] = useState({
     status: "",
     message: "",
-  });
-
-  const [item, setItem] = useState({
-    title: "",
-    description: "",
-    icon: selectedIcon,
   });
 
   const handleCapture = ({ target }) => {
@@ -48,6 +46,34 @@ export const useForm = (validateOnChange = false, id) => {
       })
       .catch((e) => console.log(e));
   };
+
+  const getAllAppSolutions = useCallback(async () => {
+    setIsLoading(true);
+    await getAllAppSolutionsApi()
+      .then((response) => {
+        setIsLoading(false);
+        if (response.status === "success") {
+          setRows(response.data.result);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: "error",
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    getAllAppSolutions();
+  }, [getAllAppSolutions]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -70,16 +96,25 @@ export const useForm = (validateOnChange = false, id) => {
 
   const addItem = () => {
     if (validate()) {
-      setItem({
-        title: item.title,
-        description: item.description,
+      let newItem = {
+        title: values.title,
+        description: values.description,
         icon: selectedIcon,
+      };
+      let newValues = values;
+      console.log("before chnages new values", newValues);
+      values.dataArray.push(newItem);
+      values.image = selectedFile;
+      console.log("new values", newValues);
+      setValues(newValues);
+    } else {
+      setResponseMessage({
+        status: "error",
+        message: "Validation Failed",
       });
+      setAlertOpen(true);
+      resetForm();
     }
-    let temp = items;
-    temp.push(item);
-    setItems(temp);
-    setValues({ image: selectedFile, dataArray: items });
   };
 
   const getBase64 = (file) =>
@@ -93,18 +128,11 @@ export const useForm = (validateOnChange = false, id) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setItem({
-      ...item,
+    setValues({
+      ...values,
       [name]: value,
     });
     if (validateOnChange) validate({ [name]: value });
-  };
-
-  const test = () => {
-    let temp = items;
-    temp.push(item);
-    setItems(temp);
-    setValues({ image: selectedFile, dataArray: items });
   };
 
   const resetForm = () => {
@@ -113,8 +141,6 @@ export const useForm = (validateOnChange = false, id) => {
     setSelectedIcon(null);
     setErrors({});
     setUpdate(false);
-    setItems([]);
-    setItem({});
   };
 
   const handleSubmit = async (e) => {
@@ -122,7 +148,7 @@ export const useForm = (validateOnChange = false, id) => {
     setIsLoading(true);
 
     let requestBody = {
-      image: values.image,
+      image: selectedFile,
       dataArray: values.dataArray,
     };
     console.log("request", requestBody);
@@ -140,7 +166,7 @@ export const useForm = (validateOnChange = false, id) => {
             resetForm();
           } else {
             setResponseMessage({
-              status: response.status,
+              status: "error",
               message: response.message,
             });
             setAlertOpen(true);
@@ -148,15 +174,15 @@ export const useForm = (validateOnChange = false, id) => {
         })
         .catch((error) => {
           setResponseMessage({
-            status: error.status,
+            status: "error",
             message: error.message,
           });
           setAlertOpen(true);
         });
     } else {
-      console.log("id", id);
       await updateAppSolutionsApi(values.id, requestBody)
         .then((response) => {
+          setIsLoading(false);
           if (response.status === "success") {
             setResponseMessage({
               status: response.status,
@@ -166,7 +192,7 @@ export const useForm = (validateOnChange = false, id) => {
             resetForm();
           } else {
             setResponseMessage({
-              status: response.status,
+              status: "error",
               message: response.message,
             });
             setAlertOpen(true);
@@ -174,21 +200,21 @@ export const useForm = (validateOnChange = false, id) => {
         })
         .catch((error) => {
           setResponseMessage({
-            status: error.status,
+            status: "error",
             message: error.message,
           });
           setAlertOpen(true);
         });
     }
+    getAllAppSolutions();
   };
 
   return {
+    rows,
+    setRows,
     alertOpen,
     setAlertOpen,
-    item,
-    setItem,
-    items,
-    setItems,
+    getAllAppSolutions,
     values,
     setValues,
     errors,
@@ -209,6 +235,5 @@ export const useForm = (validateOnChange = false, id) => {
     selectedIcon,
     setSelectedIcon,
     addItem,
-    test,
   };
 };

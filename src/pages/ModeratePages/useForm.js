@@ -1,12 +1,17 @@
-import { useState } from "react";
-import { addPagesApi, updatePagesApi } from "../../Utils/pagesApi";
+import { useState, useEffect, useCallback } from "react";
+import {
+  addPagesApi,
+  getAllPagesApi,
+  updatePagesApi,
+} from "../../Utils/pagesApi";
 import { fieldNames, messages } from "../../Utils/formConstants";
+import useStates from "../../Sections/AdminPanelFooter/useStates";
 
 const initialValues = {
   title: "",
   description: "",
   keywords: "",
-  canonicals: "",
+  canonical: "",
   heading: "",
   subHeading: "",
   metaData: {},
@@ -19,10 +24,18 @@ const initialValues = {
 
 export const useForm = (validateOnChange = false, id) => {
   const [values, setValues] = useState(initialValues);
+  const [rows, setRows] = useState([]);
+  const [editSection, setEditSection] = useState(false);
+  const [sectionValue, setSectionValue] = useState({
+    heading: "something",
+    subHeading: "something",
+    sectionName: "banner",
+    query: "",
+    order: 0,
+  });
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
   const [sectionKeys, setSectionKeys] = useState(Object.keys(values.sections));
-
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState({
@@ -43,6 +56,34 @@ export const useForm = (validateOnChange = false, id) => {
     setValues(newValues);
     setSectionKeys(Object.keys(values.sections));
   };
+
+  const getAllPages = useCallback(async () => {
+    setIsLoading(true);
+    await getAllPagesApi()
+      .then((response) => {
+        setIsLoading(false);
+        if (response.status === "success") {
+          setRows(response.data.result);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: "error",
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    getAllPages();
+  }, [getAllPages]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -75,6 +116,7 @@ export const useForm = (validateOnChange = false, id) => {
 
   const resetForm = () => {
     setValues(initialValues);
+    setSectionKeys([]);
     setErrors({});
     setUpdate(false);
   };
@@ -128,6 +170,7 @@ export const useForm = (validateOnChange = false, id) => {
         console.log("id", values.id);
         await updatePagesApi(values.id, requestBody)
           .then((response) => {
+            setIsLoading(false);
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
@@ -152,9 +195,17 @@ export const useForm = (validateOnChange = false, id) => {
           });
       }
     }
+    getAllPages();
   };
 
   return {
+    editSection,
+    setEditSection,
+    sectionValue,
+    setSectionValue,
+    rows,
+    setRows,
+    getAllPages,
     addSection,
     alertOpen,
     setAlertOpen,

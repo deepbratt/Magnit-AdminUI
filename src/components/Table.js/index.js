@@ -26,13 +26,11 @@ function Row(props) {
     <React.Fragment>
       <TableRow>
         {row[valueskeys._id] && <TableCell>{row[valueskeys._id]}</TableCell>}
-        {row[valueskeys.title] && (
-          <TableCell>{row[valueskeys.title]}</TableCell>
-        )}
+        {valueskeys.title && <TableCell>{row[valueskeys.title]}</TableCell>}
         {valueskeys.roles && <TableCell>{row[valueskeys.roles]}</TableCell>}
-        {row.dataArray && row.dataArray[0].title && (
+        {/* {row.dataArray && row.dataArray[0].title && (
           <TableCell>{row.dataArray[0].title}</TableCell>
-        )}
+        )} */}
         <TableCell align="right">
           <IconButton onClick={() => handleDelete(row._id)}>
             <DeleteRoundedIcon color="error" />
@@ -134,7 +132,7 @@ DataTable.defaultProps = {
 
 DataTable.propTypes = {
   tableHead: PropTypes.array.isRequired,
-  tableData: PropTypes.array.isRequired,
+  rows: PropTypes.array.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   loading: PropTypes.bool,

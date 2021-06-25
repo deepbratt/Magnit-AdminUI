@@ -1,5 +1,3 @@
-import PropTypes from "prop-types";
-import FullPageDialog from "../../components/FullPageDialog";
 import {
   Button,
   Grid,
@@ -17,14 +15,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import GlobalStyles from "../../globalStyles";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import { useEffect, useState, useCallback } from "react";
-import {
-  deletePagesApi,
-  getAllPagesApi,
-  getOnePagesApi,
-} from "../../Utils/pagesApi";
+import { deletePagesApi, getOnePagesApi } from "../../Utils/pagesApi";
 import PagesTable from "../../components/Table.js/PagesTable";
 import Toast from "../../components/Toast";
+import { useEffect } from "react";
 
 const sections = [
   {
@@ -59,26 +53,17 @@ const sections = [
     value: "ourObjectives",
     label: "Our Objective",
   },
-
 ];
 
-const AddNewPages = ({ open, handleClose }) => {
-  const getAllPages = useCallback(async () => {
-    let response = await getAllPagesApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-      console.log("response", response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddNewPages = () => {
   const {
+    editSection,
+    setEditSection,
+    sectionValue,
+    setSectionValue,
+    rows,
+    getAllPages,
+    isLoading,
     alertOpen,
     setAlertOpen,
     values,
@@ -94,16 +79,8 @@ const AddNewPages = ({ open, handleClose }) => {
     addSection,
     sectionKeys,
     setSectionKeys,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const tableHead = [
-    { title: "Page Name", align: "left" },
-    { title: "Order", align: "left" },
-    { title: "Canonical", align: "left" },
-  ];
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -113,36 +90,36 @@ const AddNewPages = ({ open, handleClose }) => {
     setAlertOpen(false);
   };
 
-  useEffect(() => {
-    getAllPages();
-  }, [getAllPages]);
-
   const handleDelete = async (id) => {
     await deletePagesApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
           getAllPages();
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
     await getOnePagesApi(id)
       .then((response) => {
         if (response.status === "success") {
@@ -155,24 +132,27 @@ const AddNewPages = ({ open, handleClose }) => {
             sections: response.data.result.sections,
             id: response.data.result._id,
           });
-        }
-        if (response.status === "fail") {
-          console.log(response);
+          setSectionKeys(Object.keys(response.data.result.sections));
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
       });
   };
 
-  const valueskeys = {
-    _id: "_id",
-    title: "name",
-  };
+  useEffect(() => {
+    console.log("use Effect Called");
+  }, [values]);
 
   const deleteItemByName = (name) => {
     let newObject = values;
@@ -180,6 +160,27 @@ const AddNewPages = ({ open, handleClose }) => {
     console.log("new Object", newObject);
     setValues(newObject);
     setSectionKeys(Object.keys(values.sections));
+  };
+
+  const updateItemByName = (name) => {
+    // setEditSection(true);
+    let newSection = values.sections[name];
+    console.log("new Section", newSection);
+
+    setValues((previousState) => {
+      previousState.sectionName = name;
+      previousState.heading = newSection.heading ? newSection.heading : "";
+      previousState.subHeading = newSection.subHeading
+        ? newSection.subHeading
+        : "";
+      previousState.query = newSection.queryParams
+        ? newSection.queryParams
+        : "";
+      previousState.order = newSection.order ? parseInt(newSection.order) : 1;
+      return {
+        ...previousState,
+      };
+    });
   };
 
   return (
@@ -266,12 +267,15 @@ const AddNewPages = ({ open, handleClose }) => {
             <Grid item xs={12} md={6}>
               <InputLabel id="input-sections">Sections</InputLabel>
               <TextField
+                key={fieldNames.sectionName}
                 name={fieldNames.sectionName}
                 select
                 id="input-sections"
                 variant="outlined"
                 placeholder=""
-                value={values.sectionName}
+                value={
+                  editSection ? sectionValue.sectionName : values.sectionName
+                }
                 {...(errors && { error: true, helperText: errors.sectionName })}
                 onChange={handleInputChange}
                 fullWidth
@@ -287,6 +291,7 @@ const AddNewPages = ({ open, handleClose }) => {
             <Grid item xs={12} md={6}>
               <InputLabel id="input-heading">Heading</InputLabel>
               <TextField
+                key={fieldNames.heading}
                 name={fieldNames.heading}
                 id="input-heading"
                 variant="outlined"
@@ -302,6 +307,7 @@ const AddNewPages = ({ open, handleClose }) => {
             <Grid item xs={12} md={6}>
               <InputLabel id="input-subHeading">Sub Heading</InputLabel>
               <TextField
+                key={fieldNames.subHeading}
                 name={fieldNames.subHeading}
                 id="input-subHeading"
                 variant="outlined"
@@ -317,10 +323,11 @@ const AddNewPages = ({ open, handleClose }) => {
               <InputLabel id="input-query">Query</InputLabel>
               <TextField
                 name={fieldNames.query}
+                key={fieldNames.query}
                 id="input-query"
                 variant="outlined"
                 placeholder="query e.g query"
-                value={values.query}
+                value={values.query ? JSON.stringify(values.query) : ""}
                 {...(errors && {
                   error: true,
                   helperText: errors.query,
@@ -377,6 +384,11 @@ const AddNewPages = ({ open, handleClose }) => {
                         >
                           <DeleteIcon color="error" />
                         </IconButton>
+                        <IconButton
+                          onClick={() => updateItemByName(sectionName)}
+                        >
+                          <DeleteIcon color="primary" />
+                        </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
                   ))}
@@ -417,6 +429,7 @@ const AddNewPages = ({ open, handleClose }) => {
       <Grid item xs={10}>
         <PagesTable
           rows={rows}
+          loading={isLoading}
           handleDelete={handleDelete}
           handleUpdate={handleUpdate}
         />
@@ -433,9 +446,6 @@ const AddNewPages = ({ open, handleClose }) => {
   );
 };
 
-AddNewPages.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-};
+AddNewPages.propTypes = {};
 
 export default AddNewPages;

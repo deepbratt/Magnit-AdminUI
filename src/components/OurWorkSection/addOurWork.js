@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useForm } from "./useForm";
 import {
   Button,
@@ -265,6 +266,8 @@ const AddOurWork = ({ header }) => {
   );
 };
 
-AddOurWork.propTypes = {};
+AddOurWork.propTypes = {
+  header: PropTypes.string.isRequired,
+};
 
 export default AddOurWork;

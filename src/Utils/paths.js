@@ -38,6 +38,20 @@ const AdminPanelReview = lazy(() =>
 );
 const AddServices = lazy(() => import("../components/ServicesSection"));
 const OurWorkSection = lazy(() => import("../components/OurWorkSection"));
+const AppSolutions = lazy(() => import("../components/AppSolutions"));
+const BannersSection = lazy(() => import("../components/Banners"));
+const HiringOptions = lazy(() => import("../components/HiringOptions"));
+const JobBenefitsSection = lazy(() =>
+  import("../components/JobBenefitsSection")
+);
+const OpportunitiesSection = lazy(() =>
+  import("../components/OpportunitiesSection")
+);
+const TrainingAndCertification = lazy(() =>
+  import("../components/TrainingAndCertification")
+);
+const BenifitsSection = lazy(() => import("../components/BenifitsSection"));
+const FactsAboutUsSection = lazy(() => import("../components/FactsAboutUs"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -61,7 +75,7 @@ export const paths = {
   ourWork: "ourWork",
   banner: "banner",
   hiringOptions: "hiringOptions",
-  opportunties: "opportunties",
+  opportunities: "opportunities",
   trainingAndCertification: "trainingAndCertification",
   appSolutions: "appSolutions",
   benifits: "benifits",
@@ -91,7 +105,7 @@ export const routes = {
   ourWork: "/ourWork",
   banner: "/banner",
   hiringOptions: "/hiringOptions",
-  opportunties: "/opportunties",
+  opportunities: "/opportunities",
   trainingAndCertification: "/trainingAndCertification",
   appSolutions: "/appSolutions",
   benifits: "/benifits",
@@ -179,35 +193,35 @@ export const pagesRoutes = {
   },
   [paths.banner]: {
     path: routes.banner,
-    component: AdminPanelReview,
+    component: BannersSection,
   },
   [paths.hiringOptions]: {
     path: routes.hiringOptions,
-    component: AdminPanelReview,
+    component: HiringOptions,
   },
-  [paths.opportunties]: {
-    path: routes.opportunties,
-    component: AdminPanelReview,
+  [paths.opportunities]: {
+    path: routes.opportunities,
+    component: OpportunitiesSection,
   },
   [paths.trainingAndCertification]: {
     path: routes.trainingAndCertification,
-    component: AdminPanelReview,
+    component: TrainingAndCertification,
   },
   [paths.appSolutions]: {
-    path: routes.review,
-    component: AdminPanelReview,
+    path: routes.appSolutions,
+    component: AppSolutions,
   },
   [paths.benifits]: {
     path: routes.benifits,
-    component: AdminPanelReview,
+    component: BenifitsSection,
   },
   [paths.factsAboutUs]: {
     path: routes.factsAboutUs,
-    component: AdminPanelReview,
+    component: FactsAboutUsSection,
   },
   [paths.jobBenifits]: {
     path: routes.jobBenifits,
-    component: AdminPanelReview,
+    component: JobBenefitsSection,
   },
 };
 

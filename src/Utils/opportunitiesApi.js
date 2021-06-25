@@ -65,7 +65,7 @@ export const getOneOpportunitiesApi = async (id) => {
 
 export const updateOpportunitiesApi = async (id, data) => {
   try {
-    let result = await axiosInstance.put(
+    let result = await axiosInstance.patch(
       `${OPPORTUNITIES.OPPORTUNITIES}/${id}`,
       data
     );

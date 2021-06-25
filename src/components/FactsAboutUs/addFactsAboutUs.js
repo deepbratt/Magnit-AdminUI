@@ -7,6 +7,7 @@ import {
   Tooltip,
   TextField,
   Card,
+  Typography,
 } from "@material-ui/core";
 import GlobalStyles from "../../globalStyles";
 import { IconButton } from "@material-ui/core";
@@ -14,31 +15,19 @@ import { PhotoCamera } from "@material-ui/icons";
 import ColorPicker from "material-ui-color-picker";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import FactsAboutUsTable from "../Table.js/index";
+import DataTable from "../Table.js/index";
 import { useEffect, useState, useCallback } from "react";
 import {
   deleteServiceApi,
-  getAllFactsAboutUsApi,
   getOneFactsAboutUsApi,
 } from "../../Utils/factsAboutUsApi";
 import Toast from "../Toast";
 
-const AddFactsAboutUs = ({ open, handleClose }) => {
-  const getAllFactsAboutUs = useCallback(async () => {
-    let response = await getAllFactsAboutUsApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddFactsAboutUs = ({ header }) => {
   const {
+    rows,
+    isLoading,
+    getAllFactsAboutUs,
     color,
     setColor,
     alertOpen,
@@ -56,10 +45,8 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
     resetForm,
     responseMessage,
     setResponseMessage,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -69,35 +56,36 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
     setAlertOpen(false);
   };
 
-  useEffect(() => {
-    getAllFactsAboutUs();
-  }, [getAllFactsAboutUs]);
-
   const handleDelete = async (id) => {
     await deleteServiceApi(id)
       .then((response) => {
         if (response.status === "success") {
           getAllFactsAboutUs();
+
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
     await getOneFactsAboutUsApi(id)
       .then((response) => {
         if (response.status === "success") {
@@ -108,14 +96,17 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
           });
           setColor(response.data.result.color);
           setSelectedFile(response.data.result.icon);
-        }
-        if (response.status === "fail") {
-          console.log(response);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
@@ -124,13 +115,14 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
 
   return (
     <>
-      <FullPageDialog
-        header="Manage FactsAboutUs Section"
-        open={open}
-        handleClose={handleClose}
-      >
+      <>
         <Grid container justify="center">
           <Grid container item xs={12}>
+            <Grid item xs="12">
+              <Typography align="center" variant="h4" gutterBottom>
+                {header}
+              </Typography>
+            </Grid>
             <form className={form} onSubmit={handleSubmit}>
               <Grid item xs={12} md={6}>
                 <InputLabel id="input-title">Title</InputLabel>
@@ -196,7 +188,7 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
                     margin: "0 50px",
                     minHeight: "120px",
                     maxHeight: "120px",
-                    minWidth: "100px",
+                    minWidth: "120px",
                   }}
                 >
                   {typeof selectedFile === "string" ? (
@@ -258,8 +250,9 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
             </form>
           </Grid>
           <Grid item xs={10}>
-            <FactsAboutUsTable
+            <DataTable
               rows={rows}
+              loading={isLoading}
               handleDelete={handleDelete}
               handleUpdate={handleUpdate}
             />
@@ -273,13 +266,13 @@ const AddFactsAboutUs = ({ open, handleClose }) => {
             message={responseMessage.message}
           />
         )}
-      </FullPageDialog>
+      </>
     </>
   );
 };
 
 AddFactsAboutUs.propTypes = {
-  open: PropTypes.bool.isRequired,
+  header: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 

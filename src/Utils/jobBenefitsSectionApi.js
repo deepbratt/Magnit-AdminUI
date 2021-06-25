@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 });
 
 const BENEFITS = {
-    BENEFITS: `benifits`,
+    BENEFITS: `jobBenifits`,
 };
 
 export const addBenefitsApi = async (data) => {

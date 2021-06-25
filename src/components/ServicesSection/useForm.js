@@ -40,8 +40,8 @@ export const useForm = (validateOnChange = false) => {
     setIsLoading(true);
     await getAllServicesApi()
       .then((response) => {
+        setIsLoading(false);
         if (response.status === "success") {
-          setIsLoading(false);
           setRows(response.data.result);
         } else {
           setResponseMessage({
@@ -180,8 +180,8 @@ export const useForm = (validateOnChange = false) => {
             setAlertOpen(true);
           });
       }
-      getAllServices();
     }
+    getAllServices();
   };
 
   return {

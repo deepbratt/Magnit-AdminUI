@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fieldNames, messages } from "../../Utils/formConstants";
 import {
+  getAllHiringOptionsApi,
   addHiringOptionsApi,
   updateHiringOptionsApi,
 } from "../../Utils/hiringOptionsApi";
@@ -14,8 +15,9 @@ const initialValues = {
   id: null,
 };
 
-export const useForm = (validateOnChange = false, id) => {
+export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
+  const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
   const [item, setItem] = useState("");
@@ -26,6 +28,34 @@ export const useForm = (validateOnChange = false, id) => {
     status: "",
     message: "",
   });
+
+  const getAllHiringOptions = useCallback(async () => {
+    setIsLoading(true);
+    await getAllHiringOptionsApi()
+      .then((response) => {
+        setIsLoading(false);
+        if (response.status === "success") {
+          setRows(response.data.result);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
+        }
+      })
+      .catch((error) => {
+        setResponseMessage({
+          status: "error",
+          message: error.message,
+        });
+        setAlertOpen(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    getAllHiringOptions();
+  }, [getAllHiringOptions]);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -84,7 +114,7 @@ export const useForm = (validateOnChange = false, id) => {
         buttonLink: values.buttonLink,
         items: items,
       };
-      console.log("request", requestBody);
+
       if (!update) {
         await addHiringOptionsApi(requestBody)
           .then((response) => {
@@ -99,7 +129,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -107,15 +137,15 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       } else {
-        console.log("id", id);
         await updateHiringOptionsApi(values.id, requestBody)
           .then((response) => {
+            setIsLoading(false);
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
@@ -125,7 +155,7 @@ export const useForm = (validateOnChange = false, id) => {
               resetForm();
             } else {
               setResponseMessage({
-                status: response.status,
+                status: "error",
                 message: response.message,
               });
               setAlertOpen(true);
@@ -133,16 +163,20 @@ export const useForm = (validateOnChange = false, id) => {
           })
           .catch((error) => {
             setResponseMessage({
-              status: error.status,
+              status: "error",
               message: error.message,
             });
             setAlertOpen(true);
           });
       }
     }
+    getAllHiringOptions();
   };
 
   return {
+    rows,
+    setRows,
+    getAllHiringOptions,
     alertOpen,
     setAlertOpen,
     item,

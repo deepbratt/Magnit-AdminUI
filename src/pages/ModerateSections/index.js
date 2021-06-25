@@ -26,33 +26,14 @@ const ModerateSections = () => {
         alignItems="center"
         spacing={2}
       >
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <OurWorkSection />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <BannersSection />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <HiringOptions />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <Opportunities />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <TrainingAndCertification />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <AppSolutions />
-        </Grid>
+        
+       
+     
+        
         <Grid item xs={12} sm={6} md={3} lg={2}>
           <JobBenefitsSection />
         </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <BenefitsSection />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2}>
-          <FactsAboutUsSection />
-        </Grid> */}
+       
       {/* </Grid> */}
       <Typography variant="h4" style={{ textAlign: "center" }}>
         Manage Sections

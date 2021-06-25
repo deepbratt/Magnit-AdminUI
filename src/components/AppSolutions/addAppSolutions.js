@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import FullPageDialog from "../FullPageDialog";
 import {
   Button,
   Grid,
@@ -8,15 +7,13 @@ import {
   Card,
   Tooltip,
   ListItemSecondaryAction,
+  Typography,
 } from "@material-ui/core";
 import GlobalStyles from "../../globalStyles";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
-import ServicesTable from "../Table.js/index";
-import { useEffect, useState, useCallback } from "react";
 import {
   deleteAppSolutionsApi,
-  getAllAppSolutionsApi,
   getOneAppSolutionsApi,
 } from "../../Utils/appSolutionsApi";
 import { List } from "@material-ui/core";
@@ -26,29 +23,15 @@ import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { PhotoCamera } from "@material-ui/icons";
 import Toast from "../../components/Toast";
+import DataTable from "../Table.js/index";
 
-const AddAppSolutions = ({ open, handleClose }) => {
-  const getAllAppSolutions = useCallback(async () => {
-    let response = await getAllAppSolutionsApi();
-    if (response.status === "success") {
-      setRows(response.data.result);
-    } else {
-      setResponseMessage({
-        status: response.status,
-        message: response.message,
-      });
-      setAlertOpen(true);
-    }
-  }, []);
-
-  const [id, setId] = useState(null);
+const AddAppSolutions = ({ header }) => {
   const {
+    rows,
     alertOpen,
+    isLoading,
+    getAllAppSolutions,
     setAlertOpen,
-    item,
-    setItem,
-    items,
-    setItems,
     values,
     setValues,
     errors,
@@ -64,13 +47,9 @@ const AddAppSolutions = ({ open, handleClose }) => {
     setResponseMessage,
     handleIconCapture,
     selectedIcon,
-    setSelectedIcon,
     addItem,
-    test,
-  } = useForm(id);
+  } = useForm();
   const { form, buttonWrap } = GlobalStyles();
-
-  const [rows, setRows] = useState([]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -80,60 +59,66 @@ const AddAppSolutions = ({ open, handleClose }) => {
     setAlertOpen(false);
   };
 
-  useEffect(() => {
-    getAllAppSolutions();
-  }, [getAllAppSolutions]);
-
   const handleDelete = async (id) => {
     await deleteAppSolutionsApi(id)
       .then((response) => {
         console.log("response", response);
         if (response.status === "success") {
           getAllAppSolutions();
+
+          setResponseMessage({
+            status: response.status,
+            message: "Item Deleted Successfully",
+          });
+          setAlertOpen(true);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
-        setResponseMessage({
-          status: response.status,
-          message: "Item Deleted Successfully",
-        });
-        setAlertOpen(true);
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
-        console.error(error);
       });
   };
 
   const deleteItemByIndex = (index) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
-
-    setItems(newItems);
+    console.log("values before delete", values);
+    let newObject = values;
+    newObject.dataArray.splice(index, 1);
+    console.log("newObject", newObject);
+    setValues(newObject);
   };
 
   const handleUpdate = async (id) => {
     setUpdate(true);
-    setId(id);
+    console.log("id", id);
     await getOneAppSolutionsApi(id)
       .then((response) => {
         console.log("res", response);
         if (response.status === "success") {
           setValues({
             id: response.data.result._id,
+            dataArray: response.data.result.dataArray,
           });
-          setItems(response.data.result.dataArray);
           setSelectedFile(response.data.result.image);
-        }
-        if (response.status === "fail") {
-          console.log(response);
+        } else {
+          setResponseMessage({
+            status: "error",
+            message: response.message,
+          });
+          setAlertOpen(true);
         }
       })
       .catch((error) => {
         setResponseMessage({
-          status: error.status,
+          status: "error",
           message: error.message,
         });
         setAlertOpen(true);
@@ -142,16 +127,18 @@ const AddAppSolutions = ({ open, handleClose }) => {
 
   const valueskeys = {
     _id: "_id",
+    title: "image"
   };
 
   return (
-    <FullPageDialog
-      header="Manage App Solutions Section"
-      open={open}
-      handleClose={handleClose}
-    >
+    <>
       <Grid container justify="center">
         <Grid container item xs={12}>
+          <Grid item xs="12">
+            <Typography align="center" variant="h4" gutterBottom>
+              {header}
+            </Typography>
+          </Grid>
           <form className={form} onSubmit={handleSubmit}>
             <Grid className={buttonWrap} item xs={12} md={6}>
               <input
@@ -213,7 +200,7 @@ const AddAppSolutions = ({ open, handleClose }) => {
                   id="input-title"
                   variant="outlined"
                   placeholder="e.g Web Development"
-                  value={item.title}
+                  value={values.title}
                   {...(errors && { error: true, helperText: errors.title })}
                   onChange={handleInputChange}
                   fullWidth
@@ -227,7 +214,7 @@ const AddAppSolutions = ({ open, handleClose }) => {
                   id="input-description"
                   variant="outlined"
                   placeholder="lorem ipsum...."
-                  value={item.description}
+                  value={values.description}
                   {...(errors && {
                     error: true,
                     helperText: errors.description,
@@ -305,8 +292,8 @@ const AddAppSolutions = ({ open, handleClose }) => {
               </Grid>
 
               <List>
-                {items &&
-                  items.map((item, index) => (
+                {values.dataArray &&
+                  values.dataArray.map((item, index) => (
                     <ListItem key={index}>
                       <ListItemText>{item.title}</ListItemText>
                       <ListItemSecondaryAction>
@@ -349,13 +336,13 @@ const AddAppSolutions = ({ open, handleClose }) => {
               >
                 Reset
               </Button>
-              <Button onClick={test}>Test</Button>
             </Grid>
           </form>
         </Grid>
         <Grid item xs={10}>
-          <ServicesTable
+          <DataTable
             rows={rows}
+            loading={isLoading}
             handleDelete={handleDelete}
             handleUpdate={handleUpdate}
             valueskeys={valueskeys}
@@ -370,13 +357,12 @@ const AddAppSolutions = ({ open, handleClose }) => {
           message={responseMessage.message}
         />
       )}
-    </FullPageDialog>
+    </>
   );
 };
 
 AddAppSolutions.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 export default AddAppSolutions;
