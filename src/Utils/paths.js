@@ -52,6 +52,9 @@ const TrainingAndCertification = lazy(() =>
 );
 const BenifitsSection = lazy(() => import("../components/BenifitsSection"));
 const FactsAboutUsSection = lazy(() => import("../components/FactsAboutUs"));
+const CaseStudies = lazy(() => import("../Sections/CaseStudies/index"));
+const HowItWorks = lazy(() => import("../Sections/HowItWorks/index"));
+const FAQs = lazy(() => import("../Sections/FAQs/index"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
@@ -84,6 +87,9 @@ export const paths = {
   login: "login",
   forgotPassword: "forgot-password",
   resetPassword: "reset-password",
+  caseStudies: "case-studies",
+  howItWorks: "how-it-works",
+  faqs: "faqs",
 };
 
 export const routes = {
@@ -114,6 +120,9 @@ export const routes = {
   login: "/login",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password/:token",
+  caseStudies: "/moderate-sections/case-studies",
+  howItWorks: "/moderate-sections/how-it-works",
+  faqs: "/moderate-sections/faqs",
 };
 
 export const pagesRoutes = {
@@ -222,6 +231,21 @@ export const pagesRoutes = {
   [paths.jobBenifits]: {
     path: routes.jobBenifits,
     component: JobBenefitsSection,
+  },
+  [paths.caseStudies]: {
+    name: "Section/caseStudies",
+    path: routes.caseStudies,
+    component: CaseStudies,
+  },
+  [paths.howItWorks]: {
+    name: "Section/howItWorks",
+    path: routes.howItWorks,
+    component: HowItWorks,
+  },
+  [paths.faqs]: {
+    name: "Section/faqs",
+    path: routes.faqs,
+    component: FAQs,
   },
 };
 

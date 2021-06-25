@@ -56,6 +56,7 @@ const EditData = ({ id, edit }) => {
     setLinkTitle,
     heading,
     headingChange,
+    file
   } = useStates();
 
   useEffect(() => {
@@ -161,6 +162,7 @@ const EditData = ({ id, edit }) => {
           setLinkArray={setLinkArray}
           addLink={addLink}
           edit={edit}
+          file={file}
         />
       </Grid>
       <Grid item style={{ display: "flex", justifyContent: "center" }}>

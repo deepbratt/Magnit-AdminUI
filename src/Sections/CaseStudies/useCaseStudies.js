@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { serverResponseMessages } from "../../Utils/formConstants";
 import { isResponseSuccess } from "../../Utils/helperFunctions";
-import {getAllHowItWorks, deleteHowItWorks} from "../../Utils/loginApi";
+import {getAllCaseStudies, deleteCaseStudies} from "../../Utils/loginApi";
 
-const useHowItWorks = () => {
+const useCaseStudies = () => {
   const [itemId, setItemId] = useState("");
   const [dataArray, setDataArray] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +14,7 @@ const useHowItWorks = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getAllHowItWorks()
+    getAllCaseStudies()
       .then((response) => {
         if (isResponseSuccess(response)) {
           setDataArray(response.data.data.result);
@@ -25,7 +25,7 @@ const useHowItWorks = () => {
 
   const deleteItem = (id) => {
     setIsLoading(true);
-    deleteHowItWorks(id)
+    deleteCaseStudies(id)
       .then((response) => {
         if (isResponseSuccess(response)) {
           let arr = dataArray;
@@ -44,4 +44,4 @@ const useHowItWorks = () => {
   return {itemId, setItemId, dataArray, setDataArray, isLoading, deleteItem, openToast, setOpenToast, toastType, responseMessage}
 };
 
-export default useHowItWorks;
+export default useCaseStudies;

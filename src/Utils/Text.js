@@ -3,6 +3,7 @@ export const AppBarText = "Admin Panel";
 export const HomeSlider = ["Main Slide", "Mid Slide", "Last Slide"];
 
 // routes
+
 export const payload = [
   {
     path: "/home-slider",
@@ -40,44 +41,21 @@ export const payload = [
     path: "/review",
     text: "Review",
   },
-  {
-    path: "/services",
-    text: "Services",
-  },
-  {
-    path: "/ourWork",
-    text: "Our Work",
-  },
-  {
-    path: "/appSolutions",
-    text: "App Solutions",
-  },
-  {
-    path: "/banner",
-    text: "Banner",
-  },
-  {
-    path: "/hiringOptions",
-    text: "Hiring Options",
-  },
-  {
-    path: "/opportunities",
-    text: "Opportunities",
-  },
-  {
-    path: "/trainingAndCertification",
-    text: "Training And Certification",
-  },
-  {
-    path: "/benifits",
-    text: "Benifits",
-  },
-  {
-    path: "/factsAboutUs",
-    text: "Facts About Us",
-  },
-  {
-    path: "/jobBenifits",
-    text: "Job Benifits",
-  },
 ];
+
+export const apiFieldNames = {
+  howItWorks: {
+    image: "image",
+    title: "title",
+    text: "text",
+  },
+  caseStudies: {
+    image: "icon",
+    title: "title",
+    text: "text",
+  },
+  faq: {
+    title: "questions",
+    text: "answers",
+  },
+};

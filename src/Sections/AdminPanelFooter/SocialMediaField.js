@@ -27,6 +27,7 @@ const SocialMediaField = ({
     const updatedData = [...linkArray].map((data, index) => {
       if (index === id ) {
         data = currentTodo;
+        data.icon = file.base64URL;
       }
       return data;
     });
@@ -39,7 +40,7 @@ const SocialMediaField = ({
     const updatedData = [...linkArray].map((data, index) => {
       if (index === id ) {
         data = currentTodo;
-        data.icon = file;
+        data.icon = file.base64URL;
       }
       return data;
     });
