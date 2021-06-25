@@ -12,6 +12,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditRoundedIcon from "@material-ui/icons/Edit";
 import GlobalStyles from "../../globalStyles";
 import { useForm } from "./useForm";
 import { fieldNames } from "../../Utils/formConstants";
@@ -22,6 +23,10 @@ import { useEffect } from "react";
 
 const sections = [
   {
+    value: "banner",
+    label: "Banner",
+  },
+  {
     value: "services",
     label: "Services",
   },
@@ -30,9 +35,70 @@ const sections = [
     label: "Home Page Slider",
   },
   {
-    value: "banner",
-    label: "Banner",
+    value: "company",
+    label: "Company",
   },
+  {
+    value: "opportunites",
+    label: "Opportunites",
+  },
+  {
+    value: "trainingCertification",
+    label: "Training And Certification",
+  },
+  {
+    value: "workFlow",
+    label: "WorkFlow",
+  },
+  {
+    value: "joinTeam",
+    label: "Join Team",
+  },
+  {
+    value: "jobBenifits",
+    label: "Job Benifits",
+  },
+  {
+    value: "FAQs",
+    label: "FAQ's",
+  },
+  {
+    value: "appAdminPanel",
+    label: "App Admin Panel",
+  },
+  {
+    value: "appSolutions",
+    label: "App Solutions",
+  },
+  {
+    value: "blogs",
+    label: "Blogs",
+  },
+  {
+    value: "benefits",
+    label: "Benefits",
+  },
+  {
+    value: "hiringOptions",
+    label: "Hiring Options",
+  },
+  {
+    value: "factsAboutUs",
+    label: "Facts About Us",
+  },
+  {
+    value: "ourWork",
+    label: "Our Work",
+  },
+  {
+    value: "howitWorks",
+    label: "How It Works",
+  },
+  {
+    value: "caseStudies",
+    label: "Case Studies",
+  },
+
   {
     value: "awards",
     label: "Awards",
@@ -58,9 +124,7 @@ const sections = [
 const AddNewPages = () => {
   const {
     editSection,
-    setEditSection,
     sectionValue,
-    setSectionValue,
     rows,
     getAllPages,
     isLoading,
@@ -126,7 +190,7 @@ const AddNewPages = () => {
           console.log("response", response);
           setValues({
             title: response.data.result.metaData.title,
-            description: response.data.result.metaData.subtitle,
+            description: response.data.result.metaData.description,
             canonical: response.data.result.metaData.canonical,
             keywords: response.data.result.metaData.keywords,
             sections: response.data.result.sections,
@@ -387,7 +451,7 @@ const AddNewPages = () => {
                         <IconButton
                           onClick={() => updateItemByName(sectionName)}
                         >
-                          <DeleteIcon color="primary" />
+                          <EditRoundedIcon color="primary" />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
