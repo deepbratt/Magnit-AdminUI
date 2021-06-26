@@ -5,51 +5,40 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { handlePutMethod, responseAlert,open,setOpen,toastType } = useApi("http://3.138.190.235/v1/Reviews");
+  const { handlePutMethod,responseAlert,open,setOpen,toastType} = useApi("http://3.138.190.235/v1/ourSolutions");
 
   const [file, setFile] = useState(null);
-  const [date, setDate] = useState(new Date());
   const [data, setData] = useState({
-    clientName: "",
-    projectName: "",
-    projectType: "",
-    review: "",
-    rating: 0,
+    title: "",
   });
-  const { clientName, projectName, projectType, review, rating } = data;
+  const {title} = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
+
+  const formData = new FormData();
+  {file && formData.append("image", file)}
+  formData.append("title", title);
 
   useEffect(() => {
     loadSelectedData();
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://3.138.190.235/v1/Reviews/${id}`);
-    setData(result.data.data.result);
-    setFile(result.data.data.result.image)
-    setDate(result.data.data.result.Date)
+    const {data} = await axios.get(`http://3.138.190.235/v1/ourSolutions/${id}`);
+    setData(data.data.result);
+    setFile(data.data.result.image)
   };
 
-  const formData = new FormData();
-  formData.append("clientName", clientName);
-  formData.append("projectName", projectName);
-  formData.append("projectType", projectType);
-  formData.append("review", review);
-  {file && formData.append("image", file)}
-  formData.append("rating", rating);
- 
-    
+  
   const handleToastClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
-  }; 
+  };
 
-  
   return (
     <div>
       <Grid justify="center" container>
@@ -65,25 +54,30 @@ export default function EditData({ id, edit }) {
           xs={12}
         >
           <TextFieldContext
-             clientName={clientName}
-             projectName={projectName}
-             projectType={projectType}
-             review={review}
-             rating={rating}
-             inputChange={inputChange}
-             setFile={setFile}
-             edit={edit}
-             date={date}
-             setDate={setDate}
+            title={title}
+            inputChange={inputChange}
+            setFile={setFile}
+            edit={edit}
           />
-          <Grid item>
+          <Grid
+            item
+            lg={12}
+            md={12}
+            sm={12}
+            xs={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
             <Button
               type="submit"
               onClick={() => {
                 handlePutMethod(id, formData);
                 setTimeout(() => {
                   edit(false);
-                }, 4000);
+                }, 1000);
               }}
               variant="contained"
               color="primary"
@@ -109,7 +103,7 @@ export default function EditData({ id, edit }) {
           xs={12}
           style={{ marginTop: "30px" }}
         >
-         {responseAlert && (
+            {responseAlert && (
           <Toast
             open={open}
             severity={toastType}

@@ -36,7 +36,7 @@ const sections = [
   },
   {
     value: "company",
-    label: "Company",
+    label: "Footer",
   },
   {
     value: "opportunites",
@@ -118,6 +118,10 @@ const sections = [
   {
     value: "ourObjectives",
     label: "Our Objective",
+  },
+  {
+    value: "ourSolutions",
+    label: "Solutions",
   },
 ];
 

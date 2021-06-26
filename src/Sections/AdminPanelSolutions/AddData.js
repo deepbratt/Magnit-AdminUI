@@ -5,37 +5,23 @@ import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
-import validate from "./useValidate";
+import validate from "../AdminPanelOurObjective/useValidate";
 const AddData = () => {
   const { addData, isPending, responseAlert, open, setOpen,toastType } = useApi(
-    "http://3.138.190.235/v1/Reviews"
+    "http://3.138.190.235/v1/ourSolutions"
   );
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
-  const [date, setDate] = useState(new Date());
   const [data, setData] = useState({
-    clientName: "",
-    projectName: "",
-    projectType: "",
-    review: "",
-    rating: 0,
+    title: "",
   });
-  const { clientName, projectName, projectType, review, rating } = data;
+
+  const { title } = data;
   const {} = validate(data);
   const [errors, setErrors] = useState({});
-
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-
-  const formData = new FormData();
-  formData.append("clientName", clientName);
-  formData.append("projectName", projectName);
-  formData.append("projectType", projectType);
-  formData.append("review", review);
-  formData.append("Date", date);
-  formData.append("image", file);
-  formData.append("rating", rating);
 
   const handleToastClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -45,6 +31,10 @@ const AddData = () => {
     setOpen(false);
   };
 
+  const formData = new FormData();
+  formData.append("image", file);
+  formData.append("title", title);
+
   const handleSubmit = () => {
     const validationErrors = validate(data);
     const noErrors = Object.keys(validationErrors).length === 0;
@@ -52,11 +42,7 @@ const AddData = () => {
     if (noErrors) {
       addData(formData);
       setData({
-        clientName: "",
-        projectName: "",
-        projectType: "",
-        review: "",
-        rating: 0,
+        description: "",
       });
     } else {
       return <p>errors try again</p>;
@@ -67,16 +53,10 @@ const AddData = () => {
     <>
       <Grid className={grid} lg={12} item xs={12}>
         <TextFieldContext
-          clientName={clientName}
-          projectName={projectName}
-          projectType={projectType}
-          review={review}
-          rating={rating}
+          title={title}
           inputChange={inputChange}
           setFile={setFile}
           errors={errors}
-          date={date}
-          setDate={setDate}
         />
       </Grid>
       <Grid
@@ -88,45 +68,46 @@ const AddData = () => {
           marginBottom: "30px",
         }}
       >
-        <Button
-          onClick={() => {
-            handleSubmit();
-          }}
-          variant="contained"
-          className={btn}
-        >
-          Add Data
-        </Button>
+        <Grid item style={{ marginTop: "20px" }}>
+          <Button
+            onClick={() => {
+              handleSubmit();
+            }}
+            variant="contained"
+            className={btn}
+          >
+            Add Data
+          </Button>
+        </Grid>
         <Grid item>
           <Button
             onClick={() => {
               setData({
-                clientName: "",
-                projectName: "",
-                projectType: "",
-                review: "",
-                rating: 0,
+                description: "",
               });
             }}
             variant="contained"
             color="secondary"
-            style={{ marginLeft: "15px" }}
+            style={{ marginLeft: "15px", marginTop: "20px" }}
           >
             Clear Field
           </Button>
         </Grid>
       </Grid>
-      {responseAlert && (
-        <Toast
-          open={open}
-          severity={toastType}
-          message={responseAlert.message}
-          onClose={handleToastClose}
-        />
-      )}
-      {!isPending ? (
-        <Alert severity="success">Status: Added successfully!</Alert>
-      ) :  <Alert severity="info">Status: pending</Alert>}
+
+      <Grid item style={{ marginBottom: "30px" }}>
+        {responseAlert && (
+          <Toast
+            open={open}
+            severity={toastType}
+            message={responseAlert.message}
+            onClose={handleToastClose}
+          />
+        )}
+        {!isPending ? (
+          <Alert severity="success">Status: Added successfully!</Alert>
+        ) : <Alert severity="info">Status: pending</Alert>}
+      </Grid>
     </>
   );
 };
