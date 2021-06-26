@@ -41,6 +41,46 @@ export const payload = [
     path: "/review",
     text: "Review",
   },
+  {
+    path: "/services",
+    text: "Services",
+  },
+  {
+    path: "/ourWork",
+    text: "Our Work",
+  },
+  {
+    path: "/appSolutions",
+    text: "App Solutions",
+  },
+  {
+    path: "/banner",
+    text: "Banner",
+  },
+  {
+    path: "/hiringOptions",
+    text: "Hiring Options",
+  },
+  {
+    path: "/opportunities",
+    text: "Opportunities",
+  },
+  {
+    path: "/trainingAndCertification",
+    text: "Training And Certification",
+  },
+  {
+    path: "/benifits",
+    text: "Benifits",
+  },
+  {
+    path: "/factsAboutUs",
+    text: "Facts About Us",
+  },
+  {
+    path: "/jobBenifits",
+    text: "Job Benifits",
+  },
 ];
 
 export const apiFieldNames = {
