@@ -64,7 +64,7 @@ const EditData = ({ id, edit }) => {
   }, []);
 
   const loadSelectedData = async () => {
-    const { data } = await axios.get(`http://3.138.190.235/v1/companies/${id}`);
+    const { data } = await axios.get(`http://api.themagnit.com/v1companies/${id}`);
     setNumberTitle(data.data.result.contactUs.heading);
     setAddressTitle(data.data.result.locations.heading);
     setLinkTitle(data.data.result.socialMedia.heading);
@@ -77,7 +77,7 @@ const EditData = ({ id, edit }) => {
   const handleEdit = async () => {
     try {
       const rawResponse = await fetch(
-        `http://3.138.190.235/v1/companies/${id}`,
+        `http://api.themagnit.com/v1companies/${id}`,
         {
           method: "PATCH",
           headers: {
