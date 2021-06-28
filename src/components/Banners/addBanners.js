@@ -138,7 +138,6 @@ const AddBanners = ({ header }) => {
                 {...(errors && { error: true, helperText: errors.heading })}
                 onChange={handleInputChange}
                 fullWidth
-                required
               />
             </Grid>
 
@@ -167,7 +166,6 @@ const AddBanners = ({ header }) => {
                 {...(errors && { error: true, helperText: errors.buttonLabel })}
                 onChange={handleInputChange}
                 fullWidth
-                required
               />
             </Grid>
 

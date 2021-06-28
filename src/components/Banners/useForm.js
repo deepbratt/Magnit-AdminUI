@@ -68,18 +68,7 @@ export const useForm = (validateOnChange = false, id) => {
       temp.heading =
         fieldValues.heading.trim() === "" ? messages.isRequired : "";
     }
-    if (fieldNames.subHeading in fieldValues) {
-      temp.subHeading =
-        fieldValues.subHeading.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLabel in fieldValues) {
-      temp.buttonLabel =
-        fieldValues.buttonLabel.trim() === "" ? messages.isRequired : "";
-    }
-    if (fieldNames.buttonLink in fieldValues) {
-      temp.buttonLink =
-        fieldValues.buttonLink.trim() === "" ? messages.isRequired : "";
-    }
+
     if (fieldNames.type in fieldValues) {
       temp.type = fieldValues.type.trim() === "" ? messages.isRequired : "";
     }

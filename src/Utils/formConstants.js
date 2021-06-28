@@ -30,6 +30,7 @@ export const fieldNames = {
   query: "query",
   order: "order",
   type: "type",
+  category: "category",
   role: "role",
   image: "image",
   color: "color",

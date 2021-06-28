@@ -81,6 +81,18 @@ export const payload = [
     path: "/jobBenifits",
     text: "Job Benifits",
   },
+  {
+    path: "/moderate-sections/case-studies",
+    text: "Case Studies",
+  },
+  {
+    path: "/moderate-sections/how-it-works",
+    text: "How It Works",
+  },
+  {
+    path: "/moderate-sections/faqs",
+    text: "FAQs",
+  },
 ];
 
 export const apiFieldNames = {
