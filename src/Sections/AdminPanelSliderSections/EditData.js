@@ -7,7 +7,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id,edit}) {
-  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://3.138.190.235/v1/sliders");
+  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1sliders");
 
   const [file, setFile] = useState(null);
   const [array, setArray] = useState([]);
@@ -55,7 +55,7 @@ export default function EditData({ id,edit}) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://3.138.190.235/v1/sliders/${id}`);
+    const result = await axios.get(`http://api.themagnit.com/v1sliders/${id}`);
     setData(result.data.data.result);
     setArray(result.data.data.result.items);
     setFile(result.data.data.result.backgroundImage)

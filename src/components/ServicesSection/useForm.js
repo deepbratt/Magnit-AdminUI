@@ -12,7 +12,7 @@ const initialValues = {
   buttonLabel: "",
   buttonLink: "",
   image: null,
-  color: "",
+  category: "",
   type: "",
   id: null,
 };
@@ -22,7 +22,6 @@ export const useForm = (validateOnChange = false) => {
   const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [color, setColor] = useState(values.color);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState({
@@ -108,7 +107,6 @@ export const useForm = (validateOnChange = false) => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-    setColor("");
     setSelectedFile(null);
   };
 
@@ -118,12 +116,15 @@ export const useForm = (validateOnChange = false) => {
     if (validate()) {
       setIsLoading(true);
       var formData = new FormData();
-      formData.append("title", values.title);
+      formData.append("title", values.title.toLowerCase());
       formData.append("description", values.description);
       formData.append("buttonLabel", values.buttonLabel);
       formData.append("buttonLink", values.buttonLink);
       formData.append("type", values.type);
-      formData.append("color", color);
+      formData.append(
+        "category",
+        values.category ? values.category.toLowerCase() : ""
+      );
       formData.append("image", selectedFile);
 
       if (!update) {
@@ -190,8 +191,6 @@ export const useForm = (validateOnChange = false) => {
     getAllServices,
     alertOpen,
     setAlertOpen,
-    color,
-    setColor,
     values,
     setValues,
     errors,

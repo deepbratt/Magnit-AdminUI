@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://3.138.190.235/v1/";
+const BASE_URL = "http://api.themagnit.com/v1";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
 

@@ -14,7 +14,7 @@ const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
-  const link = "http://3.138.190.235/v1/companies"
+  const link = "http://api.themagnit.com/v1companies"
   const {deleteItem,data,loader} = useApi(link)
   const valueskeys = {
     title: "heading",

@@ -36,7 +36,7 @@ const sections = [
   },
   {
     value: "company",
-    label: "Company",
+    label: "Footer",
   },
   {
     value: "opportunites",
@@ -118,6 +118,10 @@ const sections = [
   {
     value: "ourObjectives",
     label: "Our Objective",
+  },
+  {
+    value: "ourSolutions",
+    label: "Solutions",
   },
 ];
 
@@ -233,12 +237,12 @@ const AddNewPages = () => {
 
     setValues((previousState) => {
       previousState.sectionName = name;
-      previousState.heading = newSection.heading ? newSection.heading : "";
-      previousState.subHeading = newSection.subHeading
-        ? newSection.subHeading
+      previousState.heading = newSection.title ? newSection.title : "";
+      previousState.subHeading = newSection.subTitle
+        ? newSection.subTitle
         : "";
       previousState.query = newSection.queryParams
-        ? newSection.queryParams
+        ? JSON.stringify(newSection.queryParams)
         : "";
       previousState.order = newSection.order ? parseInt(newSection.order) : 1;
       return {
@@ -364,7 +368,6 @@ const AddNewPages = () => {
                 {...(errors && { error: true, helperText: errors.heading })}
                 onChange={handleInputChange}
                 fullWidth
-                required
               />
             </Grid>
 
@@ -391,7 +394,7 @@ const AddNewPages = () => {
                 id="input-query"
                 variant="outlined"
                 placeholder="query e.g query"
-                value={values.query ? JSON.stringify(values.query) : ""}
+                value={values.query}
                 {...(errors && {
                   error: true,
                   helperText: errors.query,

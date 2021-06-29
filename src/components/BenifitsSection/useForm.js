@@ -10,6 +10,7 @@ const initialValues = {
   title: "",
   description: "",
   image: null,
+  type: "",
   id: null,
 };
 
@@ -103,6 +104,10 @@ export const useForm = (validateOnChange = false) => {
       formData.append("title", values.title);
       formData.append("description", values.description);
       formData.append("image", selectedFile);
+      formData.append(
+        "type",
+        values.type ? values.type.toLocaleLowerCase() : ""
+      );
 
       if (!update) {
         await addBenifitsApi(formData)

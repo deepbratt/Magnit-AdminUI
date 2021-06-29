@@ -22,7 +22,7 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://3.138.190.235/v1/teams/${id}`);
+    const result = await axios.get(`http://api.themagnit.com/v1teams/${id}`);
     setData(result.data.data.result);
   };
 

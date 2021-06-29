@@ -88,9 +88,9 @@ const AddBenifts = ({ header }) => {
           setValues({
             title: response.data.result.title,
             description: response.data.result.description,
+            type: response.data.result.type ? response.data.result.type : "",
             id: id,
           });
-
           setSelectedFile(response.data.result.image);
         } else {
           setResponseMessage({
@@ -151,6 +151,23 @@ const AddBenifts = ({ header }) => {
                   fullWidth
                   multiline
                   rows={3}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <InputLabel id="input-type">Type</InputLabel>
+                <TextField
+                  name={fieldNames.type}
+                  id="input-type"
+                  variant="outlined"
+                  placeholder="Web Development Services"
+                  value={values.type}
+                  {...(errors && {
+                    error: true,
+                    helperText: errors.type,
+                  })}
+                  onChange={handleInputChange}
+                  fullWidth
                 />
               </Grid>
 

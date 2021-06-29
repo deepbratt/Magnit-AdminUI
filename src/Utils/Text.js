@@ -41,6 +41,62 @@ export const payload = [
     path: "/review",
     text: "Review",
   },
+  {
+    path: "/services",
+    text: "Services",
+  },
+  {
+    path: "/ourWork",
+    text: "Our Work",
+  },
+  {
+    path: "/appSolutions",
+    text: "App Solutions",
+  },
+  {
+    path: "/banner",
+    text: "Banner",
+  },
+  {
+    path: "/hiringOptions",
+    text: "Hiring Options",
+  },
+  {
+    path: "/opportunities",
+    text: "Opportunities",
+  },
+  {
+    path: "/trainingAndCertification",
+    text: "Training And Certification",
+  },
+  {
+    path: "/benifits",
+    text: "Benifits",
+  },
+  {
+    path: "/factsAboutUs",
+    text: "Facts About Us",
+  },
+  {
+    path: "/jobBenifits",
+    text: "Job Benifits",
+  },
+  {
+
+    path: "/solutions",
+    text: "Solutions",
+  },
+    {path: "/moderate-sections/case-studies",
+    text: "Case Studies",
+  },
+  {
+    path: "/moderate-sections/how-it-works",
+    text: "How It Works",
+  },
+  {
+    path: "/moderate-sections/faqs",
+    text: "FAQs",
+  },
 ];
 
 export const apiFieldNames = {

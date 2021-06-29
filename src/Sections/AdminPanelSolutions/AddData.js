@@ -5,18 +5,18 @@ import Alert from "@material-ui/lab/Alert";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
-import validate from "./useValidate";
+import validate from "../AdminPanelOurObjective/useValidate";
 const AddData = () => {
   const { addData, isPending, responseAlert, open, setOpen,toastType } = useApi(
-    "http://api.themagnit.com/v1/adminPanel"
+    "http://3.138.190.235/v1/ourSolutions"
   );
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
-    description: "",
+    title: "",
   });
 
-  const { description } = data;
+  const { title } = data;
   const {} = validate(data);
   const [errors, setErrors] = useState({});
   const inputChange = (e) => {
@@ -33,7 +33,7 @@ const AddData = () => {
 
   const formData = new FormData();
   formData.append("image", file);
-  formData.append("description", description);
+  formData.append("title", title);
 
   const handleSubmit = () => {
     const validationErrors = validate(data);
@@ -53,7 +53,7 @@ const AddData = () => {
     <>
       <Grid className={grid} lg={12} item xs={12}>
         <TextFieldContext
-          text={description}
+          title={title}
           inputChange={inputChange}
           setFile={setFile}
           errors={errors}

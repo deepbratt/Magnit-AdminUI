@@ -27,8 +27,8 @@ export const useForm = (validateOnChange = false, id) => {
   const [rows, setRows] = useState([]);
   const [editSection, setEditSection] = useState(false);
   const [sectionValue, setSectionValue] = useState({
-    heading: "something",
-    subHeading: "something",
+    title: "something",
+    subtitle: "something",
     sectionName: "banner",
     query: "",
     order: 0,
@@ -45,9 +45,9 @@ export const useForm = (validateOnChange = false, id) => {
 
   const addSection = () => {
     let newSection = {
-      heading: values.heading,
-      subHeading: values.subHeading,
-      queryParams: values.query.length > 0 ? JSON.parse(values.query) : {},
+      title: values.heading,
+      subTitle: values.subHeading,
+      queryParams: values.query ? JSON.parse(values.query) : {},
       order: values.order,
     };
     let newValues = values;

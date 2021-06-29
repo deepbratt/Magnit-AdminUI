@@ -5,7 +5,7 @@ import useApi from "../../Utils/useApi";
 import useStyles from "../AdminPanelSliderSections/useStyles";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { updateData, responseAlert,open,setOpen,toastType } = useApi("http://3.138.190.235/v1/workflows");
+  const { updateData, responseAlert,open,setOpen,toastType } = useApi("http://api.themagnit.com/v1workflows");
   const { common, labels } = useStyles();
   const [file, setFile] = useState(null);
 
@@ -14,7 +14,7 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://3.138.190.235/v1/workflows/${id}`);
+    const result = await axios.get(`http://api.themagnit.com/v1workflows/${id}`);
     setFile(result.data.data.result.image);
   };
 
