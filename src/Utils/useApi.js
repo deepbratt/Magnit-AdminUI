@@ -176,7 +176,7 @@ const useApi = (url) => {
 
   const handleEdit = async (text, link, buttonLabel, id) => {
     try {
-      const rawResponse = await fetch(`http://api.themagnit.com/v1teams/${id}`, {
+      const rawResponse = await fetch(`http://api.themagnit.com/v1/teams/${id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
