@@ -46,7 +46,7 @@ export const useForm = (validateOnChange = false, id) => {
   const addSection = () => {
     let newSection = {
       title: values.heading,
-      subtitle: values.subHeading,
+      subTitle: values.subHeading,
       queryParams: values.query ? JSON.parse(values.query) : {},
       order: values.order,
     };

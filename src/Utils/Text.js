@@ -82,8 +82,20 @@ export const payload = [
     text: "Job Benifits",
   },
   {
+
     path: "/solutions",
     text: "Solutions",
+  },
+    {path: "/moderate-sections/case-studies",
+    text: "Case Studies",
+  },
+  {
+    path: "/moderate-sections/how-it-works",
+    text: "How It Works",
+  },
+  {
+    path: "/moderate-sections/faqs",
+    text: "FAQs",
   },
 ];
 

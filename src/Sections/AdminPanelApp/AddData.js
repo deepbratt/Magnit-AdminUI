@@ -8,7 +8,7 @@ import Toast from "../../components/Toast";
 import validate from "./useValidate";
 const AddData = () => {
   const { addData, isPending, responseAlert, open, setOpen,toastType } = useApi(
-    "http://3.138.190.235/v1/adminPanel"
+    "http://api.themagnit.com/v1/adminPanel"
   );
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);

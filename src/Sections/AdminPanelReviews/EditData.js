@@ -5,7 +5,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { handlePutMethod, responseAlert,open,setOpen,toastType } = useApi("http://3.138.190.235/v1/Reviews");
+  const { handlePutMethod, responseAlert,open,setOpen,toastType } = useApi("http://api.themagnit.com/v1/Reviews");
 
   const [file, setFile] = useState(null);
   const [date, setDate] = useState(new Date());
@@ -26,7 +26,7 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://3.138.190.235/v1/Reviews/${id}`);
+    const result = await axios.get(`http://api.themagnit.com/v1/Reviews/${id}`);
     setData(result.data.data.result);
     setFile(result.data.data.result.image)
     setDate(result.data.data.result.Date)
@@ -38,6 +38,7 @@ export default function EditData({ id, edit }) {
   formData.append("projectType", projectType);
   formData.append("review", review);
   {file && formData.append("image", file)}
+  {file && formData.append("clientImage", file)}
   formData.append("rating", rating);
  
     

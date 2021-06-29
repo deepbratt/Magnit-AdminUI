@@ -13,7 +13,6 @@ import {
 import { IconButton } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
 import Toast from "../../components/Toast";
-import ColorPicker from "material-ui-color-picker";
 import ServicesTable from "../../components/Table.js/index";
 import GlobalStyles from "../../globalStyles";
 import { fieldNames } from "../../Utils/formConstants";
@@ -25,8 +24,7 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
     isLoading,
     getAllServices,
     setAlertOpen,
-    color,
-    setColor,
+
     values,
     setValues,
     errors,
@@ -46,11 +44,11 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
   const types = [
     {
       value: "Parent",
-      label: "parent",
+      label: "Parent",
     },
     {
       value: "Child",
-      label: "child",
+      label: "Child",
     },
   ];
 
@@ -100,9 +98,10 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
             buttonLabel: response.data.result.buttonLabel,
             buttonLink: response.data.result.buttonLink,
             type: response.data.result.type,
+            category: response.data.result.category,
             id: response.data.result._id,
           });
-          setColor(response.data.result.color);
+
           setSelectedFile(response.data.result.image);
         } else {
           setResponseMessage({
@@ -197,6 +196,47 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
               />
             </Grid>
 
+            <Grid item xs={12} md={6}>
+              <InputLabel id="input-type">Type</InputLabel>
+              <TextField
+                name={fieldNames.type}
+                select
+                id="input-type"
+                variant="outlined"
+                placeholder="Web Development Services"
+                value={values.type}
+                {...(errors && {
+                  error: true,
+                  helperText: errors.services,
+                })}
+                onChange={handleInputChange}
+                fullWidth
+              >
+                {types.map((type) => (
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <InputLabel id="input-category">Category</InputLabel>
+              <TextField
+                name={fieldNames.category}
+                id="input-category"
+                variant="outlined"
+                placeholder="Web Development Services"
+                value={values.category}
+                {...(errors && {
+                  error: true,
+                  helperText: errors.category,
+                })}
+                onChange={handleInputChange}
+                fullWidth
+              />
+            </Grid>
+
             <Grid className={buttonWrap} item xs={12} md={6}>
               <input
                 accept="image/png"
@@ -220,7 +260,7 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
               <label>{selectedFile ? selectedFile.name : "Select Image"}</label>
               <Card
                 style={{
-                  backgroundColor: color,
+                  backgroundColor: "#eee",
                   padding: "20px",
                   margin: "0 50px",
                   minHeight: "120px",
@@ -246,38 +286,6 @@ const AddServices = ({ getOneServicesApi, deleteServiceApi, header }) => {
                   />
                 ) : null}
               </Card>
-
-              <ColorPicker
-                variant="outlined"
-                label="Pick a Color"
-                name={fieldNames.color}
-                value={color}
-                onChange={(color) => setColor(color.toString())}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-type">Type</InputLabel>
-              <TextField
-                name={fieldNames.type}
-                select
-                id="input-type"
-                variant="outlined"
-                placeholder="Web Development Services"
-                value={values.services}
-                {...(errors && {
-                  error: true,
-                  helperText: errors.services,
-                })}
-                onChange={handleInputChange}
-                fullWidth
-              >
-                {types.map((type) => (
-                  <MenuItem key={type.value} value={type.value}>
-                    {type.label}
-                  </MenuItem>
-                ))}
-              </TextField>
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>

@@ -238,17 +238,14 @@ export const pagesRoutes = {
     component: JobBenefitsSection,
   },
   [paths.caseStudies]: {
-    name: "Section/caseStudies",
     path: routes.caseStudies,
     component: CaseStudies,
   },
   [paths.howItWorks]: {
-    name: "Section/howItWorks",
     path: routes.howItWorks,
     component: HowItWorks,
   },
   [paths.faqs]: {
-    name: "Section/faqs",
     path: routes.faqs,
     component: FAQs,
   },

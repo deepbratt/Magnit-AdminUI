@@ -238,8 +238,8 @@ const AddNewPages = () => {
     setValues((previousState) => {
       previousState.sectionName = name;
       previousState.heading = newSection.title ? newSection.title : "";
-      previousState.subHeading = newSection.subtitle
-        ? newSection.subtitle
+      previousState.subHeading = newSection.subTitle
+        ? newSection.subTitle
         : "";
       previousState.query = newSection.queryParams
         ? JSON.stringify(newSection.queryParams)

@@ -15,10 +15,11 @@ const validate = (data) => {
   }
   if (!data.review) {
     errors.review = "Review is required";
-  } else if (data.review <= 13) {
+  } else if (data.review.length <= 13) {
+
     errors.review = "Text needs to be greater than 13";
   }
-  if (data.rating.length <= 1) {
+  if (data.rating <= 1) {
     errors.rating = "Ratings need to be greater than 1.0";
   } 
   return errors;

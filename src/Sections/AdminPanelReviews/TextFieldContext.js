@@ -86,7 +86,17 @@ const TextFieldContext = ({
           <p style={{ color: "red" }}>{errors.rating}</p>: null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
-        <InputLabel className={labels}>Image</InputLabel>
+        <InputLabel className={labels}>Project Image</InputLabel>
+        <TextField
+          variant="outlined"
+          type="file"
+          name="file"
+          onChange={(e) => setFile(e.target.files[0])}
+          style={{ width: "100%" }}
+        />
+      </Grid>
+      <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
+        <InputLabel className={labels}>Client Image</InputLabel>
         <TextField
           variant="outlined"
           type="file"
