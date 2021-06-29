@@ -8,6 +8,7 @@ export default function EditData({ id, edit }) {
   const { handlePutMethod, responseAlert,open,setOpen,toastType } = useApi("http://api.themagnit.com/v1/Reviews");
 
   const [file, setFile] = useState(null);
+  const [cFile, setCFile] = useState(null);
   const [date, setDate] = useState(new Date());
   const [data, setData] = useState({
     clientName: "",
@@ -30,6 +31,7 @@ export default function EditData({ id, edit }) {
     setData(result.data.data.result);
     setFile(result.data.data.result.image)
     setDate(result.data.data.result.Date)
+    console.log(result)
   };
 
   const formData = new FormData();
@@ -38,7 +40,7 @@ export default function EditData({ id, edit }) {
   formData.append("projectType", projectType);
   formData.append("review", review);
   {file && formData.append("image", file)}
-  {file && formData.append("clientImage", file)}
+  {cFile && formData.append("clientImage", cFile)}
   formData.append("rating", rating);
  
     
@@ -76,6 +78,7 @@ export default function EditData({ id, edit }) {
              edit={edit}
              date={date}
              setDate={setDate}
+             setCFile={setCFile}
           />
           <Grid item>
             <Button
