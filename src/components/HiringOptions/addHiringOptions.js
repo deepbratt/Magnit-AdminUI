@@ -13,6 +13,7 @@ import { List } from "@material-ui/core";
 import { ListItem } from "@material-ui/core";
 import { ListItemText } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
+import EditRoundedIcon from "@material-ui/icons/Edit";
 import Toast from "../../components/Toast";
 import DataTable from "../../components/Table.js/index";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -29,10 +30,6 @@ const AddHiringOptions = ({ header }) => {
     isLoading,
     alertOpen,
     setAlertOpen,
-    item,
-    setItem,
-    items,
-    setItems,
     values,
     setValues,
     errors,
@@ -43,6 +40,11 @@ const AddHiringOptions = ({ header }) => {
     resetForm,
     responseMessage,
     setResponseMessage,
+    itemUpdate,
+    setItemUpdate,
+    addItem,
+    updateItem,
+    setItemIndex,
   } = useForm();
   const { form, buttonWrap } = GlobalStyles();
 
@@ -84,10 +86,27 @@ const AddHiringOptions = ({ header }) => {
   };
 
   const deleteItemByIndex = (index) => {
-    const newItems = [...items];
+    const newItems = [...values.items];
     newItems.splice(index, 1);
 
-    setItems(newItems);
+    setValues((previousState) => {
+      previousState.items = newItems;
+
+      return {
+        ...previousState,
+      };
+    });
+  };
+
+  const setUpdateItemValues = (valueToUpdate, index) => {
+    setItemUpdate(true);
+    setItemIndex(index);
+    setValues((previousState) => {
+      previousState.item = valueToUpdate;
+      return {
+        ...previousState,
+      };
+    });
   };
 
   const handleUpdate = async (id) => {
@@ -102,9 +121,9 @@ const AddHiringOptions = ({ header }) => {
             text: response.data.result.text,
             buttonLabel: response.data.result.buttonLabel,
             buttonLink: response.data.result.buttonLink,
+            items: response.data.result.items,
             id: id,
           });
-          setItems(response.data.result.items);
         } else {
           setResponseMessage({
             status: "error",
@@ -194,49 +213,63 @@ const AddHiringOptions = ({ header }) => {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
-              <InputLabel id="input-items">Items</InputLabel>
-              <TextField
-                name={fieldNames.items}
-                id="input-items"
-                variant="outlined"
-                placeholder="lorem ipsum...."
-                value={item}
-                {...(errors && { error: true, helperText: errors.text })}
-                onChange={(e) => setItem(e.target.value)}
-                fullWidth
-                multiline
-              />
-              <Button
-                style={{
-                  minWidth: "120px",
-                  maxHeight: "50px",
-                }}
-                variant="outlined"
-                color="success"
-                size="large"
-                onClick={() => {
-                  setItems([...items, item]);
-                }}
-              >
-                Add Items
-              </Button>
+            <Grid
+              item
+              container
+              justify="space-between"
+              alignItems="center"
+              xs={12}
+            >
+              <Grid item xs={9}>
+                <InputLabel id="input-items">Items</InputLabel>
+                <TextField
+                  name={fieldNames.item}
+                  id="input-items"
+                  variant="outlined"
+                  placeholder="lorem ipsum...."
+                  value={values.item}
+                  {...(errors && { error: true, helperText: errors.items })}
+                  onChange={handleInputChange}
+                  fullWidth
+                  multiline
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  style={{
+                    minWidth: "120px",
+                    maxHeight: "50px",
+                  }}
+                  variant="outlined"
+                  color="success"
+                  size="large"
+                  onClick={itemUpdate ? updateItem : addItem}
+                >
+                  {itemUpdate ? "Update" : "Add"} Item
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
               <Typography variant="h6">ITEMS LIST</Typography>
               <List>
-                {items &&
-                  items.map((item, index) => (
+                {values.items &&
+                  values.items.map((item, index) => (
                     <ListItem key={index}>
                       <ListItemText>{item}</ListItemText>
                       <ListItemSecondaryAction>
                         <IconButton onClick={() => deleteItemByIndex(index)}>
                           <DeleteIcon color="error" />
                         </IconButton>
+                        <IconButton
+                          onClick={() => setUpdateItemValues(item, index)}
+                        >
+                          <EditRoundedIcon color="primary" />
+                        </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
                   ))}
               </List>
             </Grid>
-
             <Grid className={buttonWrap} item xs={12} md={6}>
               <Button
                 type="submit"

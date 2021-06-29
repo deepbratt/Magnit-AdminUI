@@ -115,7 +115,7 @@ export const useForm = (validateOnChange = false) => {
         message: "Validation Failed",
       });
       setAlertOpen(true);
-      resetForm();
+      resetItemForm();
     }
   };
 

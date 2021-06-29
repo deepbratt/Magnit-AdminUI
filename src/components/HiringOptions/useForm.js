@@ -11,6 +11,7 @@ const initialValues = {
   text: "",
   buttonLabel: "",
   buttonLink: "",
+  item: "",
   items: [],
   id: null,
 };
@@ -20,8 +21,8 @@ export const useForm = (validateOnChange = false) => {
   const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
   const [update, setUpdate] = useState(false);
-  const [item, setItem] = useState("");
-  const [items, setItems] = useState(values.items);
+  const [itemIndex, setItemIndex] = useState();
+  const [itemUpdate, setItemUpdate] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState({
@@ -84,6 +85,28 @@ export const useForm = (validateOnChange = false) => {
       return Object.values(temp).every((x) => x === "");
   };
 
+  const addItem = () => {
+    let newItem = values.item;
+    let newValues = values;
+
+    values.items.push(newItem);
+    setValues(newValues);
+    resetItemForm();
+  };
+
+  const updateItem = () => {
+    let newItems = values.items;
+    newItems[itemIndex] = values.item;
+
+    setValues((previousState) => {
+      previousState.items = newItems;
+      return {
+        ...previousState,
+      };
+    });
+    resetItemForm();
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -94,12 +117,21 @@ export const useForm = (validateOnChange = false) => {
     if (validateOnChange) validate({ [name]: value });
   };
 
+  const resetItemForm = () => {
+    setValues((previousState) => {
+      previousState.item = "";
+
+      return {
+        ...previousState,
+      };
+    });
+    setItemUpdate(false);
+  };
+
   const resetForm = () => {
     setValues(initialValues);
     setErrors({});
     setUpdate(false);
-    setItems([]);
-    setItem("");
   };
 
   const handleSubmit = async (e) => {
@@ -112,7 +144,7 @@ export const useForm = (validateOnChange = false) => {
         text: values.text,
         buttonLabel: values.buttonLabel,
         buttonLink: values.buttonLink,
-        items: items,
+        items: values.items,
       };
 
       if (!update) {
@@ -179,10 +211,6 @@ export const useForm = (validateOnChange = false) => {
     getAllHiringOptions,
     alertOpen,
     setAlertOpen,
-    item,
-    setItem,
-    items,
-    setItems,
     values,
     setValues,
     errors,
@@ -196,5 +224,11 @@ export const useForm = (validateOnChange = false) => {
     isLoading,
     responseMessage,
     setResponseMessage,
+    itemUpdate,
+    setItemUpdate,
+    addItem,
+    updateItem,
+    itemIndex,
+    setItemIndex,
   };
 };
