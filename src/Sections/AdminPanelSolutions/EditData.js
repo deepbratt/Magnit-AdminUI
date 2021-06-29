@@ -5,27 +5,29 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { handlePutMethod,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1ourObjectives");
+  const { handlePutMethod,responseAlert,open,setOpen,toastType} = useApi("http://3.138.190.235/v1/ourSolutions");
 
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
     title: "",
-    text: "",
   });
-  const {title,text} = data;
+  const {title} = data;
   const inputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  const formData = new FormData();
+  {file && formData.append("image", file)}
+  formData.append("title", title);
 
   useEffect(() => {
     loadSelectedData();
   }, []);
 
   const loadSelectedData = async () => {
-    const {data} = await axios.get(`http://api.themagnit.com/v1ourObjectives/${id}`);
+    const {data} = await axios.get(`http://3.138.190.235/v1/ourSolutions/${id}`);
     setData(data.data.result);
-    setFile(data.data.result.icon)
+    setFile(data.data.result.image)
   };
 
   
@@ -36,11 +38,6 @@ export default function EditData({ id, edit }) {
 
     setOpen(false);
   };
-
-  const formData = new FormData();
-  {file && formData.append("icon", file)}
-  formData.append("title", title);
-  formData.append("text", text);
 
   return (
     <div>
@@ -56,13 +53,12 @@ export default function EditData({ id, edit }) {
           item
           xs={12}
         >
-           <TextFieldContext
-          title={title}
-          text={text}
-          inputChange={inputChange}
-          setFile={setFile}
-          edit={edit}
-        />
+          <TextFieldContext
+            title={title}
+            inputChange={inputChange}
+            setFile={setFile}
+            edit={edit}
+          />
           <Grid
             item
             lg={12}
@@ -81,7 +77,7 @@ export default function EditData({ id, edit }) {
                 handlePutMethod(id, formData);
                 setTimeout(() => {
                   edit(false);
-                }, 3000);
+                }, 1000);
               }}
               variant="contained"
               color="primary"

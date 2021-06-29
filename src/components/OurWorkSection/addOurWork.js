@@ -89,6 +89,7 @@ const AddOurWork = ({ header }) => {
             title: response.data.result.title,
             description: response.data.result.description,
             buttonLink: response.data.result.buttonLink,
+            type: response.data.result.type,
             id: id,
           });
 
@@ -156,6 +157,21 @@ const AddOurWork = ({ header }) => {
                 variant="outlined"
                 placeholder="lorem ipsum...."
                 value={values.description}
+                {...(errors && { error: true, helperText: errors.description })}
+                onChange={handleInputChange}
+                fullWidth
+                multiline
+                rows={3}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <InputLabel id="input-description">Type</InputLabel>
+              <TextField
+                name={fieldNames.type}
+                id="input-type"
+                variant="outlined"
+                placeholder="hire developer"
+                value={values.type}
                 {...(errors && { error: true, helperText: errors.description })}
                 onChange={handleInputChange}
                 fullWidth

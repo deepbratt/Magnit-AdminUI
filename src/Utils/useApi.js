@@ -141,7 +141,7 @@ const useApi = (url) => {
 
   const handleAddData = async (text, link, buttonLabel) => {
     try {
-      const rawResponse = await fetch("http://api.themagnit.com/v1teams", {
+      const rawResponse = await fetch("http://api.themagnit.com/v1/teams", {
         method: "POST",
         headers: {
           Accept: "application/json",

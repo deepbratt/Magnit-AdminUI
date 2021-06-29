@@ -8,10 +8,11 @@ import Toast from "../../components/Toast";
 import validate from "./useValidate";
 const AddData = () => {
   const { addData, isPending, responseAlert, open, setOpen,toastType } = useApi(
-    "http://api.themagnit.com/v1Reviews"
+    "http://api.themagnit.com/v1/Reviews"
   );
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [data, setData] = useState({
     clientName: "",
     projectName: "",
@@ -32,7 +33,9 @@ const AddData = () => {
   formData.append("projectName", projectName);
   formData.append("projectType", projectType);
   formData.append("review", review);
+  formData.append("Date", date);
   formData.append("image", file);
+  formData.append("clientImage", file);
   formData.append("rating", rating);
 
   const handleToastClose = (event, reason) => {
@@ -73,6 +76,8 @@ const AddData = () => {
           inputChange={inputChange}
           setFile={setFile}
           errors={errors}
+          date={date}
+          setDate={setDate}
         />
       </Grid>
       <Grid

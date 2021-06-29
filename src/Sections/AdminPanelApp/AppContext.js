@@ -10,7 +10,7 @@ const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
-  const link = "http://api.themagnit.com/v1adminPanel";
+  const link = "http://api.themagnit.com/v1/adminPanel";
   const { deleteItem, data, loader } = useApi(link);
   const valueskeys = {
     title: "description",

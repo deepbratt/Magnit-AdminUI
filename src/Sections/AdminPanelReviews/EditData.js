@@ -5,9 +5,10 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { handlePutMethod, responseAlert,open,setOpen,toastType } = useApi("http://api.themagnit.com/v1Reviews");
+  const { handlePutMethod, responseAlert,open,setOpen,toastType } = useApi("http://api.themagnit.com/v1/Reviews");
 
   const [file, setFile] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [data, setData] = useState({
     clientName: "",
     projectName: "",
@@ -28,6 +29,7 @@ export default function EditData({ id, edit }) {
     const result = await axios.get(`http://api.themagnit.com/v1/Reviews/${id}`);
     setData(result.data.data.result);
     setFile(result.data.data.result.image)
+    setDate(result.data.data.result.Date)
   };
 
   const formData = new FormData();
@@ -36,6 +38,7 @@ export default function EditData({ id, edit }) {
   formData.append("projectType", projectType);
   formData.append("review", review);
   {file && formData.append("image", file)}
+  {file && formData.append("clientImage", file)}
   formData.append("rating", rating);
  
     
@@ -71,6 +74,8 @@ export default function EditData({ id, edit }) {
              inputChange={inputChange}
              setFile={setFile}
              edit={edit}
+             date={date}
+             setDate={setDate}
           />
           <Grid item>
             <Button

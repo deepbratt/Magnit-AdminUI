@@ -9,6 +9,7 @@ import {
 const initialValues = {
   title: "",
   description: "",
+  type: "",
 
   buttonLink: "",
   image: null,
@@ -112,6 +113,7 @@ export const useForm = (validateOnChange = false, id) => {
       var formData = new FormData();
       formData.append("title", values.title);
       formData.append("description", values.description);
+      formData.append("type", values.type);
       formData.append("buttonLink", values.buttonLink);
       formData.append("image", selectedFile);
 

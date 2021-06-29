@@ -36,6 +36,9 @@ const AdminPanelApp = lazy(() =>
 const AdminPanelReview = lazy(() =>
   import("../Sections/AdminPanelReviews/ReviewContext")
 );
+const AdminPanelSolutions = lazy(() =>
+  import("../Sections/AdminPanelSolutions/SolutionsContext")
+);
 const AddServices = lazy(() => import("../components/ServicesSection"));
 const OurWorkSection = lazy(() => import("../components/OurWorkSection"));
 const AppSolutions = lazy(() => import("../components/AppSolutions"));
@@ -90,6 +93,7 @@ export const paths = {
   caseStudies: "case-studies",
   howItWorks: "how-it-works",
   faqs: "faqs",
+  solutions: "solutions"
 };
 
 export const routes = {
@@ -123,6 +127,7 @@ export const routes = {
   caseStudies: "/moderate-sections/case-studies",
   howItWorks: "/moderate-sections/how-it-works",
   faqs: "/moderate-sections/faqs",
+  solutions: "/solutions"
 };
 
 export const pagesRoutes = {
@@ -243,6 +248,10 @@ export const pagesRoutes = {
   [paths.faqs]: {
     path: routes.faqs,
     component: FAQs,
+  },
+  [paths.solutions]: {
+    path: routes.solutions,
+    component: AdminPanelSolutions,
   },
 };
 

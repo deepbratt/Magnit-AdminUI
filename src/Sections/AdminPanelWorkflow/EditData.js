@@ -14,7 +14,7 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://api.themagnit.com/v1/workflows/${id}`);
+    const result = await axios.get(`http://api.themagnit.com/v1workflows/${id}`);
     setFile(result.data.data.result.image);
   };
 

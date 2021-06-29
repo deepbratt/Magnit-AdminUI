@@ -1,6 +1,7 @@
 import React from "react";
 import { TextField, InputLabel, Grid } from "@material-ui/core";
 import useStyles from "../AdminPanelSliderSections/useStyles";
+import DateField from "../AdminPanelBlogs/DateContext"
 const TextFieldContext = ({
   clientName,
   projectName,
@@ -10,7 +11,9 @@ const TextFieldContext = ({
   inputChange,
   setFile,
   errors,
-  edit
+  edit,
+  date,
+  setDate
 }) => {
   const { labels, common } = useStyles();
   return (
@@ -51,8 +54,8 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
-           {errors.projectType && (
-          <p style={{ color: "red" }}>{errors.projectType}</p>)}
+           {!edit ?
+          <p style={{ color: "red" }}>{errors.projectType}</p>: null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
         <InputLabel className={labels}>Review</InputLabel>
@@ -79,11 +82,11 @@ const TextFieldContext = ({
           onChange={(e) => inputChange(e)}
           style={{ width: "100%" }}
         />
-        {errors.rating && (
-          <p style={{ color: "red" }}>{errors.rating}</p>)}
+          {!edit ?
+          <p style={{ color: "red" }}>{errors.rating}</p>: null}
       </Grid>
       <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
-        <InputLabel className={labels}>Image</InputLabel>
+        <InputLabel className={labels}>Project Image</InputLabel>
         <TextField
           variant="outlined"
           type="file"
@@ -91,6 +94,22 @@ const TextFieldContext = ({
           onChange={(e) => setFile(e.target.files[0])}
           style={{ width: "100%" }}
         />
+      </Grid>
+      <Grid className={common} item lg={5} md={5} sm={10} xs={12}>
+        <InputLabel className={labels}>Client Image</InputLabel>
+        <TextField
+          variant="outlined"
+          type="file"
+          name="file"
+          onChange={(e) => setFile(e.target.files[0])}
+          style={{ width: "100%" }}
+        />
+      </Grid>
+      <Grid className={common} item lg={11} md={5} sm={10} xs={12}>
+        <InputLabel style={{ marginLeft: "30px" }} className={labels}>
+          Choose Date
+        </InputLabel>
+        <DateField date={date} setDate={setDate} />
       </Grid>
     </>
   );
