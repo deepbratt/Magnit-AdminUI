@@ -34,6 +34,7 @@ export const fieldNames = {
   role: "role",
   image: "image",
   color: "color",
+  item: "item",
 };
 
 export const serverResponseMessages = {

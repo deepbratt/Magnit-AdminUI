@@ -7,9 +7,8 @@ import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 import validate from "./useValidate";
 const AddData = () => {
-  const { addData, isPending, responseAlert, open, setOpen,toastType } = useApi(
-    "http://api.themagnit.com/v1/adminPanel"
-  );
+  const { addData, isPending, responseAlert, open, setOpen, toastType } =
+    useApi("http://api.themagnit.com/v1/adminPanel");
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
@@ -106,7 +105,9 @@ const AddData = () => {
         )}
         {!isPending ? (
           <Alert severity="success">Status: Added successfully!</Alert>
-        ) : <Alert severity="info">Status: pending</Alert>}
+        ) : (
+          <Alert severity="info">Status: pending</Alert>
+        )}
       </Grid>
     </>
   );

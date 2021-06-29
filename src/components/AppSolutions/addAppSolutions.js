@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import GlobalStyles from "../../globalStyles";
 import { useForm } from "./useForm";
-import { fieldNames } from "../../Utils/formConstants";
 import {
   deleteAppSolutionsApi,
   getOneAppSolutionsApi,
@@ -21,9 +20,11 @@ import { ListItem } from "@material-ui/core";
 import { ListItemText } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditRoundedIcon from "@material-ui/icons/Edit";
 import { PhotoCamera } from "@material-ui/icons";
 import Toast from "../../components/Toast";
 import DataTable from "../Table.js/index";
+import { fieldNames } from "../../Utils/formConstants";
 
 const AddAppSolutions = ({ header }) => {
   const {
@@ -47,7 +48,12 @@ const AddAppSolutions = ({ header }) => {
     setResponseMessage,
     handleIconCapture,
     selectedIcon,
+    setSelectedIcon,
+    itemUpdate,
+    setItemUpdate,
     addItem,
+    updateItem,
+    setItemIndex,
   } = useForm();
   const { form, buttonWrap } = GlobalStyles();
 
@@ -90,10 +96,28 @@ const AddAppSolutions = ({ header }) => {
 
   const deleteItemByIndex = (index) => {
     console.log("values before delete", values);
-    let newObject = values;
-    newObject.dataArray.splice(index, 1);
-    console.log("newObject", newObject);
-    setValues(newObject);
+    let newItems = values.dataArray;
+    newItems.splice(index, 1);
+    console.log("newObject", newItems);
+    setValues((previousState) => {
+      previousState.dataArray = newItems;
+      return {
+        ...previousState,
+      };
+    });
+  };
+
+  const setUpdateItemValues = (valueToUpdate, index) => {
+    setItemUpdate(true);
+    setItemIndex(index);
+    setValues((previousState) => {
+      previousState.title = valueToUpdate.title ? valueToUpdate.title : "";
+      previousState.description = valueToUpdate.text ? valueToUpdate.text : "";
+      return {
+        ...previousState,
+      };
+    });
+    setSelectedIcon(valueToUpdate.icon);
   };
 
   const handleUpdate = async (id) => {
@@ -127,7 +151,7 @@ const AddAppSolutions = ({ header }) => {
 
   const valueskeys = {
     _id: "_id",
-    title: "image"
+    title: "image",
   };
 
   return (
@@ -285,28 +309,34 @@ const AddAppSolutions = ({ header }) => {
                   variant="outlined"
                   color="success"
                   size="large"
-                  onClick={addItem}
+                  onClick={itemUpdate ? updateItem : addItem}
                 >
-                  Add Items
+                  {itemUpdate ? "Update" : "Add"} Item
                 </Button>
               </Grid>
-
-              <List>
-                {values.dataArray &&
-                  values.dataArray.map((item, index) => (
-                    <ListItem key={index}>
-                      <ListItemText>{item.title}</ListItemText>
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          color="warning"
-                          onClick={() => deleteItemByIndex(index)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-              </List>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom>
+                  Items Added
+                </Typography>
+                <List>
+                  {values.dataArray &&
+                    values.dataArray.map((item, index) => (
+                      <ListItem key={index}>
+                        <ListItemText>{item.title}</ListItemText>
+                        <ListItemSecondaryAction>
+                          <IconButton onClick={() => deleteItemByIndex(index)}>
+                            <DeleteIcon color="error" />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => setUpdateItemValues(item, index)}
+                          >
+                            <EditRoundedIcon color="primary" />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ))}
+                </List>
+              </Grid>
             </Grid>
 
             <Grid className={buttonWrap} item xs={12} md={6}>

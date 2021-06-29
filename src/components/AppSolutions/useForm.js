@@ -19,7 +19,9 @@ export const useForm = (validateOnChange = false) => {
   const [values, setValues] = useState(initialValues);
   const [rows, setRows] = useState([]);
   const [errors, setErrors] = useState({});
+  const [itemIndex, setItemIndex] = useState();
   const [update, setUpdate] = useState(false);
+  const [itemUpdate, setItemUpdate] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -98,7 +100,7 @@ export const useForm = (validateOnChange = false) => {
     if (validate()) {
       let newItem = {
         title: values.title,
-        description: values.description,
+        text: values.description,
         icon: selectedIcon,
       };
       let newValues = values;
@@ -113,8 +115,33 @@ export const useForm = (validateOnChange = false) => {
         message: "Validation Failed",
       });
       setAlertOpen(true);
-      resetForm();
+      resetItemForm();
     }
+  };
+
+  const updateItem = () => {
+    let updatedItem = {
+      ...values.dataArray[itemIndex],
+      title: values.title,
+      text: values.description,
+      icon: selectedIcon,
+    };
+
+    const updatedDataArray = [
+      ...values.dataArray.slice(0, itemIndex),
+      updatedItem,
+      ...values.dataArray.slice(itemIndex + 1),
+    ];
+
+    console.log("updated array", updatedDataArray);
+
+    setValues((previousState) => {
+      previousState.dataArray = updatedDataArray;
+      return {
+        ...previousState,
+      };
+    });
+    resetItemForm();
   };
 
   const getBase64 = (file) =>
@@ -135,8 +162,29 @@ export const useForm = (validateOnChange = false) => {
     if (validateOnChange) validate({ [name]: value });
   };
 
+  const resetItemForm = () => {
+    setValues((previousState) => {
+      previousState.title = "";
+      previousState.description = "";
+
+      return {
+        ...previousState,
+      };
+    });
+
+    setSelectedIcon(null);
+    setItemUpdate(false);
+  };
+
   const resetForm = () => {
-    setValues(initialValues);
+    setValues((previousState) => {
+      previousState.title = "";
+      previousState.description = "";
+      previousState.dataArray = "";
+      return {
+        ...previousState,
+      };
+    });
     setSelectedFile(null);
     setSelectedIcon(null);
     setErrors({});
@@ -234,6 +282,11 @@ export const useForm = (validateOnChange = false) => {
     handleIconCapture,
     selectedIcon,
     setSelectedIcon,
+    itemUpdate,
+    setItemUpdate,
     addItem,
+    updateItem,
+    itemIndex,
+    setItemIndex,
   };
 };

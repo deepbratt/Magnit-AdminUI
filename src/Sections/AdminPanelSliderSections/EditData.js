@@ -55,7 +55,7 @@ export default function EditData({ id,edit}) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://api.themagnit.com/v1sliders/${id}`);
+    const result = await axios.get(`http://api.themagnit.com/v1/sliders/${id}`);
     setData(result.data.data.result);
     setArray(result.data.data.result.items);
     setFile(result.data.data.result.backgroundImage)
