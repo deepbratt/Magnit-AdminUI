@@ -166,7 +166,7 @@ const AddAppSolutions = ({ header }) => {
           <form className={form} onSubmit={handleSubmit}>
             <Grid className={buttonWrap} item xs={12} md={6}>
               <input
-                accept="image/png"
+                accept="image/*"
                 name={fieldNames.image}
                 style={{ display: "none" }}
                 id="input-image"
@@ -252,7 +252,7 @@ const AddAppSolutions = ({ header }) => {
 
               <Grid className={buttonWrap} item xs={12}>
                 <input
-                  accept="image/png"
+                  accept="image/*"
                   name={fieldNames.icon}
                   style={{ display: "none" }}
                   id="input-icon"
