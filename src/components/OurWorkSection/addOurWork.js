@@ -182,7 +182,7 @@ const AddOurWork = ({ header }) => {
 
             <Grid className={buttonWrap} item xs={12} md={6}>
               <input
-                accept="image/png"
+                accept="image/*"
                 name={fieldNames.image}
                 style={{ display: "none" }}
                 id="input-image"
