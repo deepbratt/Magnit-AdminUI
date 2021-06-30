@@ -12,6 +12,7 @@ const AddData = () => {
   );
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
+  const [cFile, setCFile] = useState(null);
   const [date, setDate] = useState(new Date());
   const [data, setData] = useState({
     clientName: "",
@@ -35,7 +36,7 @@ const AddData = () => {
   formData.append("review", review);
   formData.append("Date", date);
   formData.append("image", file);
-  formData.append("clientImage", file);
+  formData.append("clientImage", cFile);
   formData.append("rating", rating);
 
   const handleToastClose = (event, reason) => {
@@ -78,6 +79,7 @@ const AddData = () => {
           errors={errors}
           date={date}
           setDate={setDate}
+          setCFile={setCFile}
         />
       </Grid>
       <Grid

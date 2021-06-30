@@ -13,7 +13,8 @@ const TextFieldContext = ({
   errors,
   edit,
   date,
-  setDate
+  setDate,
+  setCFile
 }) => {
   const { labels, common } = useStyles();
   return (
@@ -101,7 +102,7 @@ const TextFieldContext = ({
           variant="outlined"
           type="file"
           name="file"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e) => setCFile(e.target.files[0])}
           style={{ width: "100%" }}
         />
       </Grid>
