@@ -71,8 +71,12 @@ const sections = [
     label: "App Solutions",
   },
   {
-    value: "blogs",
-    label: "Blogs",
+    value: "trendingBlogs",
+    label: "Trending Blogs",
+  },
+  {
+    value: "latestBlogs",
+    label: "Latest Blogs",
   },
   {
     value: "benefits",
