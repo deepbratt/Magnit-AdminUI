@@ -5,7 +5,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { handlePutMethod,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1adminPanel");
+  const { handlePutMethod,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1/adminPanel");
 
   const [file, setFile] = useState(null);
   const [data, setData] = useState({

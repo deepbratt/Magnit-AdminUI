@@ -40,6 +40,7 @@ const useApi = (url) => {
       .then(() => setLoader(false))
       .catch((error) => {
         setError({ errorMessage: error.status });
+        setLoader(false);
       });
   };
 
@@ -130,7 +131,7 @@ const useApi = (url) => {
     try {
       await axios.delete(`${url}/${id}`);
       let filteredArray = data.filter((item) => item._id !== id);
-      setData(filteredArray)
+      setData(filteredArray);
     } catch (error) {
       console.error("There was an error!", error);
       if (error.response) {
@@ -176,18 +177,21 @@ const useApi = (url) => {
 
   const handleEdit = async (text, link, buttonLabel, id) => {
     try {
-      const rawResponse = await fetch(`http://api.themagnit.com/v1/teams/${id}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: text,
-          link: link,
-          buttonLabel: buttonLabel,
-        }),
-      });
+      const rawResponse = await fetch(
+        `http://api.themagnit.com/v1/teams/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: text,
+            link: link,
+            buttonLabel: buttonLabel,
+          }),
+        }
+      );
       const { data, status } = await rawResponse.json();
 
       if (status === "success") {
