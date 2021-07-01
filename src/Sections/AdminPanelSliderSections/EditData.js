@@ -7,7 +7,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id,edit}) {
-  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1sliders");
+  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1/sliders");
 
   const [file, setFile] = useState(null);
   const [array, setArray] = useState([]);

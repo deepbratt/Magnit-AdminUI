@@ -10,13 +10,13 @@ const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
-  const link = "http://api.themagnit.com/v1sliders";
-  const { deleteItem,data,loader } = useApi(link);
+  const link = "http://api.themagnit.com/v1/sliders";
+  const { deleteItem, data, loader } = useApi(link);
 
   return (
     <div>
       {!edit ? (
-        <Grid justify="center" style={{display: "flex"}} container>
+        <Grid justify="center" style={{ display: "flex" }} container>
           <Grid className={heading} item lg={12} xs={12}>
             <Typography variant="h4">Home Slider Data</Typography>
           </Grid>
@@ -24,13 +24,13 @@ const DisplayData = () => {
             <AddData />
           </Grid>
           <Grid item xs={12}>
-          <Loader open={loader} />
-          <Table
-            rows={data}
-            handleDelete={deleteItem}
-            handleUpdate={setId}
-            edit={setEdit}
-          />
+            <Loader open={loader} />
+            <Table
+              rows={data}
+              handleDelete={deleteItem}
+              handleUpdate={setId}
+              edit={setEdit}
+            />
           </Grid>
         </Grid>
       ) : (
