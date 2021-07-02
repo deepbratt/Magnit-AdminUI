@@ -33,7 +33,7 @@ const apiEndpoints={
 export const userLoginApi = async (data) => {
   try {
     let result = await axiosInstance.post(`${USERS.LOGIN}`, data);
-
+    localStorage.setItem('jwt', result.data.token)
     return result.data;
   } catch (error) {
     console.log(error);
