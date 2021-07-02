@@ -5,7 +5,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1awards");
+  const { updateData,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1/awards");
 
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
@@ -27,7 +27,7 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const {data} = await axios.get(`http://api.themagnit.com/v1awards/${id}`);
+    const {data} = await axios.get(`http://api.themagnit.com/v1/awards/${id}`);
     setData(data.data.result);
     setFile(data.data.result.image)
   };

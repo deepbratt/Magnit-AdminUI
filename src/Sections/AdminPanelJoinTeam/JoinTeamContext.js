@@ -13,7 +13,7 @@ const JoinTeamContext = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
-  const link = "http://api.themagnit.com/v1teams"
+  const link = "http://api.themagnit.com/v1/teams"
   const {deleteItem,data,loader} = useApi(link)
   const valueskeys = {
     title: "buttonLabel",
