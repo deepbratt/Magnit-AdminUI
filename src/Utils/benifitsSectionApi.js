@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
     Accept: "multipart/form-data",
     "Content-Type": "multipart/form-data",
     "Access-Control-Allow-Origin": "*",
+    'Authorization' : "Bearer "+localStorage.getItem('jwt')
   },
 });
 

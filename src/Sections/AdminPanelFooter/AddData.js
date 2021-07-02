@@ -20,6 +20,8 @@ const AddData = () => {
   const { grid, btn } = useStyles();
 
 
+
+
   const {
     numberTitle,
     addressTitle,
@@ -61,16 +63,24 @@ const AddData = () => {
     }
     setOpen(false);
   };
-
+  
+  
 
   const handleAddData = async () => {
+
+    const  headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization' : "Bearer "+localStorage.getItem('jwt')
+    }
   
     try{
-     const rawResponse = await fetch("http://api.themagnit.com/v1/companies", {
+     const rawResponse = await fetch("http://api.themagnit.com/v1/companies", {headers}, {
        method: 'POST',
        headers: {
          'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'application/json',
+         'Authorization' : "Bearer "+localStorage.getItem('jwt')
        },
        body: JSON.stringify({ 
         heading: heading,  
@@ -97,8 +107,8 @@ const AddData = () => {
       if (error) {
         setIsPending(true);
         setResponseAlert({
-          status: error.status,
-          message: error.message,
+          status: error.response.data.status ,
+          message: error.response.data.message
         });
         setOpen(true);
         setToastType('error')
