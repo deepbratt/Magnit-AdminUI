@@ -18,7 +18,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.user = {};
-      state.token = "";
+      state.token = localStorage.clear("jwt");
       state.isLoggedIn = false;
     },
   },

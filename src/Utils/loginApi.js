@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
     Accept: "application/json",
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
+    'Authorization' : "Bearer "+localStorage.getItem('jwt')
   },
 });
 const axiosFormInstance = axios.create({
@@ -15,6 +16,7 @@ const axiosFormInstance = axios.create({
     Accept: "application/json",
     'Content-Type': 'multipart/form-data',
     "Access-Control-Allow-Origin": "*",
+    'Authorization' : "Bearer "+localStorage.getItem('jwt')
   },
 });
 

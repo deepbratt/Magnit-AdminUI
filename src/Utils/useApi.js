@@ -5,6 +5,7 @@ const headers = {
   Accept: "multipart/form-data",
   "Content-Type": "multipart/form-data",
   "Access-Control-Allow-Origin": "*",
+  'Authorization' : "Bearer "+localStorage.getItem('jwt')
 };
 
 const useApi = (url) => {
@@ -41,6 +42,15 @@ const useApi = (url) => {
       .catch((error) => {
         setError({ errorMessage: error.status });
         setLoader(false);
+        setToastType("error");
+        setOpen(true);
+        if(error){
+          setResponseAlert({
+            status: error.response.data.status ,
+            message: error.response.data.message
+          });
+        }
+       
       });
   };
 
@@ -60,8 +70,8 @@ const useApi = (url) => {
       console.error("There was an error!", error);
       setIsPending(true);
       setResponseAlert({
-        status: error.status,
-        message: error.message,
+        status: 404,
+        message: error.response.data.message
       });
       setOpen(true);
       setToastType("error");
@@ -86,8 +96,8 @@ const useApi = (url) => {
       }
     } catch (error) {
       setResponseAlert({
-        status: error.status,
-        message: error.message,
+        status: error.response.data.status,
+        message: error.response.data.message
       });
       setOpen(true);
       setToastType("error");
@@ -115,10 +125,10 @@ const useApi = (url) => {
         });
       }
     } catch (error) {
-      if (500) {
+      if (error) {
         setResponseAlert({
-          status: error.status,
-          message: error.message,
+          status: error.response.data.status ,
+          message: error.response.data.message
         });
         console.log(error);
       }
@@ -129,7 +139,7 @@ const useApi = (url) => {
 
   const deleteItem = async (id) => {
     try {
-      await axios.delete(`${url}/${id}`);
+      await axios.delete(`${url}/${id}`, {headers});
       let filteredArray = data.filter((item) => item._id !== id);
       setData(filteredArray);
     } catch (error) {
@@ -147,6 +157,7 @@ const useApi = (url) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          'Authorization' : "Bearer "+localStorage.getItem('jwt')
         },
         body: JSON.stringify({
           text: text,
@@ -166,8 +177,8 @@ const useApi = (url) => {
       if (error) {
         setIsPending(true);
         setResponseAlert({
-          status: error.status,
-          message: error.message,
+          status: error.response.data.status ,
+          message: error.response.data.message
         });
         setOpen(true);
         setToastType("error");
@@ -184,6 +195,7 @@ const useApi = (url) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            'Authorization' : "Bearer "+localStorage.getItem('jwt')
           },
           body: JSON.stringify({
             text: text,
@@ -207,13 +219,21 @@ const useApi = (url) => {
       if (error) {
         setIsPending(true);
         setResponseAlert({
-          status: error.status,
-          message: error.message,
+          status: error.response.data.status ,
+          message: error.response.data.message
         });
         setOpen(true);
         setToastType("error");
       }
     }
+  };
+
+  
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
   };
 
   return {
@@ -231,6 +251,9 @@ const useApi = (url) => {
     handlePutMethod,
     loader,
     toastType,
+    headers,
+    errorResponse,
+    handleToastClose
   };
 };
 
