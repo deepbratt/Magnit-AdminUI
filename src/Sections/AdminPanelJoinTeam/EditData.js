@@ -5,7 +5,7 @@ import Toast from "../../components/Toast";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 export default function EditData({ id, edit }) {
-  const { handleEdit,responseAlert,open,setOpen,toastType} = useApi();
+  const { handleEdit,responseAlert,open,setOpen,toastType,headers} = useApi();
 
   const [data, setData] = useState({
     text: "",
@@ -22,7 +22,7 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`http://api.themagnit.com/v1/teams/${id}`);
+    const result = await axios.get(`http://api.themagnit.com/v1/teams/${id}`, {headers});
     setData(result.data.data.result);
   };
 

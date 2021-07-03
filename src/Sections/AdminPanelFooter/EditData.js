@@ -8,6 +8,14 @@ import useStyles from "../AdminPanelSliderSections/useStyles";
 import useStates from "./useStates";
 import Toast from "../../components/Toast";
 const EditData = ({ id, edit }) => {
+
+  const headers = {
+    Accept: "multipart/form-data",
+    "Content-Type": "multipart/form-data",
+    "Access-Control-Allow-Origin": "*",
+    'Authorization' : "Bearer "+localStorage.getItem('jwt')
+  };
+
   const { grid } = useStyles();
   const [isPending, setIsPending] = useState(true);
   const [toastType, setToastType] = useState("error");
@@ -65,7 +73,8 @@ const EditData = ({ id, edit }) => {
 
   const loadSelectedData = async () => {
     const { data } = await axios.get(
-      `http://api.themagnit.com/v1/companies/${id}`
+      `http://api.themagnit.com/v1/companies/${id}`,
+      {headers}
     );
     setNumberTitle(data.data.result.contactUs.heading);
     setAddressTitle(data.data.result.locations.heading);
@@ -85,6 +94,7 @@ const EditData = ({ id, edit }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            'Authorization' : "Bearer "+localStorage.getItem('jwt')
           },
           body: JSON.stringify({
             locations: {

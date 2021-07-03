@@ -1,4 +1,4 @@
-export const getAllFAQs = async()=>{
+/*export const getAllFAQs = async()=>{
   try{
       const response = await axiosInstance.get(apiEndpoints.FAQs)
       console.log(response)

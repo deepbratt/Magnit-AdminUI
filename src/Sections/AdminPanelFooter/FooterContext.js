@@ -10,12 +10,14 @@ import EditData from "./EditData"
 import Table from "../../components/Table.js/index"
 import useApi from "../../Utils/useApi"
 import Loader from "../../components/LoadingSpinner";
+import Toast from "../../components/Toast";
+
 const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
   const link = "http://api.themagnit.com/v1/companies"
-  const {deleteItem,data,loader} = useApi(link)
+  const {deleteItem,data,loader,toastType,open,responseAlert,handleToastClose} = useApi(link)
   const valueskeys = {
     title: "heading",
     _id: "_id"
@@ -32,6 +34,14 @@ const DisplayData = () => {
           <AddData /> 
         </Grid>
             <Loader open={loader} />
+            {responseAlert && (
+            <Toast
+              open={open}
+              severity={toastType}
+              message={responseAlert.message}
+              onClose={handleToastClose}
+            />
+          )}
         <Table
             rows={data}
             handleDelete={deleteItem}
