@@ -4,6 +4,8 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import RestorePageRoundedIcon from "@material-ui/icons/RestorePageRounded";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
+import AddEditBlog from "../Sections/AddEditBlog";
+import Blogs from "../Sections/Blogs";
 const Home = lazy(() => import("../pages/home"));
 const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
@@ -93,7 +95,8 @@ export const paths = {
   caseStudies: "case-studies",
   howItWorks: "how-it-works",
   faqs: "faqs",
-  solutions: "solutions"
+  solutions: "solutions",
+  addEditBlog: "add-edit-blog"
 };
 
 export const routes = {
@@ -127,7 +130,8 @@ export const routes = {
   caseStudies: "/moderate-sections/case-studies",
   howItWorks: "/moderate-sections/how-it-works",
   faqs: "/moderate-sections/faqs",
-  solutions: "/solutions"
+  solutions: "/solutions",
+  addEditBlog:"/blogs/add-edit-blog/:contentId?",
 };
 
 export const pagesRoutes = {
@@ -171,7 +175,8 @@ export const pagesRoutes = {
   },
   [paths.blogs]: {
     path: routes.blogs,
-    component: AdminPanelBlogs,
+    // component: AdminPanelBlogs,
+    component: Blogs,
   },
   [paths.footer]: {
     path: routes.footer,
@@ -252,6 +257,10 @@ export const pagesRoutes = {
   [paths.solutions]: {
     path: routes.solutions,
     component: AdminPanelSolutions,
+  },
+  [paths.addEditBlog]: {
+    path: routes.addEditBlog,
+    component: AddEditBlog,
   },
 };
 

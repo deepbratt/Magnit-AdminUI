@@ -5,7 +5,7 @@ import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 const AddData = () => {
-  const { addData, isPending ,responseAlert,open,setOpen,toastType} = useApi("http://api.themagnit.com/v1/workflows");
+  const { addData, isPending ,responseAlert,open,setOpen,toastType} = useApi("https://api.themagnit.com/v1/workflows");
   const { grid, btn,common,labels } = useStyles();
   const [file, setFile] = useState(null);
   

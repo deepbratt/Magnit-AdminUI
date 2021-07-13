@@ -75,7 +75,7 @@ const AddData = () => {
     }
   
     try{
-     const rawResponse = await fetch("http://api.themagnit.com/v1/companies", {headers}, {
+     const rawResponse = await fetch("https://api.themagnit.com/v1/companies", {headers}, {
        method: 'POST',
        headers: {
          'Accept': 'application/json',

@@ -5,7 +5,7 @@ import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 export default function EditData({ id, edit }) {
-  const { handlePutMethod,responseAlert,open,setOpen,toastType,headers} = useApi("http://api.themagnit.com/v1/adminPanel");
+  const { handlePutMethod,responseAlert,open,setOpen,toastType,headers} = useApi("https://api.themagnit.com/v1/adminPanel");
 
   const [file, setFile] = useState(null);
   const [data, setData] = useState({
@@ -25,7 +25,7 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const {data} = await axios.get(`http://api.themagnit.com/v1/adminPanel/${id}`, {headers});
+    const {data} = await axios.get(`https://api.themagnit.com/v1/adminPanel/${id}`, {headers});
     setData(data.data.result);
     setFile(data.data.result.image)
   };

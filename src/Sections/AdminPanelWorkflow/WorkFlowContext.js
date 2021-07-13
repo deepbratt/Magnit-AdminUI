@@ -12,7 +12,7 @@ const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
-  const link = "http://api.themagnit.com/v1/workflows";
+  const link = "https://api.themagnit.com/v1/workflows";
   const {
     deleteItem,
     data,

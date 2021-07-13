@@ -7,7 +7,7 @@ import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 import validate from "./useValidate";
 const AddData = () => {
-  const { handleAddData, isPending, responseAlert, open, setOpen,toastType } = useApi("http://api.themagnit.com/v1/teams");
+  const { handleAddData, isPending, responseAlert, open, setOpen,toastType } = useApi("https://api.themagnit.com/v1/teams");
   const { grid, btn } = useStyles();
   const [data, setData] = useState({
     text: "",
