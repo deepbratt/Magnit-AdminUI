@@ -15,7 +15,7 @@ const DisplayData = () => {
   const { heading } = useStyles();
   const [edit, setEdit] = useState(false); 
   const [id,setId] = useState(null)
-  const link = "http://api.themagnit.com/v1/ourObjectives"
+  const link = "https://api.themagnit.com/v1/ourObjectives"
   const {deleteItem,data,loader,handleToastClose,open,responseAlert,toastType} = useApi(link)
 
   return (

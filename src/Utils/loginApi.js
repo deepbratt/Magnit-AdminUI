@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://api.themagnit.com/v1";
+const BASE_URL = "https://api.themagnit.com/v1";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -29,13 +29,15 @@ const USERS = {
 const apiEndpoints={
   howItWorks:"howitworks",
   caseStudies:"casestudies",
-  FAQs:"faqs"
+  FAQs:"faqs",
+  blogs:"blogs"
 }
 
 export const userLoginApi = async (data) => {
   try {
     let result = await axiosInstance.post(`${USERS.LOGIN}`, data);
     localStorage.setItem('jwt', result.data.token)
+    console.log(result)
     return result.data;
   } catch (error) {
     console.log(error);
@@ -234,4 +236,61 @@ export const createFAQs = async(dataBody)=>{
         console.log('error: ',error)
         return  error
     }
+}
+
+// blogs
+
+export const getAllBlogs = async()=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.blogs)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
+}
+
+export const createBlog = async(dataBody)=>{
+  try{
+      const response = await axiosFormInstance.post(apiEndpoints.blogs+"/", dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+
+export const updateBlog = async(itemId, dataBody)=>{
+  try{
+      const response = await axiosFormInstance.patch(apiEndpoints.blogs+"/"+itemId, dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+
+export const deleteBlog = async(itemId)=>{
+  try{
+      const response = await axiosInstance.delete(apiEndpoints.blogs+"/"+itemId)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
+  }
+}
+
+export const getOneBlog = async(itemId)=>{
+  try{
+      const response = await axiosInstance.get(apiEndpoints.blogs+"/"+itemId)
+      console.log(response)
+      return response
+  }catch(error){
+      console.log('error: ',error)
+      return error
+  }
 }
