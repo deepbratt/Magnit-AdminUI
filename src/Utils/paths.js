@@ -6,6 +6,7 @@ import RestorePageRoundedIcon from "@material-ui/icons/RestorePageRounded";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import AddEditBlog from "../Sections/AddEditBlog";
 import Blogs from "../Sections/Blogs";
+import SeoText from "../Sections/SeoText";
 const Home = lazy(() => import("../pages/home"));
 const ModeratePages = lazy(() => import("../pages/ModeratePages"));
 const ModerateSections = lazy(() => import("../pages/ModerateSections"));
@@ -95,6 +96,7 @@ export const paths = {
   caseStudies: "case-studies",
   howItWorks: "how-it-works",
   faqs: "faqs",
+  seoText: "seo-text",
   solutions: "solutions",
   addEditBlog: "add-edit-blog"
 };
@@ -131,6 +133,7 @@ export const routes = {
   howItWorks: "/moderate-sections/how-it-works",
   faqs: "/moderate-sections/faqs",
   solutions: "/solutions",
+  seoText: "/seo-text",
   addEditBlog:"/blogs/add-edit-blog/:contentId?",
 };
 
@@ -253,6 +256,10 @@ export const pagesRoutes = {
   [paths.faqs]: {
     path: routes.faqs,
     component: FAQs,
+  },
+  [paths.seoText]: {
+    path: routes.seoText,
+    component: SeoText,
   },
   [paths.solutions]: {
     path: routes.solutions,

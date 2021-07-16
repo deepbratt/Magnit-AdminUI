@@ -124,8 +124,8 @@ const sections = [
     label: "Our Objective",
   },
   {
-    value: "ourSolutions",
-    label: "Solutions",
+    value: "seoText",
+    label: "Seo Text",
   },
 ];
 
