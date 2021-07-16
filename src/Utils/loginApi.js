@@ -30,7 +30,8 @@ const apiEndpoints={
   howItWorks:"howitworks",
   caseStudies:"casestudies",
   FAQs:"faqs",
-  blogs:"blogs"
+  blogs:"blogs",
+  seoText:'seoText'
 }
 
 export const userLoginApi = async (data) => {
@@ -292,5 +293,60 @@ export const getOneBlog = async(itemId)=>{
   }catch(error){
       console.log('error: ',error)
       return error
+  }
+}
+
+// seoText
+export const getAllSeoText = async() =>{
+  try{
+    const response = await axiosInstance.get(apiEndpoints.seoText)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+export const getOneSeoText = async(itemId) =>{
+  try{
+    const response = await axiosInstance.get(apiEndpoints.seoText+'/'+itemId)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const updateSeoText = async(itemId, dataBody) =>{
+  try{
+    const response = await axiosInstance.patch(apiEndpoints.seoText+'/'+itemId, dataBody)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const createSeoText = async(dataBody) =>{
+  try{
+    const response = await axiosInstance.post(apiEndpoints.seoText, dataBody)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const deleteSeoText = async(itemId) =>{
+  try{
+    const response = await axiosInstance.delete(apiEndpoints.seoText+'/'+itemId)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
   }
 }

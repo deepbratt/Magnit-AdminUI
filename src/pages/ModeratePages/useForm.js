@@ -168,9 +168,11 @@ export const useForm = (validateOnChange = false, id) => {
           });
       } else {
         console.log("id", values.id);
+        console.log("request body: ", requestBody);
         await updatePagesApi(values.id, requestBody)
           .then((response) => {
             setIsLoading(false);
+            console.log('response: ', response)
             if (response.status === "success") {
               setResponseMessage({
                 status: response.status,
