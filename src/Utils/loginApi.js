@@ -288,6 +288,7 @@ export const deleteBlog = async(itemId)=>{
 }
 
 export const getOneBlog = async(itemId)=>{
+  console.log(localStorage.getItem('jwt'))
   try{
       const response = await axiosInstance.get(apiEndpoints.blogs+"/"+itemId)
       console.log(response)
