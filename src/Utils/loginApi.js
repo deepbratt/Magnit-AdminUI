@@ -253,9 +253,16 @@ export const getAllBlogs = async()=>{
 }
 
 export const createBlog = async(dataBody)=>{
-  console.log(localStorage.getItem('jwt'))
   try{
-      const response = await axiosFormInstance.post(apiEndpoints.blogs+"/", dataBody)
+    let token  = localStorage.getItem('jwt')
+    console.log(token)
+    let headers = {
+      Accept: "application/json",
+      'Content-Type': 'multipart/form-data',
+      "Access-Control-Allow-Origin": "*",
+      'Authorization' : "Bearer "+token
+    }
+      const response = await axiosFormInstance.post(apiEndpoints.blogs+"/", dataBody, headers)
       console.log(response)
       return  response
   }catch(error){
@@ -265,9 +272,16 @@ export const createBlog = async(dataBody)=>{
 }
 
 export const updateBlog = async(itemId, dataBody)=>{
-  console.log(localStorage.getItem('jwt'))
   try{
-      const response = await axiosFormInstance.patch(apiEndpoints.blogs+"/"+itemId, dataBody)
+    let token  = localStorage.getItem('jwt')
+    console.log(token)
+    let headers = {
+      Accept: "application/json",
+      'Content-Type': 'multipart/form-data',
+      "Access-Control-Allow-Origin": "*",
+      'Authorization' : "Bearer "+token
+    }
+      const response = await axiosFormInstance.patch(apiEndpoints.blogs+"/"+itemId, dataBody, headers)
       console.log(response)
       return  response
   }catch(error){
@@ -288,9 +302,16 @@ export const deleteBlog = async(itemId)=>{
 }
 
 export const getOneBlog = async(itemId)=>{
-  console.log(localStorage.getItem('jwt'))
   try{
-      const response = await axiosInstance.get(apiEndpoints.blogs+"/"+itemId)
+    let token  = localStorage.getItem('jwt')
+    console.log(token)
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      'Authorization' : "Bearer "+token
+    }
+      const response = await axiosInstance.get(apiEndpoints.blogs+"/"+itemId, headers)
       console.log(response)
       return response
   }catch(error){
