@@ -72,7 +72,7 @@ const useAddEditBlog = () => {
       banner: formData.banner,
       html: htmlText,
     };
-    // console.table("data ", data)
+    console.table("data ", data)
     // return
     setIsLoading(true);
     if (contentId) {
