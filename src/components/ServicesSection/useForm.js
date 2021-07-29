@@ -116,7 +116,7 @@ export const useForm = (validateOnChange = false) => {
     if (validate()) {
       setIsLoading(true);
       var formData = new FormData();
-      formData.append("title", values.title.toLowerCase());
+      formData.append("title", values.title);
       formData.append("description", values.description);
       formData.append("buttonLabel", values.buttonLabel);
       formData.append("buttonLink", values.buttonLink);
