@@ -253,6 +253,7 @@ export const getAllBlogs = async()=>{
 }
 
 export const createBlog = async(dataBody)=>{
+  console.log(localStorage.getItem('jwt'))
   try{
       const response = await axiosFormInstance.post(apiEndpoints.blogs+"/", dataBody)
       console.log(response)
@@ -264,6 +265,7 @@ export const createBlog = async(dataBody)=>{
 }
 
 export const updateBlog = async(itemId, dataBody)=>{
+  console.log(localStorage.getItem('jwt'))
   try{
       const response = await axiosFormInstance.patch(apiEndpoints.blogs+"/"+itemId, dataBody)
       console.log(response)
