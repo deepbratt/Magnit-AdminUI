@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {},
-  isLoggedIn: true,
-  token: "",
+  isLoggedIn: localStorage.getItem("jwt") !== null ? true : false,
+  token: localStorage.getItem("jwt"),
 };
 
 const authSlice = createSlice({
