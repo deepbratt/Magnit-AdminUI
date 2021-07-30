@@ -254,15 +254,14 @@ export const getAllBlogs = async()=>{
 
 export const createBlog = async(dataBody)=>{
   try{
-    let token  = localStorage.getItem('jwt')
-    console.log(token)
+    let token  =  await fetchJwt()
     let headers = {
       Accept: "application/json",
       'Content-Type': 'multipart/form-data',
       "Access-Control-Allow-Origin": "*",
       'Authorization' : "Bearer "+token
     }
-      const response = await axiosFormInstance.post(apiEndpoints.blogs+"/", dataBody, headers)
+      const response = await axiosFormInstance.post(apiEndpoints.blogs+"/", dataBody, {headers: headers})
       console.log(response)
       return  response
   }catch(error){
@@ -273,15 +272,14 @@ export const createBlog = async(dataBody)=>{
 
 export const updateBlog = async(itemId, dataBody)=>{
   try{
-    let token  = localStorage.getItem('jwt')
-    console.log(token)
+    let token  =  await fetchJwt()
     let headers = {
       Accept: "application/json",
       'Content-Type': 'multipart/form-data',
       "Access-Control-Allow-Origin": "*",
       'Authorization' : "Bearer "+token
     }
-      const response = await axiosFormInstance.patch(apiEndpoints.blogs+"/"+itemId, dataBody, headers)
+      const response = await axiosFormInstance.patch(apiEndpoints.blogs+"/"+itemId, dataBody, {headers:headers})
       console.log(response)
       return  response
   }catch(error){
@@ -301,19 +299,26 @@ export const deleteBlog = async(itemId)=>{
   }
 }
 
+async function fetchJwt(){
+  let token = undefined
+  token  =  localStorage.getItem('jwt')
+  if(token!==undefined){
+    return token
+  }
+}
+
 export const getOneBlog = async(itemId)=>{
   try{
-    let token  = localStorage.getItem('jwt')
-    console.log(token)
+    let token  =  await fetchJwt()
     let headers = {
       Accept: "application/json",
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
       'Authorization' : "Bearer "+token
     }
-      const response = await axiosInstance.get(apiEndpoints.blogs+"/"+itemId, headers)
+      const response = await axios.get(BASE_URL+"/"+apiEndpoints.blogs+"/"+itemId, {headers: headers})
       console.log(response)
-      return response
+        return response
   }catch(error){
       console.log('error: ',error)
       return error
