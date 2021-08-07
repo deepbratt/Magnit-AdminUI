@@ -31,7 +31,8 @@ const apiEndpoints={
   caseStudies:"casestudies",
   FAQs:"faqs",
   blogs:"blogs",
-  seoText:'seoText'
+  seoText:'seoText',
+  reviews:'Reviews'
 }
 
 export const userLoginApi = async (data) => {
@@ -377,5 +378,92 @@ export const deleteSeoText = async(itemId) =>{
   }catch(error){
     console.log("error: ", error)
     return error
+  }
+}
+
+export const getData = async(endpoint)=>{
+  try{
+    const response = await axiosInstance.get(endpoint)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const updateReview = async(itemId, dataBody) =>{
+//   console.log('url ',apiEndpoints.reviews+'/'+itemId)
+//   console.log('Form Data')
+//   for(var pair of dataBody.entries()) {
+//     console.log(pair[0]+ ', '+ pair[1]); 
+//  }
+//  axiosFormInstance.interceptors.request.use(request => {
+//   console.log('Starting Request', JSON.stringify(request, null, 2))
+//   return request
+// })
+// console.log('axios logger')
+// axiosFormInstance.interceptors.response.use(response => {
+//   console.log('Response:', JSON.stringify(response, null, 2))
+//   return response
+// })
+  try{
+    let token  =  await fetchJwt()
+    let headers = {
+      Accept: "application/json",
+      'Content-Type': 'multipart/form-data',
+      "Access-Control-Allow-Origin": "*",
+      'Authorization' : "Bearer "+token
+    }
+    const response = await axiosFormInstance.patch(apiEndpoints.reviews+'/'+itemId, dataBody, {headers: headers})
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const getOneReview = async(itemId) =>{
+  try{
+    const response = await axiosInstance.get(apiEndpoints.reviews+'/'+itemId)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const deleteReview = async(itemId) =>{
+  try{
+    const response = await axiosInstance.delete(apiEndpoints.reviews+'/'+itemId)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const getAllReviews = async() =>{
+  try{
+    const response = await axiosInstance.get(apiEndpoints.reviews)
+    console.log(response)
+    return response
+  }catch(error){
+    console.log("error: ", error)
+    return error
+  }
+}
+
+export const createReview = async(dataBody)=>{
+  try{
+      const response = await axiosFormInstance.post(apiEndpoints.reviews+"/", dataBody)
+      console.log(response)
+      return  response
+  }catch(error){
+      console.log('error: ',error)
+      return  error
   }
 }
