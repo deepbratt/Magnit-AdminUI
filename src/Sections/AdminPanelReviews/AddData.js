@@ -6,10 +6,15 @@ import useStyles from "../AdminPanelSliderSections/useStyles";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
 import validate from "./useValidate";
+import { createReview } from "../../Utils/loginApi";
+import { isResponseSuccess } from "../../Utils/helperFunctions";
 const AddData = () => {
-  const { addData, isPending, responseAlert, open, setOpen,toastType } = useApi(
-    "https://api.themagnit.com/v1/Reviews"
-  );
+  // const { addData, isPending, responseAlert, open, setOpen,toastType } = useApi(
+  //   "https://api.themagnit.com/v1/Reviews"
+  // );
+  const [responseAlert, setResponseAlert] = useState({status:"", message:""})
+  const [open, setOpen] = useState()
+  const [toastType, setToastType] = useState()
   const { grid, btn } = useStyles();
   const [file, setFile] = useState(null);
   const [cFile, setCFile] = useState(null);
@@ -29,16 +34,6 @@ const AddData = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const formData = new FormData();
-  formData.append("clientName", clientName);
-  formData.append("projectName", projectName);
-  formData.append("projectType", projectType);
-  formData.append("review", review);
-  formData.append("Date", date);
-  formData.append("image", file);
-  formData.append("clientImage", cFile);
-  formData.append("rating", rating);
-
   const handleToastClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -52,7 +47,31 @@ const AddData = () => {
     const noErrors = Object.keys(validationErrors).length === 0;
     setErrors(validationErrors);
     if (noErrors) {
-      addData(formData);
+      const formData = new FormData();
+      formData.append("clientName", clientName);
+      formData.append("projectName", projectName);
+      formData.append("projectType", projectType);
+      formData.append("review", review);
+      formData.append("Date", date);
+      formData.append("image", file);
+      formData.append("clientImage", cFile);
+      formData.append("rating", rating);
+      createReview(formData).then(response=>{
+        if(isResponseSuccess(response)){
+          setToastType('success')
+          setResponseAlert({
+            status: response.data.status,
+            message: response.statusText
+          })
+        }else{
+          setToastType('error')
+          setResponseAlert({
+            status: response.response.data.status,
+            message: response.response.data.message
+          })
+        }
+        setOpen(true)
+      })
       setData({
         clientName: "",
         projectName: "",
@@ -127,9 +146,9 @@ const AddData = () => {
           onClose={handleToastClose}
         />
       )}
-      {!isPending ? (
+      {/* {!isPending ? (
         <Alert severity="success">Status: Added successfully!</Alert>
-      ) :  <Alert severity="info">Status: pending</Alert>}
+      ) :  <Alert severity="info">Status: pending</Alert>} */}
     </>
   );
 };

@@ -4,8 +4,13 @@ import { Button, Grid } from "@material-ui/core";
 import TextFieldContext from "./TextFieldContext";
 import useApi from "../../Utils/useApi";
 import Toast from "../../components/Toast";
+import { getOneReview, updateReview } from "../../Utils/loginApi";
+import { isResponseSuccess } from "../../Utils/helperFunctions";
 export default function EditData({ id, edit }) {
-  const { handlePutMethod, responseAlert,open,setOpen,toastType,headers } = useApi("https://api.themagnit.com/v1/Reviews");
+  // const { handlePutMethod, responseAlert,open,setOpen,toastType,headers, setToastType, setResponseAlert } = useApi();
+  const [responseAlert, setResponseAlert] = useState({status:"", message:""})
+  const [open, setOpen] = useState()
+  const [toastType, setToastType] = useState()
 
   const [file, setFile] = useState(null);
   const [cFile, setCFile] = useState(null);
@@ -27,21 +32,62 @@ export default function EditData({ id, edit }) {
   }, []);
 
   const loadSelectedData = async () => {
-    const result = await axios.get(`https://api.themagnit.com/v1/Reviews/${id}`, {headers});
-    setData(result.data.data.result);
-    setFile(result.data.data.result.image)
-    setDate(result.data.data.result.Date)
-    console.log(result)
+    getOneReview(id).then(response=>{
+      if(isResponseSuccess(response)){
+        setToastType('success')
+        setResponseAlert({
+          status: response.data.status,
+          message: response.statusText
+        })
+        setData(response.data.data.result);
+    setFile(response.data.data.result.image)
+    setDate(response.data.data.result.Date)
+    setCFile(response.data.data.result.clientImage)
+    console.log(response)
+      }else{
+        setToastType('error')
+        setResponseAlert({
+          status: response.response.data.status,
+          message: response.response.data.message
+        })
+      }
+      setOpen(true)
+    })
   };
 
-  const formData = new FormData();
-  formData.append("clientName", clientName);
-  formData.append("projectName", projectName);
-  formData.append("projectType", projectType);
-  formData.append("review", review);
-  {file && formData.append("image", file)}
-  {cFile && formData.append("clientImage", cFile)}
-  formData.append("rating", rating);
+  const handleUpdate = (id) =>{
+    const formData = new FormData();
+    formData.append("clientName", clientName);
+    formData.append("projectName", projectName);
+    formData.append("projectType", projectType);
+    formData.append("review", review);
+    formData.append("image", file)
+    formData.append("clientImage", cFile)
+    formData.append("rating", rating);
+    console.log("clientName", typeof clientName);
+    console.log("projectName", typeof projectName);
+    console.log("projectType", typeof projectType);
+    console.log("review", typeof review);
+    console.log("image", typeof file)
+    console.log("clientImage", typeof cFile)
+    console.log("rating", typeof rating);
+    updateReview(id, formData).then(response=>{
+      if(isResponseSuccess(response)){
+        setToastType('success')
+        setResponseAlert({
+          status: response.data.status,
+          message: response.statusText
+        })
+      }else{
+        setToastType('error')
+        setResponseAlert({
+          status: response.response.data.status,
+          message: response.response.data.message
+        })
+      }
+      setOpen(true)
+    })
+  }
  
     
   const handleToastClose = (event, reason) => {
@@ -84,7 +130,7 @@ export default function EditData({ id, edit }) {
             <Button
               type="submit"
               onClick={() => {
-                handlePutMethod(id, formData);
+                handleUpdate(id);
                 setTimeout(() => {
                   edit(false);
                 }, 4000);
