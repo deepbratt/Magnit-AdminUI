@@ -21,10 +21,11 @@ const AddEditBlog = () => {
     setRawData,
     setOpenToast,
     blogData,
-    setFormData
+    setFormData,
+    formRef
   } = useAddEditBlog();
   return (
-    <form>
+    <form ref={formRef}>
       <LoadingSpinner open={isLoading} />
       <Grid container alignItems="center" spacing={2}>
         <Grid item container xs={12} justify="flex-end">
@@ -69,7 +70,7 @@ const AddEditBlog = () => {
             label="Description"
             type="text"
             variant="outlined"
-            onChange={handleChange}
+            onChange={e=>handleChange(e)}
             value={formData.description}
             style={{ width: "100%" }}
             multiline
