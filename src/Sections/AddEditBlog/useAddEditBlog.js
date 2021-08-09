@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { isResponseSuccess } from "../../Utils/helperFunctions";
 import { createBlog, getOneBlog, updateBlog } from "../../Utils/loginApi";
@@ -24,7 +24,9 @@ const formReducer = (state = initialFieldValues, event) => {
 
 const useAddEditBlog = () => {
   let { contentId } = useParams();
-  const params = useParams()
+  // const params = useParams()
+  const formRef = useRef(null)
+  const [caretPosition, setCaretPosition] = useState({caretStart:0, caretEnd:0, event:undefined})
   const [rawData, setRawData] = useState("");
   const [formData, setFormData] = useReducer(formReducer, initialFieldValues);
   const [responseMessage, setResponseMessage] = useState("");
@@ -32,10 +34,12 @@ const useAddEditBlog = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [blogData, setBlogData] = useState('')
-  const [defaultDate, setDefaultdate] = useState('12-12-2000')
+  const [, setDefaultdate] = useState('12-12-2000')
   const history = useHistory();
 
   const handleChange = (event) => {
+    const caretStart = event.target.selectionStart;
+  const caretEnd = event.target.selectionEnd;
     setFormData({
       name: event.target.name,
       value:
@@ -44,6 +48,8 @@ const useAddEditBlog = () => {
           : event.target.value,
     });
     event.target.value = event.target.name === "banner" && null;
+    // event.target.setSelectionRange(caretStart, caretEnd);
+    setCaretPosition({caretStart:caretStart, caretEnd:caretEnd, event: event});
   };
 
   async function saveBlogData() {
@@ -92,14 +98,12 @@ const useAddEditBlog = () => {
     } else {
       // create new blog data
       createBlog(fd).then(response=>{
-        console.log(response)
           if(isResponseSuccess(response)){
               setToastType('success')
               setResponseMessage(response.data.message)
               clearState()
             //   cancelAddEdit()
           }else{
-            console.log(response)
             setToastType('error')
             setResponseMessage("error") 
           }
@@ -111,19 +115,17 @@ const useAddEditBlog = () => {
   useEffect(() => {
     if (contentId) {
       // fetch already added blog data
-      console.log(contentId);
       setIsLoading(true);
       getOneBlog(contentId)
         .then((response) => {
           if (isResponseSuccess(response)) {
-            console.log(response);
             let result = response.data.data.result
+            let responseDate = new Date(result.date)
+            // let formatedDate = responseDate.getMonth()+"/"+responseDate.getDate()+"/"+responseDate.getFullYear()
+            setDefaultdate(responseDate)
             setFormData({ name: "title", value: result.title });
             setFormData({ name: "description", value: result.description });
             setFormData({ name: "descriptionLong", value: result.descriptionLong });
-            let responseDate = new Date(result.date)
-            let formatedDate = responseDate.getMonth()+"/"+responseDate.getDate()+"/"+responseDate.getFullYear()
-            setDefaultdate(responseDate)
             setFormData({ name: "date", value: responseDate });
             setFormData({ name: "banner", value: result.banner });
             setFormData({ name: "type", value: result.type });
@@ -136,9 +138,14 @@ const useAddEditBlog = () => {
     }
   }, [contentId]);
 
+  useEffect(()=>{
+    if(caretPosition.event !== undefined){
+      caretPosition.event.target.setSelectionRange(caretPosition.caretStart, caretPosition.caretEnd)
+    }
+  },[caretPosition])
+
   const fetchHtml = async (url) =>{
       let htmlText = await axios.get(url)
-      console.log(htmlText)
       setRawData(htmlText.data)
       setBlogData(htmlText.data)
   }
@@ -173,7 +180,8 @@ const useAddEditBlog = () => {
     setRawData,
     cancelAddEdit,
     blogData,
-    setFormData
+    setFormData,
+    formRef
   };
 };
 
