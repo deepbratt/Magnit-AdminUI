@@ -49,7 +49,9 @@ const useAddEditBlog = () => {
     });
     event.target.value = event.target.name === "banner" && null;
     // event.target.setSelectionRange(caretStart, caretEnd);
-    setCaretPosition({caretStart:caretStart, caretEnd:caretEnd, event: event});
+    if(event.target.name !== "banner" || event.target.name !== "type"){
+      setCaretPosition({caretStart:caretStart, caretEnd:caretEnd, event: event});
+    }
   };
 
   async function saveBlogData() {
@@ -139,7 +141,7 @@ const useAddEditBlog = () => {
   }, [contentId]);
 
   useEffect(()=>{
-    if(caretPosition.event !== undefined){
+    if(caretPosition.event !== undefined && caretPosition.event.target.name !== "type" && caretPosition.event.target.name !== "banner"){
       caretPosition.event.target.setSelectionRange(caretPosition.caretStart, caretPosition.caretEnd)
     }
   },[caretPosition])
